@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.duowei.kitchen_china.event.OrderFood;
+import com.duowei.kitchen_china.event.UpdateCfpb;
 import com.duowei.kitchen_china.fragment.MainFragment;
 import com.duowei.kitchen_china.server.PollingService;
 
@@ -33,6 +34,11 @@ public class MainActivity extends AppCompatActivity {
     @Subscribe
     public void getCfpb(OrderFood event){
         mFragment.setRecycleView(event.listCfpb);
+    }
+
+    @Subscribe
+    public void updateCfpb(UpdateCfpb event){
+        mFragment.updateSuccess();
     }
 
     @Override

@@ -1,17 +1,20 @@
 package com.duowei.kitchen_china.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.duowei.kitchen_china.R;
-import com.duowei.kitchen_china.bean.Cfpb;
+import com.duowei.kitchen_china.bean.Cfpb2;
 import com.duowei.kitchen_china.bean.Cfpb_item;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,43 +22,101 @@ import java.util.List;
  */
 
 public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHold> {
+    private int index=0;
     private Context context;
     private LayoutInflater mLayoutInflater;
-    private List<Cfpb> listCfpb;
+    private List<Cfpb2> listCfpb;
+    private List<Cfpb_item>listCfpb_item;
 
-    public RecAdapter(Context context,List<Cfpb> listCfpb) {
+    private onItemClickListener itemListener;
+    private onContinueClickListener continueLisener;
+
+    public RecAdapter(Context context,List<Cfpb2> listCfpb) {
         this.context = context;
         this.listCfpb = listCfpb;
         mLayoutInflater = LayoutInflater.from(context);
-//        Cfpb cfpb = listCfpb.get(0);
-//        List<Cfpb_item> list = cfpb.getList();
-//        Cfpb_item cfpb_item = list.get(0);
-//        Log.e("=====",cfpb_item.toString());
+        listCfpb_item=new ArrayList<>();
     }
 
-    public void setList(List<Cfpb> listCfpb){
+    public void setList(List<Cfpb2> listCfpb){
         this.listCfpb=listCfpb;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    public interface onItemClickListener{
+        void setOnItemClickListener(int index);
+    }
+    public interface onContinueClickListener{
+        void setOnContinueClickListener(int index);
+    }
+
+    public void setOnItemClickListener(onItemClickListener itemListener){
+        this.itemListener=itemListener;
+    }
+    public void setOnContinueClickListener(onContinueClickListener continueLisener){
+        this.continueLisener=continueLisener;
     }
 
     @Override
     public ViewHold onCreateViewHolder(ViewGroup parent, int viewType) {
         View inflate = mLayoutInflater.inflate(R.layout.recycle_item, null);
         ViewHold viewHold = new ViewHold(inflate);
+        //顶部子RecycleView
         viewHold.mRecyclerView = (RecyclerView) inflate.findViewById(R.id.recycleView_item);
+        viewHold.mRecyclerView.addItemDecoration(new SpacesItemDecoration(10));//设置顶部子item边距
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);//横向滑动
+        viewHold.mRecyclerView.setLayoutManager(linearLayoutManager);
+        viewHold.mRecAdapterItem = new RecAdapter_item(context, listCfpb_item);
+        viewHold.mRecyclerView.setAdapter(viewHold.mRecAdapterItem);
+
+        viewHold.mLl= (LinearLayout) inflate.findViewById(R.id.linearLayout);
         viewHold.mTvName= (TextView) inflate.findViewById(R.id.tv_name);
         viewHold.mTvNum= (TextView) inflate.findViewById(R.id.tv_num);
+        viewHold.mTvDw= (TextView) inflate.findViewById(R.id.tv_dw);
+        viewHold.btnContinue= (Button) inflate.findViewById(R.id.btn_continue);
+        viewHold.mTvPosition= (TextView) inflate.findViewById(R.id.tv_position);
         return viewHold;
     }
 
     @Override
-    public void onBindViewHolder(ViewHold holder, int position) {
-        Cfpb cfpb = listCfpb.get(position);
-        holder.mTvName.setText(cfpb.getXMMC());
-        holder.mTvNum.setText(cfpb.getZjsl()+cfpb.getDW());
+    public void onBindViewHolder(ViewHold holder, final int position) {
+        float count=0;
+        Cfpb2 cfpb = listCfpb.get(position);
+        holder.mTvName.setText(cfpb.getXmmc());
+        //获取单品总数量
+        for(Cfpb_item cfpb_item:cfpb.getListCfpb()){
+            count+=cfpb_item.sl1;
+        }
+        holder.mTvNum.setText(count+"");
+        holder.mTvDw.setText(cfpb.getDw());
+        holder.mTvPosition.setText((position+1)+"");
+        if(position==index){
+            holder.mLl.setBackgroundResource(R.drawable.shape_blue);
+        }else{
+            holder.mLl.setBackgroundResource(R.drawable.shape_green);
+        }
 
-        List<Cfpb_item> list = cfpb.getList();
-        Cfpb_item cfpb_item = list.get(0);
-        Log.e("=====",cfpb_item.toString());
+        //刷新顶部子Recycleview
+        holder.mRecAdapterItem.setListCfpb_item(cfpb.getListCfpb());
+        holder.mRecAdapterItem.notifyDataSetChanged();
+
+        holder.mLl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                itemListener.setOnItemClickListener(position);
+            }
+        });
+        //继续
+        holder.btnContinue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                continueLisener.setOnContinueClickListener(position);
+            }
+        });
     }
 
     @Override
@@ -67,8 +128,13 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHold> {
         public ViewHold(View itemView) {
             super(itemView);
         }
+        LinearLayout mLl;
         RecyclerView mRecyclerView;
         TextView mTvName;
         TextView mTvNum;
+        TextView mTvDw;
+        TextView mTvPosition;
+        Button btnContinue;
+        RecAdapter_item mRecAdapterItem;
     }
 }
