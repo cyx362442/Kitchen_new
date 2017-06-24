@@ -31,7 +31,16 @@ public class Cfpb2 {
     private String czmc;
     private String fzs;
 
+    private String sfxz="0";
     private List<Cfpb_item> listCfpb;
+    public String getSfxz() {
+        return sfxz;
+    }
+
+    public void setSfxz(String sfxz) {
+        this.sfxz = sfxz;
+    }
+
 
     public List<Cfpb_item> getListCfpb() {
         if(listCfpb==null){

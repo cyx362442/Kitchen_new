@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.duowei.kitchen_china.R;
 import com.duowei.kitchen_china.bean.Cfpb2;
 import com.duowei.kitchen_china.bean.Cfpb_item;
+import com.duowei.kitchen_china.dialog.DigitInput;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +51,7 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHold> {
         void setOnItemClickListener(int index);
     }
     public interface onContinueClickListener{
-        void setOnContinueClickListener(int index);
+        void setOnContinueClickListener(int index,float num);
     }
 
     public void setOnItemClickListener(onItemClickListener itemListener){
@@ -85,7 +86,7 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHold> {
     @Override
     public void onBindViewHolder(ViewHold holder, final int position) {
         float count=0;
-        Cfpb2 cfpb = listCfpb.get(position);
+        final Cfpb2 cfpb = listCfpb.get(position);
         holder.mTvName.setText(cfpb.getXmmc());
         //获取单品总数量
         for(Cfpb_item cfpb_item:cfpb.getListCfpb()){
@@ -110,11 +111,24 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHold> {
                 itemListener.setOnItemClickListener(position);
             }
         });
-        //继续
+        //继续按键点击事件
+        final float finalCount = count;
         holder.btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                continueLisener.setOnContinueClickListener(position);
+                if(finalCount <=1){//数量小于等于1，直接删创造
+                    continueLisener.setOnContinueClickListener(position,cfpb.getSl());
+                }else{//数量大于1，修改数量
+                    final DigitInput digitInput = DigitInput.instance();
+                    digitInput.show(context,"请输入数量","数量：",finalCount);
+                    digitInput.setOnconfirmClick(new DigitInput.OnconfirmClick() {
+                        @Override
+                        public void confirmListener(String title, String inputMsg) {
+                            continueLisener.setOnContinueClickListener(position,Float.parseFloat(inputMsg));
+                            digitInput.cancel();
+                        }
+                    });
+                }
             }
         });
     }
