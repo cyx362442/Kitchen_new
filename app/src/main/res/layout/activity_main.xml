@@ -4,12 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#e0000000"
     tools:context="com.duowei.kitchen_china.MainActivity">
     <FrameLayout
         android:id="@+id/frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginRight="5dp"
+        android:paddingRight="3dp"
         ></FrameLayout>
     <ProgressBar
         android:id="@+id/pb"

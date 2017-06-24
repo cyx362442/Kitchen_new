@@ -62,7 +62,7 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
             mRecAdapter.notifyItemRemoved(currentPosition);
             mRecAdapter.notifyItemRangeChanged(currentPosition,mRecAdapter.getItemCount());
         }else if(list.size()>tempList){//list变大，启用增加动画
-            mRecAdapter.notifyItemInserted(currentPosition);
+            mRecAdapter.notifyItemInserted(list.size()-1);
         }
         tempList=list.size();
     }
