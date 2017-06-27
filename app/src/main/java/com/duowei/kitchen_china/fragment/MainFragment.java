@@ -42,11 +42,12 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         View inflate = inflater.inflate(R.layout.fragment_main, container, false);
         listCfpb=new ArrayList<>();
         RecyclerView rv = (RecyclerView) inflate.findViewById(R.id.recycleView);
         rv.setLayoutManager(new GridLayoutManager(getActivity(),4));//gridview布局,4列
-        rv.addItemDecoration(new SpacesItemDecoration(3));//设置item边距
+        rv.addItemDecoration(new SpacesItemDecoration(10));//设置item边距
         rv.setItemAnimator(new DefaultItemAnimator());
         mRecAdapter = new RecAdapter(getActivity(), listCfpb);
         rv.setAdapter(mRecAdapter);
@@ -56,7 +57,7 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
     }
     public void setRecycleView(List<Cfpb2>list){
         mRecAdapter.setList(listCfpb=list);
-        if(list.size()==tempList){
+        if(list.size()==tempList||list.size()==0){
             mRecAdapter.notifyDataSetChanged();
         }else if(list.size()<tempList){//list变小，启用删除动画
             mRecAdapter.notifyItemRemoved(currentPosition);
@@ -68,7 +69,7 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
     }
 
     public void updateSuccess(){
-        Post.getInstance().postCfpb(Net.sql_cfpb);
+        Post.getInstance(getActivity()).postCfpb(Net.sql_cfpb);
     }
 
     @Override
@@ -97,6 +98,6 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
                 break;
             }
         }
-        Post.getInstance().setPost7(sql);
+        Post.getInstance(getActivity()).setPost7(sql);
     }
 }

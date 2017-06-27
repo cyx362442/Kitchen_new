@@ -95,11 +95,11 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHold> {
         holder.mTvNum.setText(count+"");
         holder.mTvDw.setText(cfpb.getDw());
         holder.mTvPosition.setText((position+1)+"");
-        if(position==index){
-            holder.mLl.setBackgroundResource(R.drawable.shape_blue);
-        }else{
-            holder.mLl.setBackgroundResource(R.drawable.shape_green);
-        }
+//        if(position==index){
+//            holder.mLl.setBackgroundResource(R.drawable.shape_blue);
+//        }else{
+//            holder.mLl.setBackgroundResource(R.drawable.shape_green);
+//        }
 
         //刷新顶部子Recycleview
         holder.mRecAdapterItem.setListCfpb_item(cfpb.getListCfpb());

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+        <EditTextPreference
+            android:key="et_serviceIP"
+            android:summary="192.168.1.78"
+            android:inputType="textUri"
+            android:title="前台收银机IP">
+        </EditTextPreference>
+        <EditTextPreference
+            android:key="et_printerIP"
+            android:summary="192.168.1.124"
+            android:inputType="textUri"
+            android:title="打印机IP">
+        </EditTextPreference>
+        <CheckBoxPreference
+            android:key="checkbox"
+            android:title="是否开机自启动"
+            android:checked="true">
+        </CheckBoxPreference>
+</PreferenceScreen>

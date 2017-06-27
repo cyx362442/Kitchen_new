@@ -3,13 +3,13 @@
               android:id="@+id/linearLayout"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@drawable/shape_green"
               android:orientation="vertical">
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recycleView_item"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="3dp">
+                    android:background="@drawable/cook_top_greennormal"
+                    >
                 </android.support.v7.widget.RecyclerView>
                 <View
                     android:layout_width="match_parent"
@@ -18,6 +18,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/cook_bottom_white"
                     android:orientation="vertical"
                     >
                     <TextView

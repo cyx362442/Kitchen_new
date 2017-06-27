@@ -4,13 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#e0000000"
     tools:context="com.duowei.kitchen_china.MainActivity">
     <FrameLayout
-        android:id="@+id/frame"
+        android:id="@+id/frame01"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></FrameLayout>
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:layout_below="@+id/frame01"
+        android:background="@drawable/shape_border"></View>
+    <FrameLayout
+        android:id="@+id/frame02"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingRight="3dp"
+        android:layout_below="@+id/view"
         ></FrameLayout>
     <ProgressBar
         android:id="@+id/pb"

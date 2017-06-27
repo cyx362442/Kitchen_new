@@ -34,14 +34,16 @@ public class RecAdapter_item extends RecyclerView.Adapter<RecAdapter_item.ViewHo
     public ViewHold onCreateViewHolder(ViewGroup parent, int viewType) {
         View inflate = mLayoutInflater.inflate(R.layout.recycle_item2, null);
         ViewHold viewHold = new ViewHold(inflate);
-        viewHold.tvTable= (TextView) inflate.findViewById(R.id.textView);
+        viewHold.tvTable= (TextView) inflate.findViewById(R.id.tv_table);
+        viewHold.tvPasstime= (TextView) inflate.findViewById(R.id.tv_passtime);
         return viewHold;
     }
 
     @Override
     public void onBindViewHolder(ViewHold holder, int position) {
         Cfpb_item cfpb_item = listCfpb_item.get(position);
-        holder.tvTable.setText(cfpb_item.toString());
+        holder.tvTable.setText(cfpb_item.czmc1);
+        holder.tvPasstime.setText(cfpb_item.fzs+"分钟");
     }
 
     @Override
@@ -54,5 +56,6 @@ public class RecAdapter_item extends RecyclerView.Adapter<RecAdapter_item.ViewHo
             super(itemView);
         }
         TextView tvTable;
+        TextView tvPasstime;
     }
 }
