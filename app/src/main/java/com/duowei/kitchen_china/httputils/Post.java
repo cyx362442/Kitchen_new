@@ -73,7 +73,7 @@ public class Post {
                         //抓取每个单品对应的餐桌数据集
                         for (int j = 0; j < cfpbs2.length; j++) {
                             if ((cfpbs2[j].getXmbh()).equals(cfpbs2[i].getXmbh())) {
-                                Cfpb_item cfpb_item = new Cfpb_item(cfpbs2[j].getXmbh(), cfpbs2[j].getCzmc(), cfpbs2[j].getSl(), cfpbs2[j].getFzs(), cfpbs2[j].getXH());
+                                Cfpb_item cfpb_item = new Cfpb_item(cfpbs2[j].getXmbh(), cfpbs2[j].getCzmc(), cfpbs2[j].getSl(), cfpbs2[j].getFzs(), cfpbs2[j].getXH(),cfpbs2[j].getPz());
                                 List<Cfpb_item> list = cfpbs2[i].getListCfpb();
                                 list.add(cfpb_item);
                                 cfpbs2[i].setListCfpb(list);

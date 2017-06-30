@@ -21,26 +21,38 @@
                         android:layout_height="wrap_content"
                         android:src="@mipmap/uncook"/>
                     <TextView
-                        android:id="@+id/tv_uncook"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:textColor="@color/greenDark"
                         android:textSize="@dimen/textsize20"
-                        android:text="共9项菜品"/>
+                        android:text="种类："/>
+                    <TextView
+                        android:id="@+id/tv_uncook"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/yellow"
+                        android:textSize="30dp"
+                        android:text=""/>
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginLeft="20dp"
                         android:src="@mipmap/cooked"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:textColor="@color/greenDark"
+                        android:textSize="@dimen/textsize20"
+                        android:text="待煮："/>
                     <TextView
                         android:id="@+id/tv_cooked"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/greenDark"
-                        android:textSize="@dimen/textsize20"
-                        android:layout_marginLeft="5dp"
-                        android:text="待煮菜品9项"/>
+                        android:textColor="@color/yellow"
+                        android:textSize="30dp"
+                        android:text=""/>
 
                 </LinearLayout>
                 <LinearLayout

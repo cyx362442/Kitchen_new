@@ -3,6 +3,8 @@ package com.duowei.kitchen_china.adapter;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,10 +78,10 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHold> {
 
         viewHold.mLl= (LinearLayout) inflate.findViewById(R.id.linearLayout);
         viewHold.mTvName= (TextView) inflate.findViewById(R.id.tv_name);
+        viewHold.mTvBeizhu= (TextView) inflate.findViewById(R.id.tv_beizhu);
         viewHold.mTvNum= (TextView) inflate.findViewById(R.id.tv_num);
         viewHold.mTvDw= (TextView) inflate.findViewById(R.id.tv_dw);
         viewHold.btnContinue= (Button) inflate.findViewById(R.id.btn_continue);
-        viewHold.mTvPosition= (TextView) inflate.findViewById(R.id.tv_position);
         return viewHold;
     }
 
@@ -88,13 +90,21 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHold> {
         float count=0;
         final Cfpb2 cfpb = listCfpb.get(position);
         holder.mTvName.setText(cfpb.getXmmc());
+
+        List<Cfpb_item> listCfpb = cfpb.getListCfpb();
+        //获取当前菜品对应第一个的口味备注
+        if(!TextUtils.isEmpty(listCfpb.get(0).pz)){
+            holder.mTvBeizhu.setVisibility(View.VISIBLE);
+            holder.mTvBeizhu.setText(listCfpb.get(0).pz);
+        }else if(TextUtils.isEmpty(listCfpb.get(0).pz)){
+            holder.mTvBeizhu.setVisibility(View.INVISIBLE);
+        }
         //获取单品总数量
-        for(Cfpb_item cfpb_item:cfpb.getListCfpb()){
+        for(Cfpb_item cfpb_item: listCfpb){
             count+=cfpb_item.sl1;
         }
         holder.mTvNum.setText(count+"");
         holder.mTvDw.setText(cfpb.getDw());
-        holder.mTvPosition.setText((position+1)+"");
 //        if(position==index){
 //            holder.mLl.setBackgroundResource(R.drawable.shape_blue);
 //        }else{
@@ -102,7 +112,7 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHold> {
 //        }
 
         //刷新顶部子Recycleview
-        holder.mRecAdapterItem.setListCfpb_item(cfpb.getListCfpb());
+        holder.mRecAdapterItem.setListCfpb_item(listCfpb);
         holder.mRecAdapterItem.notifyDataSetChanged();
 
         holder.mLl.setOnClickListener(new View.OnClickListener() {
@@ -145,9 +155,9 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHold> {
         LinearLayout mLl;
         RecyclerView mRecyclerView;
         TextView mTvName;
+        TextView mTvBeizhu;
         TextView mTvNum;
         TextView mTvDw;
-        TextView mTvPosition;
         Button btnContinue;
         RecAdapter_item mRecAdapterItem;
     }

@@ -2,12 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto"
     >
-    <item android:id="@+id/setting"
-          android:title="设置"
-          app:showAsAction="always"
-        >
-    </item>
-    <item android:id="@+id/exit"
+    <item android:id="@+id/menu_exit"
         android:title="关闭"
+          android:icon="@drawable/ic_rotate_left_black_48dp"
+        app:showAsAction="always"
+        ></item>
+    <item
+        android:id="@+id/menu_setting"
+        android:title=""
         app:showAsAction="always"></item>
 </menu>

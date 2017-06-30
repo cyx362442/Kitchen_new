@@ -1,5 +1,7 @@
 package com.duowei.kitchen_china.bean;
 
+import org.litepal.crud.DataSupport;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +9,7 @@ import java.util.List;
  * Created by Administrator on 2017-06-23.
  */
 
-public class Cfpb2 {
+public class Cfpb2 extends DataSupport{
 
     /**
      * XH : 10105
@@ -30,6 +32,49 @@ public class Cfpb2 {
     private String xdsj;
     private String czmc;
     private String fzs;
+    private String yhmc;
+    private float ywcsl;
+    private String wcsj;
+
+    public Cfpb2(String XH, String xmbh, String xmmc, String dw, float sl, String pz, String xdsj,
+                 String czmc, String fzs, String yhmc, float ywcsl, String wcsj) {
+            this.XH = XH;
+        this.xmbh = xmbh;
+        this.xmmc = xmmc;
+        this.dw = dw;
+        this.sl = sl;
+        this.pz = pz;
+        this.xdsj = xdsj;
+        this.czmc = czmc;
+        this.fzs = fzs;
+        this.yhmc = yhmc;
+        this.ywcsl = ywcsl;
+        this.wcsj = wcsj;
+    }
+
+    public String getWcsj() {
+        return wcsj;
+    }
+
+    public void setWcsj(String wcsj) {
+        this.wcsj = wcsj;
+    }
+
+    public String getYhmc() {
+        return yhmc;
+    }
+
+    public void setYhmc(String yhmc) {
+        this.yhmc = yhmc;
+    }
+
+    public float getYwcsl() {
+        return ywcsl;
+    }
+
+    public void setYwcsl(float ywcsl) {
+        this.ywcsl = ywcsl;
+    }
 
     private String sfxz="0";
     private List<Cfpb_item> listCfpb;
