@@ -1,7 +1,10 @@
 package com.duowei.kitchen_china.print;
 
 
+import android.util.Log;
+
 import com.duowei.kitchen_china.bean.Cfpb2;
+import com.duowei.kitchen_china.uitls.DateTimes;
 
 import java.util.List;
 
@@ -50,7 +53,7 @@ public class PrintHandler {
             mIPrint.sendMsg("桌号："+cfpb2.getCzmc()+"\n");
             Command.WEIGHT[2]=0x01;
             mIPrint.sendMsg(Command.WEIGHT);
-            mIPrint.sendMsg("点单员："+cfpb2.getYhmc()+"    时间："+cfpb2.getWcsj()+"\n");
+            mIPrint.sendMsg("点单员："+cfpb2.getYhmc()+"    时间："+ DateTimes.getTime()+"\n");
             mIPrint.sendMsg("---------------------------------------\n");
             Command.WEIGHT[2] = 0x11;
             mIPrint.sendMsg(Command.WEIGHT);

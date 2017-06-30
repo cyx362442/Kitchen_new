@@ -47,7 +47,7 @@ public class PollingService extends Service {
         mHandler.postDelayed(mRunnable =new Runnable() {
             @Override
             public void run() {
-                Post.getInstance(getApplicationContext()).postCfpb(Net.sql_cfpb);
+                Post.getInstance().postCfpb(Net.sql_cfpb);
                 mHandler.postDelayed(mRunnable,5000);
             }
         }, 1000);

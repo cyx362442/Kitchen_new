@@ -8,6 +8,18 @@ import java.util.Date;
  */
 
 public class DateTimes {
+    public static long loginTime=0;//登录时的本地时间
+
+    public static long serverTime=0;//登录时的服务器时间
+
+    public static long getServerTime() {
+        return serverTime;
+    }
+
+    public static void setServerTime(long serverTime) {
+        DateTimes.serverTime = serverTime;
+    }
+
     public static String getWeek(){
         String z = "";
         Date date = new Date();
@@ -32,8 +44,11 @@ public class DateTimes {
     }
     public static String getTime(){
         Date curDate = new Date(System.currentTimeMillis());
-        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmssSSS");
-        String dtime=format.format(curDate);
+        long passtime = curDate.getTime() - loginTime;
+        Date date = new Date(serverTime+passtime);
+
+        SimpleDateFormat dateformat = new SimpleDateFormat("HH:mm:ss");
+        String dtime=dateformat.format(date);
         return dtime;
     }
     public static String getTime2(){

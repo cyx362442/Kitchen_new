@@ -15,15 +15,20 @@ import com.duowei.kitchen_china.event.StartProgress;
 import com.duowei.kitchen_china.event.UpdateCfpb;
 import com.duowei.kitchen_china.fragment.MainFragment;
 import com.duowei.kitchen_china.fragment.TopFragment;
+import com.duowei.kitchen_china.httputils.Net;
+import com.duowei.kitchen_china.httputils.Post;
 import com.duowei.kitchen_china.print.IPrint;
 import com.duowei.kitchen_china.print.PrintHandler;
 import com.duowei.kitchen_china.print.WifiPrint;
 import com.duowei.kitchen_china.server.PollingService;
+import com.duowei.kitchen_china.uitls.DateTimes;
 import com.duowei.kitchen_china.uitls.PreferenceUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.litepal.crud.DataSupport;
+
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,13 +43,35 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         initUI();
 
-        startServer();
-
         initFragment();
-        initPrint();
         DataSupport.findLast(Cfpb2.class);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        /**去除底部导航栏*/
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        decorView.setSystemUiVisibility(uiOptions);
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+        //开启轮询服务
+        String serviceIP = PreferenceUtils.getInstance(this).getServiceIp("serviceIP", "");
+        Net.url = "http://" + serviceIP + ":2233/server/ServerSvlt?";
+        startServer();
+        //初始化打印机
+        initPrint();
+
+        long time =new Date(System.currentTimeMillis()).getTime();
+        DateTimes.loginTime=time;
+        Post.getInstance().getServerTime();
+    }
 
     private void startServer() {
         mIntent = new Intent(this, PollingService.class);
@@ -118,26 +145,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        /**去除底部导航栏*/
-        View decorView = getWindow().getDecorView();
-        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-        decorView.setSystemUiVisibility(uiOptions);
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
-    }
-
-    @Override
     protected void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
         stopService(mIntent);
     }
-
 }

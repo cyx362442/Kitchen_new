@@ -76,7 +76,7 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
     }
 
     public void updateSuccess(){
-        Post.getInstance(getActivity()).postCfpb(Net.sql_cfpb);
+        Post.getInstance().postCfpb(Net.sql_cfpb);
         DataSupport.saveAll(listCfpb2);
         PrintHandler.getInstance().print(listCfpb2);
     }
@@ -112,13 +112,13 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
                 //己完成
                 cfpb21 = new Cfpb2(cfpb2.getXH(), cfpb2.getXmbh(), cfpb2.getXmmc(), cfpb2.getDw(),
                             cfpbItem.sl1, cfpbItem.pz, cfpb2.getXdsj(), cfpbItem.czmc1,
-                            cfpbItem.fzs, cfpb2.getYhmc(), tempNum, DateTimes.getTime2());
+                            cfpbItem.fzs, cfpb2.getYhmc(), tempNum, DateTimes.getTime());
                 listCfpb2.add(cfpb21);
                 num=num-cfpbItem.sl1;
             }else{
                 break;
             }
         }
-        Post.getInstance(getActivity()).setPost7(sql);
+        Post.getInstance().setPost7(sql);
     }
 }
