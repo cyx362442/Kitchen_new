@@ -4,7 +4,6 @@ package com.duowei.kitchen_china.fragment;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +11,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.duowei.kitchen_china.R;
-import com.duowei.kitchen_china.SettingsActivity;
-import com.duowei.kitchen_china.bean.Cfpb2;
+import com.duowei.kitchen_china.activity.PastRecordsActivity;
+import com.duowei.kitchen_china.activity.SellOutActivity;
+import com.duowei.kitchen_china.activity.SettingsActivity;
+import com.duowei.kitchen_china.bean.Cfpb;
 import com.duowei.kitchen_china.bean.Cfpb_item;
 
 import java.util.List;
@@ -59,7 +60,7 @@ public class TopFragment extends Fragment {
         return inflate;
     }
     //待煮菜品
-    public void setListCfpb(List<Cfpb2>listCfpb){
+    public void setListCfpb(List<Cfpb>listCfpb){
         mTvUncook.setText(listCfpb.size()+"种");
         float foodCount=0;
         for(int i=0;i<listCfpb.size();i++){
@@ -81,12 +82,16 @@ public class TopFragment extends Fragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_history:
+                mIntent=new Intent(getActivity(), PastRecordsActivity.class);
+                startActivity(mIntent);
                 break;
             case R.id.btn_search:
                 break;
             case R.id.btn_overtime:
                 break;
             case R.id.btn_saleout:
+                mIntent=new Intent(getActivity(), SellOutActivity.class);
+                startActivity(mIntent);
                 break;
             case R.id.btn_setting:
                 mIntent = new Intent(getActivity(), SettingsActivity.class);

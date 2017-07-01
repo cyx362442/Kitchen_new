@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.duowei.kitchen_china.R;
-import com.duowei.kitchen_china.bean.Cfpb2;
+import com.duowei.kitchen_china.bean.Cfpb;
 import com.duowei.kitchen_china.bean.Cfpb_item;
 import com.duowei.kitchen_china.dialog.DigitInput;
 
@@ -28,20 +27,20 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHold> {
     private int index=0;
     private Context context;
     private LayoutInflater mLayoutInflater;
-    private List<Cfpb2> listCfpb;
+    private List<Cfpb> listCfpb;
     private List<Cfpb_item>listCfpb_item;
 
     private onItemClickListener itemListener;
     private onContinueClickListener continueLisener;
 
-    public RecAdapter(Context context,List<Cfpb2> listCfpb) {
+    public RecAdapter(Context context,List<Cfpb> listCfpb) {
         this.context = context;
         this.listCfpb = listCfpb;
         mLayoutInflater = LayoutInflater.from(context);
         listCfpb_item=new ArrayList<>();
     }
 
-    public void setList(List<Cfpb2> listCfpb){
+    public void setList(List<Cfpb> listCfpb){
         this.listCfpb=listCfpb;
     }
 
@@ -88,7 +87,7 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHold> {
     @Override
     public void onBindViewHolder(ViewHold holder, final int position) {
         float count=0;
-        final Cfpb2 cfpb = listCfpb.get(position);
+        final Cfpb cfpb = listCfpb.get(position);
         holder.mTvName.setText(cfpb.getXmmc());
 
         List<Cfpb_item> listCfpb = cfpb.getListCfpb();

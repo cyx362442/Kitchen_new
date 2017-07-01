@@ -1,76 +1,101 @@
 package com.duowei.kitchen_china.bean;
 
+import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Administrator on 2017-06-22.
+ * Created by Administrator on 2017-06-23.
  */
 
-public class Cfpb {
+public class Cfpb extends DataSupport{
 
     /**
-     * XH : 10046
-     * MTXH : 46
-     * WMDBH : CYY20170622094858575
-     * XMBH : 00926
-     * XMMC : 玫瑰奶茶
-     * DW : 份
-     * SL : 5.00
-     * PZ :
-     * XSZT :
-     * YHMC : 管理员
-     * POS : cyy
-     * XDSJ : 20170622T09:49:07
-     * BY1 : 206,
-     * BY2 : CYY
-     * BY3 : 14
-     * BY4 :
-     * BY5 : 754411
-     * YWCSL : 4.00
+     * XH : 10105
+     * xmbh : 00073
+     * xmmc : 彩虹飘香（6寸铁盘）
+     * dw : 份
+     * sl : 1.00
+     * pz :
+     * xdsj : 20170623T13:55:28
+     * czmc : 101,
+     * fzs : 69
      */
 
     private String XH;
-    private String MTXH;
-    private String WMDBH;
-    private String XMBH;
-    private String XMMC;
-    private String DW;
-    private float SL;
-    private String PZ;
-    private String XSZT;
-    private String YHMC;
-    private String POS;
-    private String XDSJ;
-    private String BY1;
-    private String BY2;
-    private String BY3;
-    private String BY4;
-    private String BY5;
-    private String YWCSL;
+    private String xmbh;
+    private String xmmc;
+    private String dw;
+    private float sl;
+    private String pz;
+    private String xdsj;
+    private String czmc;
+    private String fzs;
+    private String yhmc;
+    private float ywcsl;
+    private String wcsj;
 
-    private float zjsl;
+    public Cfpb(String XH, String xmbh, String xmmc, String dw, float sl, String pz, String xdsj,
+                String czmc, String fzs, String yhmc, float ywcsl, String wcsj) {
+            this.XH = XH;
+        this.xmbh = xmbh;
+        this.xmmc = xmmc;
+        this.dw = dw;
+        this.sl = sl;
+        this.pz = pz;
+        this.xdsj = xdsj;
+        this.czmc = czmc;
+        this.fzs = fzs;
+        this.yhmc = yhmc;
+        this.ywcsl = ywcsl;
+        this.wcsj = wcsj;
+    }
 
-    private List<Cfpb_item>list;
+    public String getWcsj() {
+        return wcsj;
+    }
 
-    public List<Cfpb_item> getList() {
-        if(list==null){
-            list=new ArrayList<>();
+    public void setWcsj(String wcsj) {
+        this.wcsj = wcsj;
+    }
+
+    public String getYhmc() {
+        return yhmc;
+    }
+
+    public void setYhmc(String yhmc) {
+        this.yhmc = yhmc;
+    }
+
+    public float getYwcsl() {
+        return ywcsl;
+    }
+
+    public void setYwcsl(float ywcsl) {
+        this.ywcsl = ywcsl;
+    }
+
+    private String sfxz="0";
+    private List<Cfpb_item> listCfpb;
+    public String getSfxz() {
+        return sfxz;
+    }
+
+    public void setSfxz(String sfxz) {
+        this.sfxz = sfxz;
+    }
+
+
+    public List<Cfpb_item> getListCfpb() {
+        if(listCfpb==null){
+            listCfpb=new ArrayList<>();
         }
-        return list;
+        return listCfpb;
     }
 
-    public void setList(List<Cfpb_item> list) {
-        this.list = list;
-    }
-
-    public float getZjsl() {
-        return zjsl;
-    }
-
-    public void setZjsl(float zjsl) {
-        this.zjsl = zjsl;
+    public void setListCfpb(List<Cfpb_item> listCfpb) {
+        this.listCfpb = listCfpb;
     }
 
     public String getXH() {
@@ -81,139 +106,67 @@ public class Cfpb {
         this.XH = XH;
     }
 
-    public String getMTXH() {
-        return MTXH;
+    public String getXmbh() {
+        return xmbh;
     }
 
-    public void setMTXH(String MTXH) {
-        this.MTXH = MTXH;
+    public void setXmbh(String xmbh) {
+        this.xmbh = xmbh;
     }
 
-    public String getWMDBH() {
-        return WMDBH;
+    public String getXmmc() {
+        return xmmc;
     }
 
-    public void setWMDBH(String WMDBH) {
-        this.WMDBH = WMDBH;
+    public void setXmmc(String xmmc) {
+        this.xmmc = xmmc;
     }
 
-    public String getXMBH() {
-        return XMBH;
+    public String getDw() {
+        return dw;
     }
 
-    public void setXMBH(String XMBH) {
-        this.XMBH = XMBH;
+    public void setDw(String dw) {
+        this.dw = dw;
     }
 
-    public String getXMMC() {
-        return XMMC;
+    public float getSl() {
+        return sl;
     }
 
-    public void setXMMC(String XMMC) {
-        this.XMMC = XMMC;
+    public void setSl(float sl) {
+        this.sl = sl;
     }
 
-    public String getDW() {
-        return DW;
+    public String getPz() {
+        return pz;
     }
 
-    public void setDW(String DW) {
-        this.DW = DW;
+    public void setPz(String pz) {
+        this.pz = pz;
     }
 
-    public float getSL() {
-        return SL;
+    public String getXdsj() {
+        return xdsj;
     }
 
-    public void setSL(float SL) {
-        this.SL = SL;
+    public void setXdsj(String xdsj) {
+        this.xdsj = xdsj;
     }
 
-    public String getPZ() {
-        return PZ;
+    public String getCzmc() {
+        return czmc;
     }
 
-    public void setPZ(String PZ) {
-        this.PZ = PZ;
+    public void setCzmc(String czmc) {
+        this.czmc = czmc;
     }
 
-    public String getXSZT() {
-        return XSZT;
+    public String getFzs() {
+        return fzs;
     }
 
-    public void setXSZT(String XSZT) {
-        this.XSZT = XSZT;
-    }
-
-    public String getYHMC() {
-        return YHMC;
-    }
-
-    public void setYHMC(String YHMC) {
-        this.YHMC = YHMC;
-    }
-
-    public String getPOS() {
-        return POS;
-    }
-
-    public void setPOS(String POS) {
-        this.POS = POS;
-    }
-
-    public String getXDSJ() {
-        return XDSJ;
-    }
-
-    public void setXDSJ(String XDSJ) {
-        this.XDSJ = XDSJ;
-    }
-
-    public String getBY1() {
-        return BY1;
-    }
-
-    public void setBY1(String BY1) {
-        this.BY1 = BY1;
-    }
-
-    public String getBY2() {
-        return BY2;
-    }
-
-    public void setBY2(String BY2) {
-        this.BY2 = BY2;
-    }
-
-    public String getBY3() {
-        return BY3;
-    }
-
-    public void setBY3(String BY3) {
-        this.BY3 = BY3;
-    }
-
-    public String getBY4() {
-        return BY4;
-    }
-
-    public void setBY4(String BY4) {
-        this.BY4 = BY4;
-    }
-
-    public String getBY5() {
-        return BY5;
-    }
-
-    public void setBY5(String BY5) {
-        this.BY5 = BY5;
-    }
-
-    public String getYWCSL() {
-        return YWCSL;
-    }
-
-    public void setYWCSL(String YWCSL) {
-        this.YWCSL = YWCSL;
+    public void setFzs(String fzs) {
+        this.fzs = fzs;
     }
 }

@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <litepal>
     <dbname value="kitchen" ></dbname>
-    <version value="2" ></version>
+    <version value="3" ></version>
     <list>
-        <mapping class="com.duowei.kitchen_china.bean.Cfpb2"></mapping>
+        <mapping class="com.duowei.kitchen_china.bean.Cfpb"></mapping>
+    </list>
+    <list>
+        <mapping class="com.duowei.kitchen_china.bean.Jyxmsz"></mapping>
     </list>
 </litepal>

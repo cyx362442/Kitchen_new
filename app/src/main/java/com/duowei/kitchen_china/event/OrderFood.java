@@ -1,6 +1,6 @@
 package com.duowei.kitchen_china.event;
 
-import com.duowei.kitchen_china.bean.Cfpb2;
+import com.duowei.kitchen_china.bean.Cfpb;
 
 import java.util.List;
 
@@ -9,9 +9,9 @@ import java.util.List;
  */
 
 public class OrderFood {
-    public List<Cfpb2> listCfpb;
+    public List<Cfpb> listCfpb;
 
-    public OrderFood(List<Cfpb2> listCfpb) {
+    public OrderFood(List<Cfpb> listCfpb) {
         this.listCfpb = listCfpb;
     }
 }

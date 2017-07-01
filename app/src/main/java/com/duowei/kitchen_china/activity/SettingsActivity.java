@@ -1,4 +1,4 @@
-package com.duowei.kitchen_china;
+package com.duowei.kitchen_china.activity;
 
 import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.duowei.kitchen_china.R;
 import com.duowei.kitchen_china.uitls.PreferenceUtils;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -69,7 +70,7 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-       getMenuInflater().inflate(R.menu.options_menu,menu);
+        getMenuInflater().inflate(R.menu.options_menu,menu);
         return true;
     }
 

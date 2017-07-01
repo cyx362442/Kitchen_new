@@ -1,4 +1,4 @@
-package com.duowei.kitchen_china;
+package com.duowei.kitchen_china.activity;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -9,7 +9,8 @@ import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.duowei.kitchen_china.bean.Cfpb2;
+import com.duowei.kitchen_china.R;
+import com.duowei.kitchen_china.bean.Cfpb;
 import com.duowei.kitchen_china.event.OrderFood;
 import com.duowei.kitchen_china.event.StartProgress;
 import com.duowei.kitchen_china.event.UpdateCfpb;
@@ -44,7 +45,8 @@ public class MainActivity extends AppCompatActivity {
         initUI();
 
         initFragment();
-        DataSupport.findLast(Cfpb2.class);
+//        DataSupport.findLast(Cfpb.class);
+        PrintHandler.getInstance().setIPrint(null);
     }
 
     @Override

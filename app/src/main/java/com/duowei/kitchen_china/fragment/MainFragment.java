@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,7 @@ import android.view.ViewGroup;
 import com.duowei.kitchen_china.R;
 import com.duowei.kitchen_china.adapter.RecAdapter;
 import com.duowei.kitchen_china.adapter.SpacesItemDecoration;
-import com.duowei.kitchen_china.bean.Cfpb2;
+import com.duowei.kitchen_china.bean.Cfpb;
 import com.duowei.kitchen_china.bean.Cfpb_item;
 import com.duowei.kitchen_china.event.StartProgress;
 import com.duowei.kitchen_china.httputils.Net;
@@ -25,7 +24,6 @@ import com.duowei.kitchen_china.uitls.DateTimes;
 import org.greenrobot.eventbus.EventBus;
 import org.litepal.crud.DataSupport;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,8 +33,8 @@ import java.util.List;
 public class MainFragment extends Fragment implements RecAdapter.onItemClickListener, RecAdapter.onContinueClickListener {
 
     private RecAdapter mRecAdapter;
-    private List<Cfpb2> listCfpb;
-    private List<Cfpb2>listCfpb2;//己完成
+    private List<Cfpb> listCfpb;
+    private List<Cfpb> mListCfpb;//己完成
     private int tempList;
     private int currentPosition=0;
 
@@ -51,7 +49,7 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
 
         View inflate = inflater.inflate(R.layout.fragment_main, container, false);
         listCfpb=new ArrayList<>();
-        listCfpb2=new ArrayList<>();
+        mListCfpb =new ArrayList<>();
         RecyclerView rv = (RecyclerView) inflate.findViewById(R.id.recycleView);
         rv.setLayoutManager(new GridLayoutManager(getActivity(),4));//gridview布局,4列
         rv.addItemDecoration(new SpacesItemDecoration(10));//设置item边距
@@ -62,7 +60,7 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
         mRecAdapter.setOnContinueClickListener(this);
         return inflate;
     }
-    public void setRecycleView(List<Cfpb2>list){
+    public void setRecycleView(List<Cfpb>list){
         mRecAdapter.setList(listCfpb=list);
         if(list.size()==tempList||list.size()==0){
             mRecAdapter.notifyDataSetChanged();
@@ -77,8 +75,8 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
 
     public void updateSuccess(){
         Post.getInstance().postCfpb(Net.sql_cfpb);
-        DataSupport.saveAll(listCfpb2);
-        PrintHandler.getInstance().print(listCfpb2);
+        DataSupport.saveAll(mListCfpb);
+        PrintHandler.getInstance().print(mListCfpb);
     }
 
     @Override
@@ -92,13 +90,13 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
         currentPosition=index;
 
         float tempNum=0;
-        Cfpb2 cfpb21=null;
-        listCfpb2.clear();
+        Cfpb cfpb21=null;
+        mListCfpb.clear();
         EventBus.getDefault().post(new StartProgress());
         String sql="";
         mRecAdapter.setIndex(index);
-        Cfpb2 cfpb2 = listCfpb.get(index);
-        List<Cfpb_item> listCfpb = cfpb2.getListCfpb();
+        Cfpb cfpb = listCfpb.get(index);
+        List<Cfpb_item> listCfpb = cfpb.getListCfpb();
         for(int i=0;i<listCfpb.size();i++){
             if(num>0){
                 Cfpb_item cfpbItem = listCfpb.get(i);
@@ -110,10 +108,10 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
                     tempNum=num;
                 }
                 //己完成
-                cfpb21 = new Cfpb2(cfpb2.getXH(), cfpb2.getXmbh(), cfpb2.getXmmc(), cfpb2.getDw(),
-                            cfpbItem.sl1, cfpbItem.pz, cfpb2.getXdsj(), cfpbItem.czmc1,
-                            cfpbItem.fzs, cfpb2.getYhmc(), tempNum, DateTimes.getTime());
-                listCfpb2.add(cfpb21);
+                cfpb21 = new Cfpb(cfpb.getXH(), cfpb.getXmbh(), cfpb.getXmmc(), cfpb.getDw(),
+                            cfpbItem.sl1, cfpbItem.pz, cfpb.getXdsj(), cfpbItem.czmc1,
+                            cfpbItem.fzs, cfpb.getYhmc(), tempNum, DateTimes.getTime());
+                mListCfpb.add(cfpb21);
                 num=num-cfpbItem.sl1;
             }else{
                 break;

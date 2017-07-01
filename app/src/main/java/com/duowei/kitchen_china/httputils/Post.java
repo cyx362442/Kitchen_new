@@ -1,18 +1,17 @@
 package com.duowei.kitchen_china.httputils;
 
 
-import android.content.Context;
 import android.util.Log;
 
 import com.android.volley.VolleyError;
-import com.duowei.kitchen_china.bean.Cfpb2;
+import com.duowei.kitchen_china.bean.Cfpb;
 import com.duowei.kitchen_china.bean.Cfpb_item;
+import com.duowei.kitchen_china.bean.Jyxmsz;
 import com.duowei.kitchen_china.event.OrderFood;
 import com.duowei.kitchen_china.event.UpdateCfpb;
 import com.duowei.kitchen_china.uitls.DateTimes;
-import com.duowei.kitchen_china.uitls.PreferenceUtils;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
+import com.google.gson.reflect.TypeToken;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONArray;
@@ -41,7 +40,7 @@ public class Post {
         return post;
     }
 
-    private List<Cfpb2> listCfpb = new ArrayList<>();
+    private List<Cfpb> listCfpb = new ArrayList<>();
 
     public synchronized void setPost7(String sql) {
         DownHTTP.postVolley7(Net.url, sql, new VolleyResultListener() {
@@ -72,22 +71,22 @@ public class Post {
 
                 }else{
                     Gson gson = new Gson();
-                    Cfpb2[] cfpb2 = gson.fromJson(response, Cfpb2[].class);
+                    Cfpb[] cfpb = gson.fromJson(response, Cfpb[].class);
                     String str = "";
-                    for (int i = 0; i < cfpb2.length; i++) {
+                    for (int i = 0; i < cfpb.length; i++) {
                         //抓取每个单品对应的餐桌数据集
-                        for (int j = 0; j < cfpb2.length; j++) {
-                            if ((cfpb2[j].getXmbh()).equals(cfpb2[i].getXmbh())) {
-                                Cfpb_item cfpb_item = new Cfpb_item(cfpb2[j].getXmbh(), cfpb2[j].getCzmc(), cfpb2[j].getSl(), cfpb2[j].getFzs(), cfpb2[j].getXH(),cfpb2[j].getPz());
-                                List<Cfpb_item> list = cfpb2[i].getListCfpb();
+                        for (int j = 0; j < cfpb.length; j++) {
+                            if ((cfpb[j].getXmbh()).equals(cfpb[i].getXmbh())) {
+                                Cfpb_item cfpb_item = new Cfpb_item(cfpb[j].getXmbh(), cfpb[j].getCzmc(), cfpb[j].getSl(), cfpb[j].getFzs(), cfpb[j].getXH(), cfpb[j].getPz());
+                                List<Cfpb_item> list = cfpb[i].getListCfpb();
                                 list.add(cfpb_item);
-                                cfpb2[i].setListCfpb(list);
+                                cfpb[i].setListCfpb(list);
                             }
                         }
                         //按单品编号不同进行分组
-                        if (!str.contains(cfpb2[i].getXmbh())) {
-                            listCfpb.add(cfpb2[i]);
-                            str = str + cfpb2[i].getXmbh() + "-";
+                        if (!str.contains(cfpb[i].getXmbh())) {
+                            listCfpb.add(cfpb[i]);
+                            str = str + cfpb[i].getXmbh() + "-";
                         }
                     }
                 }
@@ -95,6 +94,7 @@ public class Post {
             }
         });
     }
+
     public void getServerTime(){
         String sql="select CONVERT(varchar(100),getdate(),120) as fwqsj from cfpb|";
         DownHTTP.postVolley6(Net.url, sql, new VolleyResultListener() {
