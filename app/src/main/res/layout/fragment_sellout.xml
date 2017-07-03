@@ -3,17 +3,48 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              tools:context="com.duowei.kitchen_china.fragment.SelloutFragment">
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             >
             <include
-                layout="@layout/sellout_title"></include>
+                android:id="@+id/include"
+                layout="@layout/sellout_title"
+                ></include>
             <ListView
                 android:id="@+id/listView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_below="@+id/include"
+                android:layout_above="@+id/linearLayout"
+                android:background="@color/white"
                 ></ListView>
-        </LinearLayout>
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerInParent="true">
+                <Button
+                    android:id="@+id/btn_cancelall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:padding="10dp"
+                    android:background="@drawable/shape_button_blue"
+                    android:text="取消全部沽清"
+                    android:textSize="@dimen/textsize20"
+                    android:textColor="@color/white"/>
+                <Button
+                    android:id="@+id/btn_cancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:padding="10dp"
+                    android:background="@drawable/shape_button_blue"
+                    android:text="取消沽清"
+                    android:textSize="@dimen/textsize20"
+                    android:textColor="@color/white"/>
+            </LinearLayout>
+        </RelativeLayout>
 </FrameLayout>

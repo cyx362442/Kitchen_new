@@ -2,19 +2,35 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-            android:orientation="horizontal">
+              android:orientation="vertical">
+    <TextView
+        android:id="@+id/tv_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:background="@drawable/shape_top_title"
+        android:padding="10dp"
+        android:layout_marginBottom="1dp"
+        android:textSize="@dimen/textsize20"
+        android:textColor="@color/white"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
             <TextView
                 style="@style/TextView_title"
                 android:layout_weight="2"
-                android:background="@drawable/shape_left_corner"
                 android:text="品名"/>
             <TextView
                 style="@style/TextView_title"
                 android:layout_weight="1"
+                android:layout_marginLeft="1dp"
                 android:text="内部编码"/>
             <TextView
                 style="@style/TextView_title"
                 android:layout_weight="1"
-                android:background="@drawable/shape_right_corner"
+                android:layout_marginLeft="1dp"
                 android:text="助记符"/>
+    </LinearLayout>
 </LinearLayout>

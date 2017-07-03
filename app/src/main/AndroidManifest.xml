@@ -40,7 +40,8 @@
             android:name=".activity.PastRecordsActivity"
             android:label="历史菜品">
         </activity>
-        <activity android:name=".activity.SellOutActivity">
+        <activity android:name=".activity.SellOutActivity"
+            android:label="单品沽清">
         </activity>
     </application>
 

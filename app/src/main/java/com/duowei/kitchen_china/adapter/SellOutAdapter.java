@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.duowei.kitchen_china.R;
@@ -20,6 +21,7 @@ public class SellOutAdapter extends BaseAdapter {
     private Context context;
     private LayoutInflater mLayoutInflater;
     private List<Jyxmsz> listJyxmsz;
+    private int index=0;
 
     public SellOutAdapter(Context context, List<Jyxmsz> listJyxmsz) {
         this.context = context;
@@ -29,6 +31,10 @@ public class SellOutAdapter extends BaseAdapter {
 
     public void setList(List<Jyxmsz>listJyxmsz){
         this.listJyxmsz=listJyxmsz;
+    }
+
+    public void setIndex(int index){
+        this.index=index;
     }
 
     @Override
@@ -53,6 +59,7 @@ public class SellOutAdapter extends BaseAdapter {
         if(convertView==null){
             convertView=mLayoutInflater.inflate(R.layout.sellout_item,null);
             hold=new ViewHold();
+            hold.linearLayout= (LinearLayout) convertView.findViewById(R.id.linearLayout);
             hold.tvName= (TextView) convertView.findViewById(R.id.tv_name);
             hold.tvBianma= (TextView) convertView.findViewById(R.id.tv_bianma);
             hold.tvZhujifu= (TextView) convertView.findViewById(R.id.tv_zhujifu);
@@ -64,9 +71,15 @@ public class SellOutAdapter extends BaseAdapter {
         hold.tvName.setText(jyxmsz.getXmmc());
         hold.tvBianma.setText(jyxmsz.getXmbh());
         hold.tvZhujifu.setText(jyxmsz.getPy());
+        if(postion==index){
+            hold.linearLayout.setBackgroundResource(R.color.colorBlue);
+        }else{
+            hold.linearLayout.setBackgroundResource(R.color.white);
+        }
         return convertView;
     }
     class ViewHold{
+        LinearLayout linearLayout;
         TextView tvName;
         TextView tvBianma;
         TextView tvZhujifu;

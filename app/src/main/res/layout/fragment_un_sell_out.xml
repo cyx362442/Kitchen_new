@@ -3,11 +3,88 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              tools:context="com.duowei.kitchen_china.fragment.UnSellOutFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment"/>
+        >
+        <LinearLayout
+            android:id="@+id/ll_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:background="@drawable/shape_top_title">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="助记符或编码  "
+                android:textColor="@color/white"
+                android:textSize="@dimen/textsize20"/>
+            <EditText
+                android:id="@+id/et_input"
+                android:layout_width="200dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/shape_input"
+                />
+            <LinearLayout
+                android:id="@+id/ll_guqing"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="20dp"
+                android:gravity="center">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_delete_forever_black_36dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="沽清"
+                    android:textSize="@dimen/textsize20"
+                    android:textColor="@color/white"/>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/ll_center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ll_top"
+            android:layout_marginTop="1dp"
+            android:orientation="horizontal">
 
+            <TextView
+                style="@style/TextView_title"
+                android:layout_weight="2"
+                android:text="品名"/>
+            <TextView
+                style="@style/TextView_title"
+                android:layout_weight="1"
+                android:layout_marginLeft="1dp"
+                android:text="内部编码"/>
+            <TextView
+                style="@style/TextView_title"
+                android:layout_weight="1"
+                android:layout_marginLeft="1dp"
+                android:text="助记符"/>
+        </LinearLayout>
+        <ListView
+            android:id="@+id/listView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/ll_center"
+            android:layout_above="@+id/btn_close"
+            android:background="@color/white"></ListView>
+        <Button
+            android:id="@+id/btn_close"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="10dp"
+            android:background="@drawable/shape_confirm"
+            android:text="关闭"
+            android:textSize="@dimen/textsize20"
+            android:textColor="@color/white"/>
+    </RelativeLayout>
 </FrameLayout>
