@@ -1,17 +1,12 @@
 package com.duowei.kitchen_china.httputils;
 
-
-import android.util.Log;
-
 import com.android.volley.VolleyError;
 import com.duowei.kitchen_china.bean.Cfpb;
 import com.duowei.kitchen_china.bean.Cfpb_item;
-import com.duowei.kitchen_china.bean.Jyxmsz;
 import com.duowei.kitchen_china.event.OrderFood;
 import com.duowei.kitchen_china.event.UpdateCfpb;
 import com.duowei.kitchen_china.uitls.DateTimes;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONArray;
@@ -74,7 +69,7 @@ public class Post {
                     Cfpb[] cfpb = gson.fromJson(response, Cfpb[].class);
                     String str = "";
                     for (int i = 0; i < cfpb.length; i++) {
-                        //抓取每个单品对应的餐桌数据集
+                        //抓取每个单品所包含的餐桌数据集
                         for (int j = 0; j < cfpb.length; j++) {
                             if ((cfpb[j].getXmbh()).equals(cfpb[i].getXmbh())) {
                                 Cfpb_item cfpb_item = new Cfpb_item(cfpb[j].getXmbh(), cfpb[j].getCzmc(), cfpb[j].getSl(), cfpb[j].getFzs(), cfpb[j].getXH(), cfpb[j].getPz());

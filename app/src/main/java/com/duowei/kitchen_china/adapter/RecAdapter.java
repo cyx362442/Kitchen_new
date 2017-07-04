@@ -1,9 +1,11 @@
 package com.duowei.kitchen_china.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +17,12 @@ import com.duowei.kitchen_china.R;
 import com.duowei.kitchen_china.bean.Cfpb;
 import com.duowei.kitchen_china.bean.Cfpb_item;
 import com.duowei.kitchen_china.dialog.DigitInput;
+import com.duowei.kitchen_china.uitls.ColorAnim;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by Administrator on 2017-06-22.
@@ -89,29 +94,25 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHold> {
         float count=0;
         final Cfpb cfpb = listCfpb.get(position);
         holder.mTvName.setText(cfpb.getXmmc());
+        List<Cfpb_item> listCfpb_item = cfpb.getListCfpb();
 
-        List<Cfpb_item> listCfpb = cfpb.getListCfpb();
         //获取当前菜品对应第一个的口味备注
-        if(!TextUtils.isEmpty(listCfpb.get(0).pz)){
+        if(!TextUtils.isEmpty(listCfpb_item.get(0).pz)){
             holder.mTvBeizhu.setVisibility(View.VISIBLE);
-            holder.mTvBeizhu.setText(listCfpb.get(0).pz);
-        }else if(TextUtils.isEmpty(listCfpb.get(0).pz)){
+            holder.mTvBeizhu.setText(listCfpb_item.get(0).pz);
+        }else if(TextUtils.isEmpty(listCfpb_item.get(0).pz)){
             holder.mTvBeizhu.setVisibility(View.INVISIBLE);
         }
-        //获取单品总数量
-        for(Cfpb_item cfpb_item: listCfpb){
+        //获取每列单品总数量
+        for(Cfpb_item cfpb_item: listCfpb_item){
             count+=cfpb_item.sl1;
         }
+
         holder.mTvNum.setText(count+"");
         holder.mTvDw.setText(cfpb.getDw());
-//        if(position==index){
-//            holder.mLl.setBackgroundResource(R.drawable.shape_blue);
-//        }else{
-//            holder.mLl.setBackgroundResource(R.drawable.shape_green);
-//        }
 
         //刷新顶部子Recycleview
-        holder.mRecAdapterItem.setListCfpb_item(listCfpb);
+        holder.mRecAdapterItem.setListCfpb_item(listCfpb_item);
         holder.mRecAdapterItem.notifyDataSetChanged();
 
         holder.mLl.setOnClickListener(new View.OnClickListener() {
@@ -125,7 +126,7 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHold> {
         holder.btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(finalCount <=1){//数量小于等于1，直接删创造
+                if(finalCount <=1){//数量小于等于1，直接删删
                     continueLisener.setOnContinueClickListener(position,cfpb.getSl());
                 }else{//数量大于1，修改数量
                     final DigitInput digitInput = DigitInput.instance();

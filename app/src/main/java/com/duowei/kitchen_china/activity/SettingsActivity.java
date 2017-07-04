@@ -60,7 +60,8 @@ public class SettingsActivity extends AppCompatActivity {
                 mEtPrinterIP.setSummary(printerIP);
                 mPreferenceUtils.setPrinterIp("printerIP",printerIP);
             }else if(key.equals("checkbox")){
-                boolean auto = sharedPreferences.getBoolean("auto", true);
+                boolean auto=mPreferenceUtils.getAutoStart("auto", true);
+                auto=!auto;
                 mCheckbox.setChecked(auto);
                 mPreferenceUtils.setAutoStart("auto",auto);
             }

@@ -80,45 +80,48 @@ public class SelloutFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onClick(View view) {
-        String sql="";
         switch (view.getId()){
             case R.id.btn_cancel:
                 if(listJyxmsz.size()<=0){
                     return;
                 }
-                sql="update jyxmsz set gq='' where xmbh='"+mJyxmsz.getXmbh()+"'|";
-                Http_guqing(sql);
+                Http_guqing();
                 break;
             case R.id.btn_cancelall:
                 if(listJyxmsz.size()<=0){
                     return;
                 }
-                EventBus.getDefault().post(new StartAnim());
-                sql="update jyxmsz set gq=''|";
-                DownHTTP.postVolley7(Net.url, sql, new VolleyResultListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        EventBus.getDefault().post(new StopAnim());
-                    }
-                    @Override
-                    public void onResponse(String response) {
-                        if(response.contains("richado")){
-                            ContentValues values = new ContentValues();
-                            values.put("gq","");
-                            DataSupport.updateAll(Jyxmsz.class,values);
-                            listJyxmsz.clear();
-                            mAdapter.setList(listJyxmsz);
-                            mAdapter.notifyDataSetChanged();
-                            EventBus.getDefault().post(new StopAnim());
-                        }
-                    }
-                });
+                Http_guqingAll();
                 break;
         }
     }
 
-    private void Http_guqing(String sql) {
+    private void Http_guqingAll() {
         EventBus.getDefault().post(new StartAnim());
+        String sql="update jyxmsz set gq=''|";
+        DownHTTP.postVolley7(Net.url, sql, new VolleyResultListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                EventBus.getDefault().post(new StopAnim());
+            }
+            @Override
+            public void onResponse(String response) {
+                if(response.contains("richado")){
+                    ContentValues values = new ContentValues();
+                    values.put("gq","");
+                    DataSupport.updateAll(Jyxmsz.class,values);
+                    listJyxmsz.clear();
+                    mAdapter.setList(listJyxmsz);
+                    mAdapter.notifyDataSetChanged();
+                    EventBus.getDefault().post(new StopAnim());
+                }
+            }
+        });
+    }
+
+    private void Http_guqing() {
+        EventBus.getDefault().post(new StartAnim());
+        String sql="update jyxmsz set gq='' where xmbh='"+mJyxmsz.getXmbh()+"'|";
         DownHTTP.postVolley7(Net.url, sql, new VolleyResultListener() {
             @Override
             public void onErrorResponse(VolleyError error) {

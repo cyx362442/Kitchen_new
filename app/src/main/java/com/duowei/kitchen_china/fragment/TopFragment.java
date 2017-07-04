@@ -4,6 +4,7 @@ package com.duowei.kitchen_china.fragment;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,11 @@ import com.duowei.kitchen_china.activity.SellOutActivity;
 import com.duowei.kitchen_china.activity.SettingsActivity;
 import com.duowei.kitchen_china.bean.Cfpb;
 import com.duowei.kitchen_china.bean.Cfpb_item;
+import com.duowei.kitchen_china.event.SearchFood;
+import com.duowei.kitchen_china.sound.KeySound;
+import com.duowei.kitchen_china.uitls.ColorAnim;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -47,6 +53,9 @@ public class TopFragment extends Fragment {
     Unbinder unbinder;
     private Intent mIntent;
 
+    private float tempNum=0;
+    private KeySound mSound;
+
     public TopFragment() {
         // Required empty public constructor
     }
@@ -57,6 +66,7 @@ public class TopFragment extends Fragment {
         // Inflate the layout for this fragment
         View inflate = inflater.inflate(R.layout.fragment_top, container, false);
         unbinder = ButterKnife.bind(this, inflate);
+        mSound = KeySound.getContext(getActivity());
         return inflate;
     }
     //待煮菜品
@@ -70,6 +80,11 @@ public class TopFragment extends Fragment {
             }
         }
         mTvCooked.setText(foodCount+"份");
+        if(foodCount>tempNum){
+            mSound.playSound('0',0);
+            ColorAnim.getInstacne(getActivity()).startColor(mTvCooked);
+        }
+        tempNum=foodCount;
     }
 
     @Override
@@ -86,6 +101,7 @@ public class TopFragment extends Fragment {
                 startActivity(mIntent);
                 break;
             case R.id.btn_search:
+                EventBus.getDefault().post(new SearchFood(true));
                 break;
             case R.id.btn_overtime:
                 break;

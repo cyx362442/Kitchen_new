@@ -1,6 +1,7 @@
 package com.duowei.kitchen_china.activity;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -11,11 +12,14 @@ import android.widget.Toast;
 
 import com.duowei.kitchen_china.R;
 import com.duowei.kitchen_china.bean.Cfpb;
+import com.duowei.kitchen_china.broadcast.MyReceiver;
 import com.duowei.kitchen_china.event.OrderFood;
+import com.duowei.kitchen_china.event.SearchFood;
 import com.duowei.kitchen_china.event.StartProgress;
 import com.duowei.kitchen_china.event.UpdateCfpb;
 import com.duowei.kitchen_china.fragment.MainFragment;
 import com.duowei.kitchen_china.fragment.TopFragment;
+import com.duowei.kitchen_china.fragment.TopFragment2;
 import com.duowei.kitchen_china.httputils.Net;
 import com.duowei.kitchen_china.httputils.Post;
 import com.duowei.kitchen_china.print.IPrint;
@@ -35,13 +39,15 @@ public class MainActivity extends AppCompatActivity {
 
     private Intent mIntent;
     private MainFragment mFragment;
-    private ProgressBar mPb;
     private TopFragment mTopFragment;
+    private View mLoad;
+    private boolean isSearch=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         initUI();
 
         initFragment();
@@ -90,8 +96,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initUI() {
-        mPb = (ProgressBar) findViewById(R.id.pb);
-        mPb.setVisibility(View.VISIBLE);
+        mLoad = findViewById(R.id.loading);
+        mLoad.setVisibility(View.VISIBLE);
     }
     /**初始化打印机*/
     private void initPrint() {
@@ -131,9 +137,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe
     public void getCfpb(OrderFood event){
-        mFragment.setRecycleView(event.listCfpb);
-        mTopFragment.setListCfpb(event.listCfpb);
-        mPb.setVisibility(View.GONE);
+        if(isSearch==false){
+            mFragment.setRecycleView(event.listCfpb);
+            mTopFragment.setListCfpb(event.listCfpb);
+        }
+        mLoad.setVisibility(View.GONE);
     }
 
     @Subscribe
@@ -143,7 +151,20 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe
     public void startProgress(StartProgress event){
-        mPb.setVisibility(View.VISIBLE);
+        mLoad.setVisibility(View.VISIBLE);
+    }
+
+    @Subscribe
+    public void toSearch(SearchFood event){
+        isSearch=event.search;
+        if(event.search==true){
+            TopFragment2 fragment = new TopFragment2();
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.frame01, fragment).commit();
+        }else{
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.frame01, mTopFragment).commit();
+        }
     }
 
     @Override

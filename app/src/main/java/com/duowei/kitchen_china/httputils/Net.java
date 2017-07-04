@@ -12,5 +12,5 @@ public class Net {
             "where A.XDSJ BETWEEN DATEADD(mi,-180,GETDATE()) AND GETDATE() and (isnull(A.sl,0)-isnull(A.tdsl,0))>0\n" +
             "order by A.xdsj,A.xmmc|";
 
-    public static String sql_jyxmsz="select xmbh,xmmc,py,isnull(gq,'0')gq from jyxmsz where isnull(sfqx,'0')<>'1'|";
+    public static String sql_jyxmsz="select xmbh,xmmc,py,isnull(gq,'0')gq from jyxmsz where isnull(sfqx,'0')<>'1' and isnull(sftc,'0')<>'1'|";
 }
