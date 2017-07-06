@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.WindowManager;
 
 import com.duowei.kitchen_china.R;
 import com.duowei.kitchen_china.uitls.PreferenceUtils;
@@ -30,6 +32,16 @@ public class SettingsActivity extends AppCompatActivity {
         mFragment = new SettingFragment();
         ft.replace(R.id.frame_setting, mFragment).commit();
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        decorView.setSystemUiVisibility(uiOptions);
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+    }
+
     public static class SettingFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {

@@ -5,9 +5,9 @@ package com.duowei.kitchen_china.event;
  */
 
 public class SearchFood {
-    public boolean search=true;
+    public String  stytle;
 
-    public SearchFood(boolean search) {
-        this.search = search;
+    public SearchFood(String stytle) {
+        this.stytle = stytle;
     }
 }

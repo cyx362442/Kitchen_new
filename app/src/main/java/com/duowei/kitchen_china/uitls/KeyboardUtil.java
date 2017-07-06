@@ -5,6 +5,7 @@ import android.content.Context;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.text.Editable;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 

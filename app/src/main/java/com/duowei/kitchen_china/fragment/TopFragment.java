@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.duowei.kitchen_china.R;
@@ -17,7 +18,11 @@ import com.duowei.kitchen_china.activity.SellOutActivity;
 import com.duowei.kitchen_china.activity.SettingsActivity;
 import com.duowei.kitchen_china.bean.Cfpb;
 import com.duowei.kitchen_china.bean.Cfpb_item;
+import com.duowei.kitchen_china.event.OutTimeFood;
+import com.duowei.kitchen_china.event.Print;
 import com.duowei.kitchen_china.event.SearchFood;
+import com.duowei.kitchen_china.httputils.Net;
+import com.duowei.kitchen_china.httputils.Post;
 import com.duowei.kitchen_china.sound.KeySound;
 import com.duowei.kitchen_china.uitls.ColorAnim;
 
@@ -50,11 +55,14 @@ public class TopFragment extends Fragment {
     Button mBtnSetting;
     @BindView(R.id.btn_exit)
     Button mBtnExit;
+    @BindView(R.id.img_print)
+    ImageView mImgPrint;
     Unbinder unbinder;
     private Intent mIntent;
 
-    private float tempNum=0;
+    private float tempNum = 0;
     private KeySound mSound;
+    private boolean isOutTime = false;
 
     public TopFragment() {
         // Required empty public constructor
@@ -69,22 +77,23 @@ public class TopFragment extends Fragment {
         mSound = KeySound.getContext(getActivity());
         return inflate;
     }
+
     //待煮菜品
-    public void setListCfpb(List<Cfpb>listCfpb){
-        mTvUncook.setText(listCfpb.size()+"种");
-        float foodCount=0;
-        for(int i=0;i<listCfpb.size();i++){
+    public void setListCfpb(List<Cfpb> listCfpb) {
+        mTvUncook.setText(listCfpb.size() + "种");
+        float foodCount = 0;
+        for (int i = 0; i < listCfpb.size(); i++) {
             List<Cfpb_item> list = listCfpb.get(i).getListCfpb();
-            for(int j=0;j<list.size();j++){
-                foodCount+=list.get(j).sl1;
+            for (int j = 0; j < list.size(); j++) {
+                foodCount += list.get(j).sl1;
             }
         }
-        mTvCooked.setText(foodCount+"份");
-        if(foodCount>tempNum){
-            mSound.playSound('0',0);
+        mTvCooked.setText(foodCount + "份");
+        if (foodCount > tempNum) {
+            mSound.playSound('0', 0);
             ColorAnim.getInstacne(getActivity()).startColor(mTvCooked);
         }
-        tempNum=foodCount;
+        tempNum = foodCount;
     }
 
     @Override
@@ -93,20 +102,36 @@ public class TopFragment extends Fragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.btn_history, R.id.btn_search, R.id.btn_overtime, R.id.btn_saleout, R.id.btn_setting, R.id.btn_exit})
+    @OnClick({R.id.img_print,R.id.btn_history, R.id.btn_search, R.id.btn_overtime, R.id.btn_saleout,
+            R.id.btn_setting, R.id.btn_exit})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.img_print:
+                EventBus.getDefault().post(new Print());
+                break;
             case R.id.btn_history:
-                mIntent=new Intent(getActivity(), PastRecordsActivity.class);
+                mIntent = new Intent(getActivity(), PastRecordsActivity.class);
                 startActivity(mIntent);
                 break;
             case R.id.btn_search:
-                EventBus.getDefault().post(new SearchFood(true));
+                EventBus.getDefault().post(new SearchFood(getResources().getString(R.string.searchfood)));
                 break;
             case R.id.btn_overtime:
+                if (isOutTime == false) {
+                    EventBus.getDefault().post(new OutTimeFood(getResources().getString(R.string.outtimefood)));
+                    mBtnOvertime.setText("全部单品");
+//                    mBtnOvertime.setTextColor(getResources().getColor(R.color.white));
+                } else {
+                    EventBus.getDefault().post(new OutTimeFood(getResources().getString(R.string.allfood)));
+                    mBtnOvertime.setText("超时单品");
+//                    mBtnOvertime.setTextColor(Color.RED);
+                }
+                //马上发起服务器查询
+                Post.getInstance().postCfpb(Net.sql_cfpb);
+                isOutTime = !isOutTime;
                 break;
             case R.id.btn_saleout:
-                mIntent=new Intent(getActivity(), SellOutActivity.class);
+                mIntent = new Intent(getActivity(), SellOutActivity.class);
                 startActivity(mIntent);
                 break;
             case R.id.btn_setting:

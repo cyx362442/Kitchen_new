@@ -28,6 +28,10 @@ public class HistoryAdapter extends BaseAdapter{
         mLayoutInflater = LayoutInflater.from(context);
     }
 
+    public void setList(List<Cfpb>listCfpb){
+        this.listCfpb=listCfpb;
+    }
+
     @Override
     public int getCount() {
         return listCfpb.size();

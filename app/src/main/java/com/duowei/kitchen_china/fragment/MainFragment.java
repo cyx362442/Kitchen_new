@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +35,7 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
 
     private RecAdapter mRecAdapter;
     private List<Cfpb> listCfpb;
-    private List<Cfpb> mListCfpb;//己完成
+    private List<Cfpb> listCfpbComplete;//己完成的
     private int tempList;
     private int currentPosition=0;
 
@@ -49,10 +50,10 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
 
         View inflate = inflater.inflate(R.layout.fragment_main, container, false);
         listCfpb=new ArrayList<>();
-        mListCfpb =new ArrayList<>();
+        listCfpbComplete =new ArrayList<>();
         RecyclerView rv = (RecyclerView) inflate.findViewById(R.id.recycleView);
         rv.setLayoutManager(new GridLayoutManager(getActivity(),4));//gridview布局,4列
-        rv.addItemDecoration(new SpacesItemDecoration(10));//设置item边距
+        rv.addItemDecoration(new SpacesItemDecoration(5));//设置item边距
         rv.setItemAnimator(new DefaultItemAnimator());
         mRecAdapter = new RecAdapter(getActivity(), listCfpb);
         rv.setAdapter(mRecAdapter);
@@ -73,10 +74,15 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
         tempList=list.size();
     }
 
+    public void setRecycleView2(List<Cfpb>list){
+        mRecAdapter.setList(listCfpb=list);
+        mRecAdapter.notifyDataSetChanged();
+    }
+
     public void updateSuccess(){
         Post.getInstance().postCfpb(Net.sql_cfpb);
-        DataSupport.saveAll(mListCfpb);
-        PrintHandler.getInstance().print(mListCfpb);
+        DataSupport.saveAll(listCfpbComplete);
+        PrintHandler.getInstance().print(listCfpbComplete);
     }
 
     @Override
@@ -91,7 +97,7 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
 
         float tempNum=0;
         Cfpb cfpb21=null;
-        mListCfpb.clear();
+        listCfpbComplete.clear();
         EventBus.getDefault().post(new StartProgress());
         String sql="";
         mRecAdapter.setIndex(index);
@@ -110,8 +116,9 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
                 //己完成
                 cfpb21 = new Cfpb(cfpb.getXH(), cfpb.getXmbh(), cfpb.getXmmc(), cfpb.getDw(),
                             cfpbItem.sl1, cfpbItem.pz, cfpb.getXdsj(), cfpbItem.czmc1,
-                            cfpbItem.fzs, cfpb.getYhmc(), tempNum, DateTimes.getTime());
-                mListCfpb.add(cfpb21);
+                            cfpbItem.fzs, cfpb.getYhmc(), tempNum, DateTimes.getTime(),
+                        DateTimes.getTime2(cfpb.getXdsj()));
+                listCfpbComplete.add(cfpb21);
                 num=num-cfpbItem.sl1;
             }else{
                 break;

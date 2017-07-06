@@ -11,6 +11,7 @@ import com.google.gson.Gson;
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.litepal.crud.DataSupport;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -103,8 +104,12 @@ public class Post {
                     String fwqsj = jsonArray.getJSONObject(0).getString("fwqsj");
                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     Date datetime = dateFormat.parse(fwqsj);
-                    long time = datetime.getTime();
-                    DateTimes.serverTime=time;
+                    long currentServerTime = datetime.getTime();
+                    DateTimes.serverTime=currentServerTime;
+
+                    /*删除2天之前的历史数据*/
+                    long l = currentServerTime - 2*24*60*60*1000;
+                    DataSupport.deleteAll(Cfpb.class,"time<'"+l+"'");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 } catch (ParseException e) {

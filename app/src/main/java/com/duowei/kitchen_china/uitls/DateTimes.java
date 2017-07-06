@@ -1,5 +1,6 @@
 package com.duowei.kitchen_china.uitls;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -42,6 +43,7 @@ public class DateTimes {
         }
         return z;
     }
+
     public static String getTime(){
         Date curDate = new Date(System.currentTimeMillis());
         long passtime = curDate.getTime() - loginTime;
@@ -51,10 +53,15 @@ public class DateTimes {
         String dtime=dateformat.format(date);
         return dtime;
     }
-    public static String getTime2(){
-        Date curDate = new Date(System.currentTimeMillis());
+    public static long getTime2(String xdsj){
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String dtime=format.format(curDate);
-        return dtime;
+        long mTime = 0;
+        try {
+            Date date = format.parse(xdsj);
+            mTime= date.getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return mTime;
     }
 }

@@ -5,6 +5,10 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_settings">设置</string>
 
+    <string name="allfood">全部菜品</string>
+    <string name="searchfood">查询菜品</string>
+    <string name="outtimefood">超时单品</string>
+
     <!-- Strings related to Settings -->
 
     <!-- Example General settings -->

@@ -26,4 +26,12 @@
         android:id="@+id/loading"
         layout="@layout/loading_item"
         android:visibility="gone"></include>
+    <android.inputmethodservice.KeyboardView
+        android:id="@+id/keyboard_view"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentBottom="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:visibility="gone" />
 </RelativeLayout>

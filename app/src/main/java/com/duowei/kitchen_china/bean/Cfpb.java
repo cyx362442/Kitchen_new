@@ -31,13 +31,33 @@ public class Cfpb extends DataSupport{
     private String pz;
     private String xdsj;
     private String czmc;
-    private String fzs;
+    private int fzs;
     private String yhmc;
     private float ywcsl;
+    private String py;
+    private int cssj;
+    private long time;
+
+    public String getPy() {
+        return py;
+    }
+
+    public void setPy(String py) {
+        this.py = py;
+    }
+
+    public int getCssj() {
+        return cssj;
+    }
+
+    public void setCssj(int cssj) {
+        this.cssj = cssj;
+    }
+
     private String wcsj;
 
     public Cfpb(String XH, String xmbh, String xmmc, String dw, float sl, String pz, String xdsj,
-                String czmc, String fzs, String yhmc, float ywcsl, String wcsj) {
+                String czmc, int fzs, String yhmc, float ywcsl, String wcsj,long time) {
             this.XH = XH;
         this.xmbh = xmbh;
         this.xmmc = xmmc;
@@ -50,6 +70,7 @@ public class Cfpb extends DataSupport{
         this.yhmc = yhmc;
         this.ywcsl = ywcsl;
         this.wcsj = wcsj;
+        this.time=time;
     }
 
     public String getWcsj() {
@@ -162,11 +183,11 @@ public class Cfpb extends DataSupport{
         this.czmc = czmc;
     }
 
-    public String getFzs() {
+    public int getFzs() {
         return fzs;
     }
 
-    public void setFzs(String fzs) {
+    public void setFzs(int fzs) {
         this.fzs = fzs;
     }
 }
