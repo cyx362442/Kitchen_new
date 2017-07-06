@@ -3,6 +3,8 @@ package com.duowei.kitchen_china.fragment;
 
 import android.app.Fragment;
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -63,6 +65,7 @@ public class TopFragment extends Fragment {
     private float tempNum = 0;
     private KeySound mSound;
     private boolean isOutTime = false;
+    private AnimationDrawable mDrawable;
 
     public TopFragment() {
         // Required empty public constructor
@@ -94,6 +97,12 @@ public class TopFragment extends Fragment {
             ColorAnim.getInstacne(getActivity()).startColor(mTvCooked);
         }
         tempNum = foodCount;
+    }
+
+    public void startAnim(){
+        mImgPrint.setImageResource(R.drawable.printanim);
+        mDrawable = (AnimationDrawable) mImgPrint.getDrawable();
+        mDrawable.start();
     }
 
     @Override

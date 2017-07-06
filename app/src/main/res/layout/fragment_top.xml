@@ -12,7 +12,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:layout_weight="1.5">
+                    android:layout_weight="1.8">
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -23,7 +23,7 @@
                         android:layout_marginLeft="5dp"
                         android:textColor="@color/greenDark"
                         android:textSize="@dimen/textsize20"
-                        android:text="种类："/>
+                        android:text="种类:"/>
                     <TextView
                         android:id="@+id/tv_uncook"
                         android:layout_width="wrap_content"
@@ -42,13 +42,14 @@
                         android:layout_marginLeft="5dp"
                         android:textColor="@color/greenDark"
                         android:textSize="@dimen/textsize20"
-                        android:text="待煮："/>
+                        android:text="待煮:"/>
                     <TextView
                         android:id="@+id/tv_cooked"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/yellow"
                         android:textSize="30dp"
+                        android:singleLine="true"
                         android:text=""/>
 
                 </LinearLayout>

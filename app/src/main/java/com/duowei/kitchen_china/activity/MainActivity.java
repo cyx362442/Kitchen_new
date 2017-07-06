@@ -15,6 +15,7 @@ import com.duowei.kitchen_china.event.InputMsg;
 import com.duowei.kitchen_china.event.OrderFood;
 import com.duowei.kitchen_china.event.OutTimeFood;
 import com.duowei.kitchen_china.event.Print;
+import com.duowei.kitchen_china.event.PrintAmin;
 import com.duowei.kitchen_china.event.SearchFood;
 import com.duowei.kitchen_china.event.StartProgress;
 import com.duowei.kitchen_china.event.UpdateCfpb;
@@ -225,9 +226,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Subscribe
-    public void PrintConnect(Print event){
+    public void printConnect(Print event){
         PrintHandler.getInstance().setIPrint(null);
         initPrint();
+    }
+
+    @Subscribe
+    public void printAnim(PrintAmin event){
+        mTopFragment.startAnim();
     }
 
     @Override

@@ -1,8 +1,10 @@
 package com.duowei.kitchen_china.print;
 
-
 import com.duowei.kitchen_china.bean.Cfpb;
+import com.duowei.kitchen_china.event.PrintAmin;
 import com.duowei.kitchen_china.uitls.DateTimes;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -41,6 +43,7 @@ public class PrintHandler {
         if (mIPrint == null) {
             return;
         }
+        EventBus.getDefault().post(new PrintAmin());
         for(int i=0;i<list.size();i++){
             Cfpb cfpb = list.get(i);
             mIPrint.sendMsg(Command.INIT);
