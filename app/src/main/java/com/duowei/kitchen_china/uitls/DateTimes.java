@@ -1,5 +1,7 @@
 package com.duowei.kitchen_china.uitls;
 
+import android.util.Log;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -51,6 +53,7 @@ public class DateTimes {
 
         SimpleDateFormat dateformat = new SimpleDateFormat("HH:mm:ss");
         String dtime=dateformat.format(date);
+
         return dtime;
     }
     public static long getTime2(String xdsj){
