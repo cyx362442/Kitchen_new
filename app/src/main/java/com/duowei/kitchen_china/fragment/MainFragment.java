@@ -31,7 +31,8 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MainFragment extends Fragment implements RecAdapter.onItemClickListener, RecAdapter.onContinueClickListener {
+public class MainFragment extends Fragment implements RecAdapter.onItemClickListener,
+        RecAdapter.onContinueClickListener {
 
     private RecAdapter mRecAdapter;
     private List<Cfpb> listCfpb;
@@ -51,6 +52,11 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
         View inflate = inflater.inflate(R.layout.fragment_main, container, false);
         listCfpb=new ArrayList<>();
         listCfpbComplete =new ArrayList<>();
+        initRecy(inflate);
+        return inflate;
+    }
+
+    private void initRecy(View inflate) {
         RecyclerView rv = (RecyclerView) inflate.findViewById(R.id.recycleView);
         rv.setLayoutManager(new GridLayoutManager(getActivity(),4));//gridview布局,4列
         rv.addItemDecoration(new SpacesItemDecoration(5));//设置item边距
@@ -59,8 +65,8 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
         rv.setAdapter(mRecAdapter);
         mRecAdapter.setOnItemClickListener(this);
         mRecAdapter.setOnContinueClickListener(this);
-        return inflate;
     }
+
     public void setRecycleView(List<Cfpb>list){
         mRecAdapter.setList(listCfpb=list);
         if(list.size()==tempList||list.size()==0){
@@ -102,10 +108,10 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
         String sql="";
         mRecAdapter.setIndex(index);
         Cfpb cfpb = listCfpb.get(index);
-        List<Cfpb_item> listCfpb = cfpb.getListCfpb();
+        List<Cfpb_item> listCfpb_item = cfpb.getListCfpb();
         for(int i=0;i<listCfpb.size();i++){
             if(num>0){
-                Cfpb_item cfpbItem = listCfpb.get(i);
+                Cfpb_item cfpbItem = listCfpb_item.get(i);
                 if(cfpbItem.sl1<=num){//当前桌号待删除的单品数量<=num,直接删除这行
                     sql+="delete from cfpb where xh='"+cfpbItem.xh+"'|";
                     tempNum=cfpbItem.sl1;
@@ -124,6 +130,9 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
                 break;
             }
         }
+        //只最后一次点击的单品置‘1’
+        sql+="update cfpb set by8='0' where by8='1' and XDSJ BETWEEN DATEADD(mi,-180,GETDATE()) AND GETDATE()|";
+        sql+="update cfpb set by8='1' where xmbh='"+cfpb.getXmbh()+"'and XDSJ BETWEEN DATEADD(mi,-180,GETDATE()) AND GETDATE()|";
         Post.getInstance().setPost7(sql);
     }
 }

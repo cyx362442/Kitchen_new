@@ -213,12 +213,12 @@ public class MainActivity extends AppCompatActivity {
     @Subscribe
     public void toSearch(SearchFood event){
         mStytle=event.stytle;
-        if(mStytle.equals(getResources().getString(R.string.searchfood))){//查询菜品
+        if(mStytle.equals(getResources().getString(R.string.searchfood))){//切换至查询菜品
             mTopFragment2 = new TopFragment2();
             getFragmentManager().beginTransaction()
                     .replace(R.id.frame01, mTopFragment2).commit();
-            tempList=new ArrayList<>();
-        }else if(mStytle.equals(getResources().getString(R.string.allfood))){//全部菜品
+            searchMsg="";
+        }else if(mStytle.equals(getResources().getString(R.string.allfood))){//返回全部菜品
             getFragmentManager().beginTransaction()
                     .replace(R.id.frame01, mTopFragment).commit();
             mLoad.setVisibility(View.VISIBLE);

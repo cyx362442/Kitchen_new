@@ -92,6 +92,7 @@ public class TopFragment extends Fragment {
             }
         }
         mTvCooked.setText(foodCount + "份");
+        //新订单声音、动画
         if (foodCount > tempNum) {
             mSound.playSound('0', 0);
             ColorAnim.getInstacne(getActivity()).startColor(mTvCooked);
@@ -135,9 +136,9 @@ public class TopFragment extends Fragment {
                     mBtnOvertime.setText("超时单品");
 //                    mBtnOvertime.setTextColor(Color.RED);
                 }
+                isOutTime = !isOutTime;
                 //马上发起服务器查询
                 Post.getInstance().postCfpb(Net.sql_cfpb);
-                isOutTime = !isOutTime;
                 break;
             case R.id.btn_saleout:
                 mIntent = new Intent(getActivity(), SellOutActivity.class);

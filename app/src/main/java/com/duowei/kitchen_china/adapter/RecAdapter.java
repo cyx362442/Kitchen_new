@@ -121,6 +121,12 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHold> {
                 itemListener.setOnItemClickListener(position);
             }
         });
+        //最后一次点继续的单品，还显示在列表中的（数量》=1），置为蓝色
+        if("1.00".equals(cfpb.getBy8())){
+            holder.btnContinue.setBackgroundResource(R.drawable.shape_continue_blue);
+        }else{
+            holder.btnContinue.setBackgroundResource(R.drawable.shape_continue);
+        }
         //继续按键点击事件
         final float finalCount = count;
         holder.btnContinue.setOnClickListener(new View.OnClickListener() {
