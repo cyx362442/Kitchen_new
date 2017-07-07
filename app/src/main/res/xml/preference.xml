@@ -6,11 +6,18 @@
             android:summary="192.168.1.78"
             android:title="服务器IP">
         </EditTextPreference>
+        <ListPreference
+            android:key="printStytle"
+            android:title="打印机类型"
+            android:summary="USB打印机"
+            android:entries="@array/list_print_stytle"
+            android:entryValues="@array/list_print_stytle"
+            android:dialogTitle="请选择打印机" ></ListPreference>
         <EditTextPreference
             android:key="et_printerIP"
             android:summary="192.168.1.124"
             android:inputType="textUri"
-            android:title="打印机IP">
+            android:title="网络打印机IP">
         </EditTextPreference>
         <CheckBoxPreference
             android:key="checkbox"

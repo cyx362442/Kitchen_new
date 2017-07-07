@@ -20,7 +20,9 @@ import com.duowei.kitchen_china.event.StartProgress;
 import com.duowei.kitchen_china.httputils.Net;
 import com.duowei.kitchen_china.httputils.Post;
 import com.duowei.kitchen_china.print.PrintHandler;
+import com.duowei.kitchen_china.print.UsbPrint;
 import com.duowei.kitchen_china.uitls.DateTimes;
+import com.duowei.kitchen_china.uitls.PreferenceUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.litepal.crud.DataSupport;
@@ -39,6 +41,7 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
     private List<Cfpb> listCfpbComplete;//己完成的
     private int tempList;
     private int currentPosition=0;
+    private String mPrintStytle;
 
     public MainFragment() {
         // Required empty public constructor
@@ -54,6 +57,13 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
         listCfpbComplete =new ArrayList<>();
         initRecy(inflate);
         return inflate;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        PreferenceUtils instance = PreferenceUtils.getInstance(getActivity());
+        mPrintStytle = instance.getPrintStytle("printStytle", getResources().getString(R.string.print_usb));
     }
 
     private void initRecy(View inflate) {
@@ -75,7 +85,7 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
             mRecAdapter.notifyItemRemoved(currentPosition);
             mRecAdapter.notifyItemRangeChanged(currentPosition,mRecAdapter.getItemCount());
         }else if(list.size()>tempList){//list变大，启用增加动画
-            mRecAdapter.notifyItemInserted(list.size()-1);
+            mRecAdapter.notifyItemInserted(0);
         }
         tempList=list.size();
     }
@@ -88,7 +98,11 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
     public void updateSuccess(){
         Post.getInstance().postCfpb(Net.sql_cfpb);
         DataSupport.saveAll(listCfpbComplete);
-        PrintHandler.getInstance().print(listCfpbComplete);
+        if(mPrintStytle.equals(getResources().getString(R.string.print_net))){//网络打印机
+            PrintHandler.getInstance().print(listCfpbComplete);
+        }else if(mPrintStytle.equals(getResources().getString(R.string.print_usb))){//usb打印机
+            UsbPrint.getInstance(getActivity()).usbPrint(listCfpbComplete);
+        }
     }
 
     @Override

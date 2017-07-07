@@ -9,6 +9,14 @@
     <string name="searchfood">查询菜品</string>
     <string name="outtimefood">超时单品</string>
 
+    <string name="usb_connect">连接</string>
+    <string name="usb_disconnect">断开</string>
+    <string name="print_usb">USB打印机</string>
+    <string name="print_net">网络打印机</string>
+
+    <string name="msg_getpermission">打印机USB权限获取成功</string>
+    <string name="msg_conn_state">打印机USB权限获取失败</string>
+
     <!-- Strings related to Settings -->
 
     <!-- Example General settings -->

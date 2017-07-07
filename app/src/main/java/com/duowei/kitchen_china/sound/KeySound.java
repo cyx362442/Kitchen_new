@@ -49,5 +49,6 @@ public class KeySound {
 		});
 		hm = new HashMap<Character, Integer>();// 创建HashMap对象
 		hm.put('0', sp.load(context, R.raw.neworder, 0));//加载资源文件中音源到容器，最好为.wav格式的！
+		hm.put('1',sp.load(context,R.raw.usbprint,0));
 	}
 }

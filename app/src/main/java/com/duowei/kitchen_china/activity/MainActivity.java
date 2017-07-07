@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -19,6 +18,7 @@ import com.duowei.kitchen_china.event.PrintAmin;
 import com.duowei.kitchen_china.event.SearchFood;
 import com.duowei.kitchen_china.event.StartProgress;
 import com.duowei.kitchen_china.event.UpdateCfpb;
+import com.duowei.kitchen_china.event.UsbState;
 import com.duowei.kitchen_china.fragment.MainFragment;
 import com.duowei.kitchen_china.fragment.TopFragment;
 import com.duowei.kitchen_china.fragment.TopFragment2;
@@ -26,8 +26,10 @@ import com.duowei.kitchen_china.httputils.Net;
 import com.duowei.kitchen_china.httputils.Post;
 import com.duowei.kitchen_china.print.IPrint;
 import com.duowei.kitchen_china.print.PrintHandler;
+import com.duowei.kitchen_china.print.UsbPrint;
 import com.duowei.kitchen_china.print.WifiPrint;
 import com.duowei.kitchen_china.server.PollingService;
+import com.duowei.kitchen_china.sound.KeySound;
 import com.duowei.kitchen_china.uitls.DateTimes;
 import com.duowei.kitchen_china.uitls.PreferenceUtils;
 
@@ -49,6 +51,9 @@ public class MainActivity extends AppCompatActivity {
     private List<Cfpb>tempList=new ArrayList<>();
     private TopFragment2 mTopFragment2;
     private String searchMsg="";
+    private KeySound mSound;
+    private String mPrintStytle;
+    private PreferenceUtils mPreferenceUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,18 +62,33 @@ public class MainActivity extends AppCompatActivity {
 
         initUI();
         initFragment();
-        PrintHandler.getInstance().setIPrint(null);
+        mPreferenceUtils = PreferenceUtils.getInstance(this);
+        mSound = KeySound.getContext(this);//初始化声音
+
         //记录登录时的本地时间
         long time =new Date(System.currentTimeMillis()).getTime();
         DateTimes.loginTime=time;
-        //获取登录时的服务器时间、删除历史数据
-        Post.getInstance().getServerTime();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
+        //开启轮询服务
+        String serviceIP = PreferenceUtils.getInstance(this).getServiceIp("serviceIP", "");
+        Net.url = "http://" + serviceIP + ":2233/server/ServerSvlt?";
+        startServer();
+        //获取登录时的服务器时间、删除历史数据
+        Post.getInstance().getServerTime();
+
+        //初始化打印机
+        mPrintStytle = mPreferenceUtils.getPrintStytle("printStytle", getResources().getString(R.string.print_usb));
+        if(mPrintStytle.equals(getResources().getString(R.string.print_net))){//网络
+            initPrint();
+        }else if(mPrintStytle.equals(getResources().getString(R.string.print_usb))){//usb
+            UsbPrint.getInstance(this).intUsbPrint();
+            UsbPrint.getInstance(this).connectUsbPrint();
+        }
     }
 
     @Override
@@ -79,17 +99,6 @@ public class MainActivity extends AppCompatActivity {
         int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
         decorView.setSystemUiVisibility(uiOptions);
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
-        //开启轮询服务
-        String serviceIP = PreferenceUtils.getInstance(this).getServiceIp("serviceIP", "");
-        Net.url = "http://" + serviceIP + ":2233/server/ServerSvlt?";
-        startServer();
-        //初始化打印机
-        initPrint();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
     }
 
     /*开启网络轮询服务*/
@@ -225,15 +234,34 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /*手动加载打印机*/
     @Subscribe
     public void printConnect(Print event){
-        PrintHandler.getInstance().setIPrint(null);
-        initPrint();
+        if(mPrintStytle.equals(getResources().getString(R.string.print_net))){//网络
+            PrintHandler.getInstance().setIPrint(null);
+            initPrint();
+        }else if(mPrintStytle.equals(getResources().getString(R.string.print_usb))){
+            UsbPrint.getInstance(this).intUsbPrint();
+            UsbPrint.getInstance(this).connectUsbPrint();
+        }
     }
 
+    /*打印机动画*/
     @Subscribe
     public void printAnim(PrintAmin event){
         mTopFragment.startAnim();
+    }
+
+    /*判断USB打印机连接状态*/
+    @Subscribe
+    public void usbPrintState(UsbState event){
+        if(event.state.equals(getResources().getString(R.string.usb_connect))){
+            UsbPrint.getInstance(this).intUsbPrint();
+            UsbPrint.getInstance(this).connectUsbPrint();
+        }else if(event.state.equals(getResources().getString(R.string.usb_disconnect))){
+            mSound.playSound('1',0);
+            Toast.makeText(this,"USB打印机己断开",Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

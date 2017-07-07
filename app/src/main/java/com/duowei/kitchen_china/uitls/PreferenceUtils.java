@@ -33,6 +33,14 @@ public class PreferenceUtils {
         return mPreferences.getString(key,value);
     }
 
+    public void setPrintStytle(String key,String value){
+        mEdit.putString(key,value);
+        mEdit.commit();
+    }
+    public String getPrintStytle(String key,String value){
+        return mPreferences.getString(key,value);
+    }
+
     public void setPrinterIp(String key,String value){
         mEdit.putString(key,value);
         mEdit.commit();

@@ -4,6 +4,8 @@ import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
+import android.preference.ListPreference;
+import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +26,8 @@ public class SettingsActivity extends AppCompatActivity {
     private static EditTextPreference mEtServiceIP;
     private static EditTextPreference mEtPrinterIP;
     private static CheckBoxPreference mCheckbox;
+    private static ListPreference listPrint;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,9 +56,11 @@ public class SettingsActivity extends AppCompatActivity {
         }
         private void initPreference() {
             mEtServiceIP = (EditTextPreference)findPreference("et_serviceIP");
+            listPrint = (ListPreference) findPreference("printStytle");
             mEtPrinterIP = (EditTextPreference) findPreference("et_printerIP");
             mCheckbox = (CheckBoxPreference) findPreference("checkbox");
             mEtServiceIP.setSummary(mPreferenceUtils.getServiceIp("serviceIP",""));
+            listPrint.setSummary(mPreferenceUtils.getPrintStytle("printStytle",getResources().getString(R.string.print_usb)));
             mEtPrinterIP.setSummary(mPreferenceUtils.getPrinterIp("printerIP",""));
             mCheckbox.setChecked(mPreferenceUtils.getAutoStart("auto",true));
             SharedPreferences sharedPreferences = getPreferenceScreen().getSharedPreferences();
@@ -67,6 +73,10 @@ public class SettingsActivity extends AppCompatActivity {
                 String serviceIP = sharedPreferences.getString("et_serviceIP", "");
                 mEtServiceIP.setSummary(serviceIP);
                 mPreferenceUtils.setServiceIp("serviceIP",serviceIP);
+            }else if(key.equals("printStytle")){
+                String printStytle = sharedPreferences.getString("printStytle", "");
+                listPrint.setSummary(printStytle);
+                mPreferenceUtils.setPrintStytle("printStytle",printStytle);
             }else if(key.equals("et_printerIP")){
                 String printerIP = sharedPreferences.getString("et_printerIP", "");
                 mEtPrinterIP.setSummary(printerIP);
