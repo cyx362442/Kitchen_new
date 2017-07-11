@@ -79,6 +79,10 @@ public class UsbPrint {
     }
 
     public void usbPrint(List<Cfpb>listCfpb){
+        if(dev==null){
+//            Toast.makeText(context,"USB打印机未连接",Toast.LENGTH_SHORT).show();
+            return;
+        }
         byte isHasPaper = usbCtrl.revByte(dev);
         if( isHasPaper == 0x38 ){
             Toast.makeText(context, "打印机没纸了",

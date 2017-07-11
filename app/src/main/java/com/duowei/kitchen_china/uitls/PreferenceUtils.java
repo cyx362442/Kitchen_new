@@ -32,6 +32,13 @@ public class PreferenceUtils {
     public String getServiceIp(String key,String value){
         return mPreferences.getString(key,value);
     }
+    public void setKetchen(String key,String value){
+        mEdit.putString(key,value);
+        mEdit.commit();
+    }
+    public String getKetchen(String key,String value){
+        return mPreferences.getString(key,value);
+    }
 
     public void setPrintStytle(String key,String value){
         mEdit.putString(key,value);

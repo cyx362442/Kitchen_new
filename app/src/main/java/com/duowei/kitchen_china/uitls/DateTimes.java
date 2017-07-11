@@ -50,7 +50,6 @@ public class DateTimes {
         Date curDate = new Date(System.currentTimeMillis());
         long passtime = curDate.getTime() - loginTime;
         Date date = new Date(serverTime+passtime);
-
         SimpleDateFormat dateformat = new SimpleDateFormat("HH:mm:ss");
         String dtime=dateformat.format(date);
 

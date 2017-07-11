@@ -36,6 +36,8 @@ public class SelloutFragment extends Fragment implements View.OnClickListener,
     private SellOutAdapter mAdapter;
     private ListView mLv;
     private Jyxmsz mJyxmsz;
+    private String mUpdateJyxmsz;
+    private String mUpdateTbrq;
 
     public SelloutFragment() {
         // Required empty public constructor
@@ -98,8 +100,9 @@ public class SelloutFragment extends Fragment implements View.OnClickListener,
 
     private void Http_guqingAll() {
         EventBus.getDefault().post(new StartAnim());
-        String sql="update jyxmsz set gq=''|";
-        DownHTTP.postVolley7(Net.url, sql, new VolleyResultListener() {
+        mUpdateJyxmsz = "update jyxmsz set gq=''|";
+        mUpdateTbrq = "update tbsj set tbrq=getdate() where tablename='jyxmsz'|";
+        DownHTTP.postVolley7(Net.url, mUpdateJyxmsz+mUpdateTbrq, new VolleyResultListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 EventBus.getDefault().post(new StopAnim());
@@ -121,8 +124,9 @@ public class SelloutFragment extends Fragment implements View.OnClickListener,
 
     private void Http_guqing() {
         EventBus.getDefault().post(new StartAnim());
-        String sql="update jyxmsz set gq='' where xmbh='"+mJyxmsz.getXmbh()+"'|";
-        DownHTTP.postVolley7(Net.url, sql, new VolleyResultListener() {
+        mUpdateJyxmsz="update jyxmsz set gq='' where xmbh='"+mJyxmsz.getXmbh()+"'|";
+        mUpdateTbrq = "update tbsj set tbrq=getdate() where tablename='jyxmsz'|";
+        DownHTTP.postVolley7(Net.url, mUpdateJyxmsz+mUpdateTbrq, new VolleyResultListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 EventBus.getDefault().post(new StopAnim());

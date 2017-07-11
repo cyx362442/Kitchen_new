@@ -4,7 +4,13 @@
             android:inputType="textUri"
             android:key="et_serviceIP"
             android:summary="192.168.1.78"
-            android:title="服务器IP">
+            android:title="服务器IP(必填)">
+        </EditTextPreference>
+        <EditTextPreference
+            android:inputType="text"
+            android:key="et_kitchenName"
+            android:summary="  "
+            android:title="厨房屏计算机名(必填)">
         </EditTextPreference>
         <ListPreference
             android:key="printStytle"

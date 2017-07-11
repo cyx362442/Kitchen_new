@@ -40,6 +40,8 @@ public class UnSellOutFragment extends Fragment implements View.OnClickListener,
     private List<Jyxmsz> listJyxmsz;
     private SellOutAdapter mAdapter;
     private Jyxmsz mJyxmsz;
+    private String mUpdateJyxmsz;
+    private String mUpdateTbrq;
 
     public UnSellOutFragment() {
         // Required empty public constructor
@@ -77,8 +79,9 @@ public class UnSellOutFragment extends Fragment implements View.OnClickListener,
                     return;
                 }
                 EventBus.getDefault().post(new StartAnim());
-                String sql="update jyxmsz set gq='1' where xmbh='"+mJyxmsz.getXmbh()+"'|";
-                DownHTTP.postVolley7(Net.url, sql, new VolleyResultListener() {
+                mUpdateJyxmsz="update jyxmsz set gq='1' where xmbh='"+mJyxmsz.getXmbh()+"'|";
+                mUpdateTbrq = "update tbsj set tbrq=getdate() where tablename='jyxmsz'|";
+                DownHTTP.postVolley7(Net.url, mUpdateJyxmsz+mUpdateTbrq, new VolleyResultListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         EventBus.getDefault().post(new StopAnim());

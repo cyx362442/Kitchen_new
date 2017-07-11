@@ -4,7 +4,6 @@ package com.duowei.kitchen_china.fragment;
 import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,12 +20,14 @@ import com.duowei.kitchen_china.activity.SettingsActivity;
 import com.duowei.kitchen_china.bean.Cfpb;
 import com.duowei.kitchen_china.bean.Cfpb_item;
 import com.duowei.kitchen_china.event.OutTimeFood;
-import com.duowei.kitchen_china.event.Print;
 import com.duowei.kitchen_china.event.SearchFood;
 import com.duowei.kitchen_china.httputils.Net;
 import com.duowei.kitchen_china.httputils.Post;
+import com.duowei.kitchen_china.print.PrintHandler;
+import com.duowei.kitchen_china.print.UsbPrint;
 import com.duowei.kitchen_china.sound.KeySound;
 import com.duowei.kitchen_china.uitls.ColorAnim;
+import com.duowei.kitchen_china.uitls.PreferenceUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -67,6 +68,14 @@ public class TopFragment extends Fragment {
     private boolean isOutTime = false;
     private AnimationDrawable mDrawable;
 
+    private String mPrintStytle;
+    private PreferenceUtils mPreferenceUtils;
+    private PrintHandler mPrintHandler;
+    private String mPrinterIP;
+    private UsbPrint mUsbPrint;
+
+    public final static int REQUESTCODE=200;
+
     public TopFragment() {
         // Required empty public constructor
     }
@@ -78,7 +87,37 @@ public class TopFragment extends Fragment {
         View inflate = inflater.inflate(R.layout.fragment_top, container, false);
         unbinder = ButterKnife.bind(this, inflate);
         mSound = KeySound.getContext(getActivity());
+
+        mPreferenceUtils = PreferenceUtils.getInstance(getActivity());
+        mUsbPrint = UsbPrint.getInstance(getActivity());
+        mPrintHandler = PrintHandler.getInstance();
+        initPrint();
         return inflate;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+       if(requestCode==REQUESTCODE&&resultCode==SettingsActivity.RESULTCODE){
+           /**初始化打印机*/
+           initPrint();
+       }
+    }
+
+    private void initPrint() {
+        mPrintStytle = mPreferenceUtils.getPrintStytle("printStytle", getResources().getString(R.string.print_usb));
+        mPrinterIP = PreferenceUtils.getInstance(getActivity()).getPrinterIp("printerIP","");
+        resetPrint();
+    }
+
+    private void resetPrint() {
+        if(mPrintStytle.equals(getResources().getString(R.string.print_net))){//网络打印机
+            mPrintHandler.setIPrint(null);
+            mPrintHandler.initPrint(getActivity(), mPrinterIP);
+        }else if(mPrintStytle.equals(getResources().getString(R.string.print_usb))){//usb打印机
+            mUsbPrint.intUsbPrint();
+            mUsbPrint.connectUsbPrint();
+        }
     }
 
     //待煮菜品
@@ -117,7 +156,7 @@ public class TopFragment extends Fragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.img_print:
-                EventBus.getDefault().post(new Print());
+                resetPrint();
                 break;
             case R.id.btn_history:
                 mIntent = new Intent(getActivity(), PastRecordsActivity.class);
@@ -130,11 +169,11 @@ public class TopFragment extends Fragment {
                 if (isOutTime == false) {
                     EventBus.getDefault().post(new OutTimeFood(getResources().getString(R.string.outtimefood)));
                     mBtnOvertime.setText("全部单品");
-//                    mBtnOvertime.setTextColor(getResources().getColor(R.color.white));
+                    mBtnOvertime.setTextColor(getResources().getColor(R.color.white));
                 } else {
                     EventBus.getDefault().post(new OutTimeFood(getResources().getString(R.string.allfood)));
                     mBtnOvertime.setText("超时单品");
-//                    mBtnOvertime.setTextColor(Color.RED);
+                    mBtnOvertime.setTextColor(getResources().getColor(R.color.orange));
                 }
                 isOutTime = !isOutTime;
                 //马上发起服务器查询
@@ -146,7 +185,7 @@ public class TopFragment extends Fragment {
                 break;
             case R.id.btn_setting:
                 mIntent = new Intent(getActivity(), SettingsActivity.class);
-                startActivity(mIntent);
+                startActivityForResult(mIntent,REQUESTCODE);
                 break;
             case R.id.btn_exit:
                 getActivity().finish();

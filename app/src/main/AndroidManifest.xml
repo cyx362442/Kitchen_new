@@ -61,12 +61,23 @@
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <!--usb设备的动作-->
-                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+
+                <!-- usb设备的动作 -->
+                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"/>
                 <action android:name="android.hardware.usb.action.USB_DEVICE_DETACHED"/>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".broadcast.ShutDownReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <!-- 关机广播 -->
+           <intent-filter>
+               <action android:name="android.intent.action.ACTION_SHUTDOWN"></action>
+           </intent-filter>
         </receiver>
     </application>
 

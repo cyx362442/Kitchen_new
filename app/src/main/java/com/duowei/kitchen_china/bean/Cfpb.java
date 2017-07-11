@@ -36,7 +36,7 @@ public class Cfpb extends DataSupport{
     private float ywcsl;
     private String py;
     private int cssj;
-    private String by8;
+    private String by9;//最后一次点击
     private String wcsj;
     private long time;
 
@@ -56,12 +56,12 @@ public class Cfpb extends DataSupport{
         this.cssj = cssj;
     }
 
-    public String getBy8() {
-        return by8;
+    public String getBy9() {
+        return by9;
     }
 
-    public void setBy8(String by8) {
-        this.by8 = by8;
+    public void setBy9(String by9) {
+        this.by9 = by9;
     }
 
     public Cfpb(String XH, String xmbh, String xmmc, String dw, float sl, String pz, String xdsj,

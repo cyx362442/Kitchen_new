@@ -2,21 +2,28 @@ package com.duowei.kitchen_china.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.CountDownTimer;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.duowei.kitchen_china.R;
 import com.duowei.kitchen_china.bean.Cfpb;
 import com.duowei.kitchen_china.bean.Cfpb_item;
 import com.duowei.kitchen_china.dialog.DigitInput;
+import com.duowei.kitchen_china.dialog.PopuShow;
 import com.duowei.kitchen_china.uitls.ColorAnim;
 
 import java.util.ArrayList;
@@ -37,16 +44,21 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHold> {
 
     private onItemClickListener itemListener;
     private onContinueClickListener continueLisener;
+    private final PopuShow mPopuShow;//点击菜品名称弹出popuwindow
 
     public RecAdapter(Context context,List<Cfpb> listCfpb) {
         this.context = context;
         this.listCfpb = listCfpb;
         mLayoutInflater = LayoutInflater.from(context);
         listCfpb_item=new ArrayList<>();
+        mPopuShow = PopuShow.getInstance(context);
     }
 
     public void setList(List<Cfpb> listCfpb){
         this.listCfpb=listCfpb;
+        if(mPopuShow.isShow()){
+            mPopuShow.dissPopu();
+        }
     }
 
     public void setIndex(int index) {
@@ -90,7 +102,7 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHold> {
     }
 
     @Override
-    public void onBindViewHolder(ViewHold holder, final int position) {
+    public void onBindViewHolder(final ViewHold holder, final int position) {
         float count=0;
         final Cfpb cfpb = listCfpb.get(position);
         holder.mTvName.setText(cfpb.getXmmc());
@@ -121,12 +133,23 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHold> {
                 itemListener.setOnItemClickListener(position);
             }
         });
+
         //最后一次点继续的单品，还显示在列表中的（数量》=1），置为蓝色
-        if("1.00".equals(cfpb.getBy8())){
-            holder.btnContinue.setBackgroundResource(R.drawable.shape_continue_blue);
+        if("1".equals(cfpb.getBy9())){
+            holder.mTvName.setTextColor(context.getResources().getColor(R.color.colorBlue));
+        }else{
+            holder.mTvName.setTextColor(context.getResources().getColor(R.color.gray_dark));
+        }
+
+        //超时单品
+        if(cfpb.getFzs()>cfpb.getCssj()){
+            holder.btnContinue.setBackgroundResource(R.drawable.shape_contiune_outtime);
+            holder.mRecyclerView.setBackgroundResource(R.drawable.cook_top_outtime);
         }else{
             holder.btnContinue.setBackgroundResource(R.drawable.shape_continue);
+            holder.mRecyclerView.setBackgroundResource(R.drawable.cook_top_greennormal);
         }
+
         //继续按键点击事件
         final float finalCount = count;
         holder.btnContinue.setOnClickListener(new View.OnClickListener() {
@@ -145,6 +168,13 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHold> {
                         }
                     });
                 }
+            }
+        });
+        //点击菜品名称弹出popuwindow
+        holder.mTvName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPopuShow.showPopuWindow(view,cfpb.getXmmc());
             }
         });
     }

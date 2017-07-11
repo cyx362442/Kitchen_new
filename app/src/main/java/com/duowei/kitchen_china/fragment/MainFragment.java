@@ -145,8 +145,8 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
             }
         }
         //只最后一次点击的单品置‘1’
-        sql+="update cfpb set by8='0' where by8='1' and XDSJ BETWEEN DATEADD(mi,-180,GETDATE()) AND GETDATE()|";
-        sql+="update cfpb set by8='1' where xmbh='"+cfpb.getXmbh()+"'and XDSJ BETWEEN DATEADD(mi,-180,GETDATE()) AND GETDATE()|";
+        sql+="update cfpb set by9='0' where by9='1' and XDSJ BETWEEN DATEADD(mi,-180,GETDATE()) AND GETDATE()|";
+        sql+="update cfpb set by9='1' where xmbh='"+cfpb.getXmbh()+"'and XDSJ BETWEEN DATEADD(mi,-180,GETDATE()) AND GETDATE()|";
         Post.getInstance().setPost7(sql);
     }
 }

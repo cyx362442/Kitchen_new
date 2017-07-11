@@ -33,6 +33,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:textSize="30sp"
+                            android:textColor="@color/gray_dark"
                             android:singleLine="true"
                             android:text="名称"/>
                         <TextView

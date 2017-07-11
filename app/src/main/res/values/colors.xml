@@ -10,4 +10,6 @@
     <color name="greenDark">#1A8A72</color>
     <color name="greenLow">#53B4AB</color>
     <color name="yellow">#F58C2F</color>
+    <color name="orange">#EA6901</color>
+    <color name="gray_dark">#565656</color>
 </resources>

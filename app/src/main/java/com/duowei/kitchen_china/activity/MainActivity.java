@@ -3,7 +3,6 @@ package com.duowei.kitchen_china.activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -13,7 +12,6 @@ import com.duowei.kitchen_china.bean.Cfpb;
 import com.duowei.kitchen_china.event.InputMsg;
 import com.duowei.kitchen_china.event.OrderFood;
 import com.duowei.kitchen_china.event.OutTimeFood;
-import com.duowei.kitchen_china.event.Print;
 import com.duowei.kitchen_china.event.PrintAmin;
 import com.duowei.kitchen_china.event.SearchFood;
 import com.duowei.kitchen_china.event.StartProgress;
@@ -24,10 +22,7 @@ import com.duowei.kitchen_china.fragment.TopFragment;
 import com.duowei.kitchen_china.fragment.TopFragment2;
 import com.duowei.kitchen_china.httputils.Net;
 import com.duowei.kitchen_china.httputils.Post;
-import com.duowei.kitchen_china.print.IPrint;
-import com.duowei.kitchen_china.print.PrintHandler;
 import com.duowei.kitchen_china.print.UsbPrint;
-import com.duowei.kitchen_china.print.WifiPrint;
 import com.duowei.kitchen_china.server.PollingService;
 import com.duowei.kitchen_china.sound.KeySound;
 import com.duowei.kitchen_china.uitls.DateTimes;
@@ -52,9 +47,6 @@ public class MainActivity extends AppCompatActivity {
     private TopFragment2 mTopFragment2;
     private String searchMsg="";
     private KeySound mSound;
-    private String mPrintStytle;
-    private PreferenceUtils mPreferenceUtils;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
 
         initUI();
         initFragment();
-        mPreferenceUtils = PreferenceUtils.getInstance(this);
         mSound = KeySound.getContext(this);//初始化声音
 
         //记录登录时的本地时间
@@ -74,21 +65,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
-        //开启轮询服务
+
         String serviceIP = PreferenceUtils.getInstance(this).getServiceIp("serviceIP", "");
         Net.url = "http://" + serviceIP + ":2233/server/ServerSvlt?";
+        String ketchen = PreferenceUtils.getInstance(this).getKetchen("et_kitchenName", "");
+        Net.sql_cfpb="select A.XH,A.xmbh,LTrim(A.xmmc)as xmmc,A.dw,(isnull(A.sl,0)-isnull(A.tdsl,0)-isnull(A.YWCSL,0))sl,\n" +
+                "A.pz,CONVERT(varchar(100), a.xdsj, 120)as xdsj,A.BY1 as czmc,datediff(minute,A.xdsj,getdate())fzs,A.yhmc,A.ywcsl,j.py,isnull(j.by13,9999999)cssj,A.by9 from cfpb A LEFT JOIN JYXMSZ J ON A.XMBH=J.XMBH\n" +
+                "where A.XDSJ BETWEEN DATEADD(mi,-180,GETDATE()) AND GETDATE() and (isnull(A.sl,0)-isnull(A.tdsl,0))>0 and a.pos='"+ketchen+"'\n" +
+                "order by A.xdsj,A.xmmc|";
+        //开启轮询服务
         startServer();
         //获取登录时的服务器时间、删除历史数据
         Post.getInstance().getServerTime();
-
-        //初始化打印机
-        mPrintStytle = mPreferenceUtils.getPrintStytle("printStytle", getResources().getString(R.string.print_usb));
-        if(mPrintStytle.equals(getResources().getString(R.string.print_net))){//网络
-            initPrint();
-        }else if(mPrintStytle.equals(getResources().getString(R.string.print_usb))){//usb
-            UsbPrint.getInstance(this).intUsbPrint();
-            UsbPrint.getInstance(this).connectUsbPrint();
-        }
     }
 
     @Override
@@ -120,41 +108,6 @@ public class MainActivity extends AppCompatActivity {
         mLoad = findViewById(R.id.loading);
         mLoad.setVisibility(View.VISIBLE);
         mStytle=getResources().getString(R.string.allfood);
-    }
-    /**初始化打印机*/
-    private void initPrint() {
-        final IPrint[] iPrint = {null};
-        if (check(WifiPrint.class)) {
-            String ip = PreferenceUtils.getInstance(this).getPrinterIp("printerIP","");
-            if (!TextUtils.isEmpty(ip)) {
-                iPrint[0] = new WifiPrint(ip);
-            } else {
-                Toast.makeText(this, "没有设置打印机IP地址!", Toast.LENGTH_SHORT).show();
-            }
-        }
-        if (iPrint[0] != null) {
-            PrintHandler.getInstance().setIPrint(iPrint[0]);
-        }
-    }
-
-    private boolean check(Class<? extends IPrint> cls) {
-        IPrint print = PrintHandler.getInstance().getIPrint();
-
-        if (print == null) {
-            return true;
-        }
-
-        if (cls.isInstance(print)) {
-            return false;
-
-        } else if (cls.isInstance(print)) {
-            return false;
-
-        } else if (cls.isInstance(print)) {
-            return false;
-        }
-
-        return true;
     }
 
     /*菜品查询*/
@@ -231,18 +184,6 @@ public class MainActivity extends AppCompatActivity {
             getFragmentManager().beginTransaction()
                     .replace(R.id.frame01, mTopFragment).commit();
             mLoad.setVisibility(View.VISIBLE);
-        }
-    }
-
-    /*手动加载打印机*/
-    @Subscribe
-    public void printConnect(Print event){
-        if(mPrintStytle.equals(getResources().getString(R.string.print_net))){//网络
-            PrintHandler.getInstance().setIPrint(null);
-            initPrint();
-        }else if(mPrintStytle.equals(getResources().getString(R.string.print_usb))){
-            UsbPrint.getInstance(this).intUsbPrint();
-            UsbPrint.getInstance(this).connectUsbPrint();
         }
     }
 

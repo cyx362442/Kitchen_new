@@ -5,10 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.duowei.kitchen_china.R;
 import com.duowei.kitchen_china.bean.Cfpb;
+import com.duowei.kitchen_china.print.PrintHandler;
 
 import java.util.List;
 
@@ -61,6 +64,7 @@ public class HistoryAdapter extends BaseAdapter{
             hold.tvBeizhu= (TextView) convertView.findViewById(R.id.tv_beizhu);
             hold.tvOrderTime= (TextView) convertView.findViewById(R.id.tv_ordertime);
             hold.tvCompleteTime= (TextView) convertView.findViewById(R.id.tv_completetime);
+            hold.llPrint= (RelativeLayout) convertView.findViewById(R.id.ll_print);
             convertView.setTag(hold);
         }else{
             hold= (ViewHold) convertView.getTag();
@@ -73,6 +77,15 @@ public class HistoryAdapter extends BaseAdapter{
         hold.tvBeizhu.setText(cfpb.getPz());
         hold.tvOrderTime.setText(cfpb.getXdsj());
         hold.tvCompleteTime.setText(cfpb.getWcsj());
+
+        //打印
+        final Cfpb finalCfpb = cfpb;
+        hold.llPrint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PrintHandler.getInstance().printSingle(finalCfpb);
+            }
+        });
         return convertView;
     }
 
@@ -84,5 +97,6 @@ public class HistoryAdapter extends BaseAdapter{
         TextView tvBeizhu;
         TextView tvOrderTime;
         TextView tvCompleteTime;
+        RelativeLayout llPrint;
     }
 }

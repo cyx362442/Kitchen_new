@@ -8,7 +8,9 @@ import com.duowei.kitchen_china.application.MyApplication;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketAddress;
 
 /**
  * IP地址打印
@@ -50,7 +52,7 @@ public class WifiPrint implements IPrint {
     @Override
     public void close() {
         if (socket != null
-                && !socket.isClosed()) {
+                && socket.isConnected()) {
             try {
                 socket.close();
             } catch (IOException e) {
@@ -99,8 +101,8 @@ public class WifiPrint implements IPrint {
             super.run();
             try {
                 socket = new Socket(host, 9100);
+                socket.setSoTimeout(3000);
                 os = socket.getOutputStream();
-
                 if (socket.isConnected()) {
                     Log.d(TAG, "wifi socket connected");
                     mHandler.post(new Runnable() {

@@ -27,6 +27,9 @@ public class SettingsActivity extends AppCompatActivity {
     private static EditTextPreference mEtPrinterIP;
     private static CheckBoxPreference mCheckbox;
     private static ListPreference listPrint;
+    private static EditTextPreference etKetchen;
+
+    public final static int RESULTCODE=300;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,10 +59,12 @@ public class SettingsActivity extends AppCompatActivity {
         }
         private void initPreference() {
             mEtServiceIP = (EditTextPreference)findPreference("et_serviceIP");
+            etKetchen = (EditTextPreference) findPreference("et_kitchenName");
             listPrint = (ListPreference) findPreference("printStytle");
             mEtPrinterIP = (EditTextPreference) findPreference("et_printerIP");
             mCheckbox = (CheckBoxPreference) findPreference("checkbox");
             mEtServiceIP.setSummary(mPreferenceUtils.getServiceIp("serviceIP",""));
+            etKetchen.setSummary(mPreferenceUtils.getKetchen("et_kitchenName",""));
             listPrint.setSummary(mPreferenceUtils.getPrintStytle("printStytle",getResources().getString(R.string.print_usb)));
             mEtPrinterIP.setSummary(mPreferenceUtils.getPrinterIp("printerIP",""));
             mCheckbox.setChecked(mPreferenceUtils.getAutoStart("auto",true));
@@ -73,6 +78,10 @@ public class SettingsActivity extends AppCompatActivity {
                 String serviceIP = sharedPreferences.getString("et_serviceIP", "");
                 mEtServiceIP.setSummary(serviceIP);
                 mPreferenceUtils.setServiceIp("serviceIP",serviceIP);
+            }else if(key.equals("et_kitchenName")){
+                String kitChen = sharedPreferences.getString("et_kitchenName", "");
+                etKetchen.setSummary(kitChen);
+                mPreferenceUtils.setKetchen("et_kitchenName",kitChen);
             }else if(key.equals("printStytle")){
                 String printStytle = sharedPreferences.getString("printStytle", "");
                 listPrint.setSummary(printStytle);
@@ -101,6 +110,7 @@ public class SettingsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
         if(item.getItemId()==R.id.menu_exit){
+            setResult(300);
             finish();
         }
         return true;
