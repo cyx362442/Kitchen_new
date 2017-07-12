@@ -4,6 +4,8 @@ package com.duowei.kitchen_china.fragment;
 import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -91,7 +93,13 @@ public class TopFragment extends Fragment {
         mPreferenceUtils = PreferenceUtils.getInstance(getActivity());
         mUsbPrint = UsbPrint.getInstance(getActivity());
         mPrintHandler = PrintHandler.getInstance();
-        initPrint();
+
+        ConnectivityManager mConnectivityManager = (ConnectivityManager)getActivity()
+                .getSystemService(getActivity().CONNECTIVITY_SERVICE);
+        NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
+        if (mNetworkInfo != null&&mNetworkInfo.isAvailable()) {
+            initPrint();
+        }
         return inflate;
     }
 
@@ -156,7 +164,7 @@ public class TopFragment extends Fragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.img_print:
-                resetPrint();
+                initPrint();
                 break;
             case R.id.btn_history:
                 mIntent = new Intent(getActivity(), PastRecordsActivity.class);

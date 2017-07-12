@@ -25,6 +25,7 @@ public class PastRecordsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_past_records);
+        getWindow().setFlags(WindowManager.LayoutParams. FLAG_FULLSCREEN ,WindowManager.LayoutParams. FLAG_FULLSCREEN);
         mCfpbList = DataSupport.order("xdsj desc").find(Cfpb.class);
 
         ListView lv = (ListView) findViewById(R.id.listView);

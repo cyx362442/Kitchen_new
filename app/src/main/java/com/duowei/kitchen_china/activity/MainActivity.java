@@ -3,11 +3,13 @@ package com.duowei.kitchen_china.activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.duowei.kitchen_china.R;
+import com.duowei.kitchen_china.application.MyApplication;
 import com.duowei.kitchen_china.bean.Cfpb;
 import com.duowei.kitchen_china.event.InputMsg;
 import com.duowei.kitchen_china.event.OrderFood;
@@ -22,6 +24,7 @@ import com.duowei.kitchen_china.fragment.TopFragment;
 import com.duowei.kitchen_china.fragment.TopFragment2;
 import com.duowei.kitchen_china.httputils.Net;
 import com.duowei.kitchen_china.httputils.Post;
+import com.duowei.kitchen_china.print.PrintHandler;
 import com.duowei.kitchen_china.print.UsbPrint;
 import com.duowei.kitchen_china.server.PollingService;
 import com.duowei.kitchen_china.sound.KeySound;
@@ -86,7 +89,9 @@ public class MainActivity extends AppCompatActivity {
         View decorView = getWindow().getDecorView();
         int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
         decorView.setSystemUiVisibility(uiOptions);
+        getWindow().setFlags(WindowManager.LayoutParams. FLAG_FULLSCREEN ,WindowManager.LayoutParams. FLAG_FULLSCREEN);
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+
     }
 
     /*开启网络轮询服务*/
@@ -202,6 +207,9 @@ public class MainActivity extends AppCompatActivity {
         }else if(event.state.equals(getResources().getString(R.string.usb_disconnect))){
             mSound.playSound('1',0);
             Toast.makeText(this,"USB打印机己断开",Toast.LENGTH_SHORT).show();
+        }else if(event.state.equals(getResources().getString(R.string.net_disconnect))){
+            mSound.playSound('2',0);
+            Toast.makeText(this,"网络己断开，请检查",Toast.LENGTH_LONG).show();
         }
     }
 
@@ -210,5 +218,11 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
         EventBus.getDefault().unregister(this);
         stopService(mIntent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        PrintHandler.getInstance().closePrint();
     }
 }

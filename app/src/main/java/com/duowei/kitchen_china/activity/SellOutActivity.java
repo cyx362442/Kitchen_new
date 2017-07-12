@@ -47,6 +47,7 @@ public class SellOutActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sell_out);
+        getWindow().setFlags(WindowManager.LayoutParams. FLAG_FULLSCREEN ,WindowManager.LayoutParams. FLAG_FULLSCREEN);
         EventBus.getDefault().register(this);
         initFragment();
         mLoad = findViewById(R.id.loading);

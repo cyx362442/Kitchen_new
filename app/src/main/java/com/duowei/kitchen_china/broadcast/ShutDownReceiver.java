@@ -15,7 +15,7 @@ public class ShutDownReceiver extends BroadcastReceiver {
         // an Intent broadcast.
         String msg = intent.getAction();
         if(msg.equals(action)){
-//            PrintHandler.getInstance().closePrint();
+            PrintHandler.getInstance().closePrint();
         }
     }
 }

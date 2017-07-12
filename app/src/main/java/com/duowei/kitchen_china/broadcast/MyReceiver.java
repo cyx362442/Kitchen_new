@@ -3,8 +3,10 @@ package com.duowei.kitchen_china.broadcast;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.duowei.kitchen_china.activity.MainActivity;
+import com.duowei.kitchen_china.httputils.Post;
 import com.duowei.kitchen_china.uitls.PreferenceUtils;
 
 public class MyReceiver extends BroadcastReceiver {

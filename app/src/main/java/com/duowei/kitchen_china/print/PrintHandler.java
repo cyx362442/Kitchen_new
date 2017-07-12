@@ -76,9 +76,9 @@ public class PrintHandler {
         return true;
     }
 
-//    public void closePrint(){
-//        mPrints[0].close();
-//    }
+    public void closePrint(){
+        mPrints[0].close();
+    }
 
     /**
      * 下单打印(打印未下单的数据)
