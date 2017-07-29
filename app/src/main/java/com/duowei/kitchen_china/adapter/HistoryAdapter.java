@@ -12,6 +12,7 @@ import com.duowei.kitchen_china.R;
 import com.duowei.kitchen_china.activity.MainActivity;
 import com.duowei.kitchen_china.bean.Cfpb;
 import com.duowei.kitchen_china.print.PrintHandler;
+import com.duowei.kitchen_china.uitls.PreferenceUtils;
 
 import java.util.List;
 
@@ -24,11 +25,13 @@ public class HistoryAdapter extends BaseAdapter{
     private Context context;
     private LayoutInflater mLayoutInflater;
     private List<Cfpb> listCfpb;
+    private final String mPrintStytle;
 
     public HistoryAdapter(Context context, List<Cfpb> listCfpb) {
         this.context = context;
         this.listCfpb = listCfpb;
         mLayoutInflater = LayoutInflater.from(context);
+        mPrintStytle = PreferenceUtils.getInstance(context).getPrintStytle("printStytle", "");
     }
 
     public void setList(List<Cfpb>listCfpb){
@@ -85,7 +88,11 @@ public class HistoryAdapter extends BaseAdapter{
         hold.llPrint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PrintHandler.getInstance().printUsb(MainActivity.mGpService,finalCfpb);
+                if(mPrintStytle.equals(context.getResources().getString(R.string.print_usb))){
+                    PrintHandler.getInstance().printUsb(MainActivity.mGpService,finalCfpb);
+                }else if(mPrintStytle.equals(context.getResources().getString(R.string.print_net))){
+                    PrintHandler.getInstance().printSingle(finalCfpb);
+                }
             }
         });
         return convertView;
