@@ -30,7 +30,7 @@ import com.duowei.kitchen_china.fragment.TopFragment2;
 import com.duowei.kitchen_china.httputils.Net;
 import com.duowei.kitchen_china.httputils.Post;
 import com.duowei.kitchen_china.print.PrintHandler;
-import com.duowei.kitchen_china.print.PrintUsb;
+import com.duowei.kitchen_china.print.UsbPrint;
 import com.duowei.kitchen_china.server.PollingService;
 import com.duowei.kitchen_china.sound.KeySound;
 import com.duowei.kitchen_china.uitls.DateTimes;
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         public void onServiceConnected(ComponentName name, IBinder service) {
             mGpService = GpService.Stub.asInterface(service);
             mFragment.setGpService(mGpService);
-            PrintUsb.getInstance().intiPrint(MainActivity.this,mGpService);
+            UsbPrint.getInstance().intiPrint(MainActivity.this,mGpService);
         }
     }
 
@@ -268,7 +268,7 @@ public class MainActivity extends AppCompatActivity {
     @Subscribe
     public void usbPrintState(UsbState event){
         if(event.state.equals(getResources().getString(R.string.usb_connect))){
-            PrintUsb.getInstance().intiPrint(this,mGpService);
+            UsbPrint.getInstance().intiPrint(this,mGpService);
         }else if(event.state.equals(getResources().getString(R.string.usb_disconnect))){
             mSound.playSound('1',0);
             Toast.makeText(this,"USB打印机己断开",Toast.LENGTH_SHORT).show();

@@ -22,12 +22,12 @@ import java.util.Iterator;
  * Created by Administrator on 2017-07-27.
  */
 
-public class PrintUsb {
-    private PrintUsb(){}
-    private static PrintUsb print=null;
-    public static PrintUsb getInstance(){
+public class UsbPrint {
+    private UsbPrint(){}
+    private static UsbPrint print=null;
+    public static UsbPrint getInstance(){
         if(print==null){
-            print=new PrintUsb();
+            print=new UsbPrint();
         }
         return print;
     }
