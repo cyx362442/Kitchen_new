@@ -9,6 +9,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
     private String mPrinterIP;
 
     public static final String CONNECT_STATUS = "connect.status";
-    public static GpService mGpService = null;
+    public  static GpService mGpService = null;
     private PrinterServiceConnection conn = null;
 
     public static final int REQUESTCODE=200;
@@ -161,9 +162,9 @@ public class MainActivity extends AppCompatActivity {
 
     /*绑定USB打印机*/
     private void connectionUsbPrint() {
-            conn = new PrinterServiceConnection();
-            Intent intent = new Intent(this, GpPrintService.class);
-            bindService(intent, conn, Context.BIND_AUTO_CREATE); // bindService
+        conn = new PrinterServiceConnection();
+        Intent intent = new Intent(this, GpPrintService.class);
+        bindService(intent, conn, Context.BIND_AUTO_CREATE); // bindService
     }
 
     private void initFragment() {

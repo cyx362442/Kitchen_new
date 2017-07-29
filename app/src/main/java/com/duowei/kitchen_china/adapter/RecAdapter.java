@@ -4,9 +4,11 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.CountDownTimer;
+import android.os.RemoteException;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -20,16 +22,25 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.duowei.kitchen_china.R;
+import com.duowei.kitchen_china.activity.MainActivity;
+import com.duowei.kitchen_china.application.MyApplication;
 import com.duowei.kitchen_china.bean.Cfpb;
 import com.duowei.kitchen_china.bean.Cfpb_item;
 import com.duowei.kitchen_china.dialog.DigitInput;
 import com.duowei.kitchen_china.dialog.PopuShow;
+import com.duowei.kitchen_china.event.UsbState;
 import com.duowei.kitchen_china.uitls.ColorAnim;
+import com.gprinter.command.EscCommand;
+import com.gprinter.command.GpCom;
+import com.gprinter.command.GpUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Vector;
 
 /**
  * Created by Administrator on 2017-06-22.

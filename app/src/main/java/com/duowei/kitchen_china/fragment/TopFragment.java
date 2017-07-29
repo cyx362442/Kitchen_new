@@ -26,6 +26,7 @@ import com.duowei.kitchen_china.httputils.Net;
 import com.duowei.kitchen_china.httputils.Post;
 import com.duowei.kitchen_china.sound.KeySound;
 import com.duowei.kitchen_china.uitls.ColorAnim;
+import com.gprinter.aidl.GpService;
 
 import org.greenrobot.eventbus.EventBus;
 

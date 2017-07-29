@@ -3,31 +3,40 @@ package com.duowei.kitchen_china.fragment;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.duowei.kitchen_china.R;
 import com.duowei.kitchen_china.adapter.RecAdapter;
 import com.duowei.kitchen_china.adapter.SpacesItemDecoration;
+import com.duowei.kitchen_china.application.MyApplication;
 import com.duowei.kitchen_china.bean.Cfpb;
 import com.duowei.kitchen_china.bean.Cfpb_item;
 import com.duowei.kitchen_china.event.StartProgress;
+import com.duowei.kitchen_china.event.UsbState;
 import com.duowei.kitchen_china.httputils.Net;
 import com.duowei.kitchen_china.httputils.Post;
 import com.duowei.kitchen_china.print.PrintHandler;
 import com.duowei.kitchen_china.uitls.DateTimes;
 import com.duowei.kitchen_china.uitls.PreferenceUtils;
 import com.gprinter.aidl.GpService;
+import com.gprinter.command.EscCommand;
+import com.gprinter.command.GpCom;
+import com.gprinter.command.GpUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -117,8 +126,11 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
     /**继续按键点击事件*/
     @Override
     public void setOnContinueClickListener(int index,float num) {
-        currentPosition=index;
+        if(mPrintStytle.equals(getActivity().getResources().getString(R.string.print_usb))){
+            if (usbPrintConnect()) return;
+        }
 
+        currentPosition=index;
         float tempNum=0;
         Cfpb cfpb21=null;
         listCfpbComplete.clear();
@@ -152,5 +164,25 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
         sql+="update cfpb set by9='0' where by9='1' and XDSJ BETWEEN DATEADD(mi,-180,GETDATE()) AND GETDATE()|";
         sql+="update cfpb set by9='1' where xmbh='"+cfpb.getXmbh()+"'and XDSJ BETWEEN DATEADD(mi,-180,GETDATE()) AND GETDATE()|";
         Post.getInstance().setPost7(sql);
+    }
+
+    private boolean usbPrintConnect() {
+        EscCommand esc = new EscCommand();
+        Vector<Byte> datas = esc.getCommand(); // 发送数据
+        byte[] bytes = GpUtils.ByteTo_byte(datas);
+        String sss = Base64.encodeToString(bytes, Base64.DEFAULT);
+        int rs;
+        try {
+            rs = mGpService.sendEscCommand(0, sss);
+            GpCom.ERROR_CODE r = GpCom.ERROR_CODE.values()[rs];
+            if (r != GpCom.ERROR_CODE.SUCCESS) {
+                EventBus.getDefault().post(new UsbState(getActivity().getResources().getString(R.string.reconnect)));
+                return true;
+            }
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return false;
     }
 }

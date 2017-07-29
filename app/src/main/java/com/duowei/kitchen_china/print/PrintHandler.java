@@ -178,7 +178,6 @@ public class PrintHandler {
             GpCom.ERROR_CODE r = GpCom.ERROR_CODE.values()[rs];
             if (r != GpCom.ERROR_CODE.SUCCESS) {
                 Toast.makeText(MyApplication.getContext(), "打印失败，请到历史菜品中重新打印", Toast.LENGTH_SHORT).show();
-                EventBus.getDefault().post(new UsbState(MyApplication.getContext().getResources().getString(R.string.reconnect)));
             }
         } catch (RemoteException e) {
             // TODO Auto-generated catch block

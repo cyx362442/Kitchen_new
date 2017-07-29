@@ -1,20 +1,32 @@
 package com.duowei.kitchen_china.adapter;
 
 import android.content.Context;
+import android.os.RemoteException;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.duowei.kitchen_china.R;
 import com.duowei.kitchen_china.activity.MainActivity;
+import com.duowei.kitchen_china.application.MyApplication;
 import com.duowei.kitchen_china.bean.Cfpb;
+import com.duowei.kitchen_china.event.UsbState;
 import com.duowei.kitchen_china.print.PrintHandler;
 import com.duowei.kitchen_china.uitls.PreferenceUtils;
+import com.gprinter.command.EscCommand;
+import com.gprinter.command.GpCom;
+import com.gprinter.command.GpUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
+import java.util.Vector;
 
 /**
  * Created by Administrator on 2017-07-01.
@@ -27,7 +39,7 @@ public class HistoryAdapter extends BaseAdapter{
     private List<Cfpb> listCfpb;
     private String mPrintStytle;
 
-    public HistoryAdapter(Context context, List<Cfpb> listCfpb) {
+    public HistoryAdapter(Context context,List<Cfpb> listCfpb) {
         this.context = context;
         this.listCfpb = listCfpb;
         mLayoutInflater = LayoutInflater.from(context);
@@ -89,6 +101,7 @@ public class HistoryAdapter extends BaseAdapter{
             @Override
             public void onClick(View view) {
                 if(mPrintStytle.equals(context.getResources().getString(R.string.print_usb))){
+                    if (usbPrintConnect()) return;
                     PrintHandler.getInstance().printUsb(MainActivity.mGpService,finalCfpb);
                 }else if(mPrintStytle.equals(context.getResources().getString(R.string.print_net))){
                     PrintHandler.getInstance().printSingle(finalCfpb);
@@ -107,5 +120,25 @@ public class HistoryAdapter extends BaseAdapter{
         TextView tvOrderTime;
         TextView tvCompleteTime;
         RelativeLayout llPrint;
+    }
+
+    private boolean usbPrintConnect() {
+        EscCommand esc = new EscCommand();
+        Vector<Byte> datas = esc.getCommand(); // 发送数据
+        byte[] bytes = GpUtils.ByteTo_byte(datas);
+        String sss = Base64.encodeToString(bytes, Base64.DEFAULT);
+        int rs;
+        try {
+            rs = MainActivity.mGpService.sendEscCommand(0, sss);
+            GpCom.ERROR_CODE r = GpCom.ERROR_CODE.values()[rs];
+            if (r != GpCom.ERROR_CODE.SUCCESS) {
+                Toast.makeText(context,"打印机己断开，请重新连接",Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return false;
     }
 }
