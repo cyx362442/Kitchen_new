@@ -108,7 +108,6 @@ public class Post {
                     Date datetime = dateFormat.parse(fwqsj);
                     long currentServerTime = datetime.getTime();
                     DateTimes.serverTime=currentServerTime;
-                    Log.e("DateTimes.serverTime==",DateTimes.serverTime+"");
 
                     /*删除2天之前的历史数据*/
                     long l = currentServerTime - 2*24*60*60*1000;

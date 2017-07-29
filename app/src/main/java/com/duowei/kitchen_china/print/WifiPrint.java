@@ -34,7 +34,6 @@ public class WifiPrint implements IPrint {
     @Override
     public void connect() {
         close();
-
         Toast.makeText(MyApplication.getContext(), "打印机连接中...", Toast.LENGTH_SHORT).show();
         new ConnectThread().start();
     }

@@ -25,13 +25,13 @@ public class HistoryAdapter extends BaseAdapter{
     private Context context;
     private LayoutInflater mLayoutInflater;
     private List<Cfpb> listCfpb;
-    private final String mPrintStytle;
+    private String mPrintStytle;
 
     public HistoryAdapter(Context context, List<Cfpb> listCfpb) {
         this.context = context;
         this.listCfpb = listCfpb;
         mLayoutInflater = LayoutInflater.from(context);
-        mPrintStytle = PreferenceUtils.getInstance(context).getPrintStytle("printStytle", "");
+        mPrintStytle = PreferenceUtils.getInstance(context).getPrintStytle("printStytle", context.getResources().getString(R.string.print_usb));
     }
 
     public void setList(List<Cfpb>listCfpb){

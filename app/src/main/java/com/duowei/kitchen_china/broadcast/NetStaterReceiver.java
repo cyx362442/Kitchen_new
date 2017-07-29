@@ -37,9 +37,12 @@ public class NetStaterReceiver extends BroadcastReceiver {
                         //获取登录时的服务器时间、删除历史数据
                         Post.getInstance().getServerTime();
                         //初始化打印机
-                        String printerIP = PreferenceUtils.getInstance(context).getPrinterIp("printerIP", "");
-                        PrintHandler.getInstance().setIPrint(null);
-                        PrintHandler.getInstance().initPrint(context,printerIP);
+                        String printStytle = PreferenceUtils.getInstance(context).getPrintStytle("printStytle", "");
+                        if(printStytle.equals(context.getResources().getString(R.string.print_net))){
+                            String printerIP = PreferenceUtils.getInstance(context).getPrinterIp("printerIP", "");
+                            PrintHandler.getInstance().setIPrint(null);
+                            PrintHandler.getInstance().initPrint(context,printerIP);
+                        }
                     }
                 } else {
                     EventBus.getDefault().post(new UsbState(context.getResources().getString(R.string.net_disconnect)));

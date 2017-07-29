@@ -275,6 +275,9 @@ public class MainActivity extends AppCompatActivity {
         }else if(event.state.equals(getResources().getString(R.string.net_disconnect))){
             mSound.playSound('2',0);
             Toast.makeText(this,"网络己断开，请检查",Toast.LENGTH_LONG).show();
+        }else if(event.state.equals(getResources().getString(R.string.reconnect))){
+            mSound.playSound('3',0);
+            connectionUsbPrint();
         }
     }
 

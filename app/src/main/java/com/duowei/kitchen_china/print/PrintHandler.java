@@ -4,12 +4,16 @@ import android.content.Context;
 import android.os.RemoteException;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.duowei.kitchen_china.R;
 import com.duowei.kitchen_china.application.MyApplication;
 import com.duowei.kitchen_china.bean.Cfpb;
 import com.duowei.kitchen_china.event.PrintAmin;
 import com.duowei.kitchen_china.event.PrintConnect;
+import com.duowei.kitchen_china.event.UpdateCfpb;
+import com.duowei.kitchen_china.event.UsbState;
 import com.duowei.kitchen_china.uitls.DateTimes;
 import com.gprinter.aidl.GpService;
 import com.gprinter.command.EscCommand;
@@ -173,8 +177,8 @@ public class PrintHandler {
             rs = mGpService.sendEscCommand(0, sss);
             GpCom.ERROR_CODE r = GpCom.ERROR_CODE.values()[rs];
             if (r != GpCom.ERROR_CODE.SUCCESS) {
-                Toast.makeText(MyApplication.getContext(), GpCom.getErrorText(r), Toast.LENGTH_SHORT).show();
-                EventBus.getDefault().post(new PrintConnect());
+                Toast.makeText(MyApplication.getContext(), "打印失败，请到历史菜品中重新打印", Toast.LENGTH_SHORT).show();
+                EventBus.getDefault().post(new UsbState(MyApplication.getContext().getResources().getString(R.string.reconnect)));
             }
         } catch (RemoteException e) {
             // TODO Auto-generated catch block
@@ -206,6 +210,7 @@ public class PrintHandler {
             GpCom.ERROR_CODE r = GpCom.ERROR_CODE.values()[rs];
         if (r != GpCom.ERROR_CODE.SUCCESS) {
             Toast.makeText(MyApplication.getContext(), GpCom.getErrorText(r), Toast.LENGTH_SHORT).show();
+            EventBus.getDefault().post(new UsbState(MyApplication.getContext().getResources().getString(R.string.reconnect)));
             }
         } catch (RemoteException e) {
         // TODO Auto-generated catch block
