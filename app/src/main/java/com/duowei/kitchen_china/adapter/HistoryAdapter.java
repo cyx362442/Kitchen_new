@@ -5,11 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.duowei.kitchen_china.R;
+import com.duowei.kitchen_china.activity.MainActivity;
 import com.duowei.kitchen_china.bean.Cfpb;
 import com.duowei.kitchen_china.print.PrintHandler;
 
@@ -76,14 +76,16 @@ public class HistoryAdapter extends BaseAdapter{
         hold.tvNum.setText(cfpb.getSl()+"");
         hold.tvBeizhu.setText(cfpb.getPz());
         hold.tvOrderTime.setText(cfpb.getXdsj());
-        hold.tvCompleteTime.setText(cfpb.getWcsj());
+        String wcsj = cfpb.getWcsj();
+        String sb = wcsj.substring(wcsj.length() - 8, wcsj.length());
+        hold.tvCompleteTime.setText(sb);
 
         //打印
         final Cfpb finalCfpb = cfpb;
         hold.llPrint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PrintHandler.getInstance().printSingle(finalCfpb);
+                PrintHandler.getInstance().printUsb(MainActivity.mGpService,finalCfpb);
             }
         });
         return convertView;

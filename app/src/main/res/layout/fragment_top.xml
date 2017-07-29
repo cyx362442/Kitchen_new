@@ -63,7 +63,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.5"
-                        android:src="@drawable/ic_print_black_48dp"
+                        android:src="@drawable/shape_print"
                         />
                     <Button
                         android:id="@+id/btn_history"

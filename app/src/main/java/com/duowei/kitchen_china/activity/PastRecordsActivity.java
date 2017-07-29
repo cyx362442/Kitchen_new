@@ -1,7 +1,7 @@
 package com.duowei.kitchen_china.activity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,7 +26,7 @@ public class PastRecordsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_past_records);
         getWindow().setFlags(WindowManager.LayoutParams. FLAG_FULLSCREEN ,WindowManager.LayoutParams. FLAG_FULLSCREEN);
-        mCfpbList = DataSupport.order("xdsj desc").find(Cfpb.class);
+        mCfpbList = DataSupport.order("wcsj desc").find(Cfpb.class);
 
         ListView lv = (ListView) findViewById(R.id.listView);
         mAdapter = new HistoryAdapter(this, mCfpbList);
@@ -56,7 +56,7 @@ public class PastRecordsActivity extends AppCompatActivity {
             finish();
         }else if(item.getItemId()==R.id.menu_clear){
             DataSupport.deleteAll(Cfpb.class);
-            mCfpbList = DataSupport.order("xdsj desc").find(Cfpb.class);
+            mCfpbList = DataSupport.order("wcsj desc").find(Cfpb.class);
             mAdapter.setList(mCfpbList);
             mAdapter.notifyDataSetChanged();
         }

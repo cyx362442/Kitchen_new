@@ -1,7 +1,5 @@
 package com.duowei.kitchen_china.uitls;
 
-import android.util.Log;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -50,7 +48,7 @@ public class DateTimes {
         Date curDate = new Date(System.currentTimeMillis());
         long passtime = curDate.getTime() - loginTime;
         Date date = new Date(serverTime+passtime);
-        SimpleDateFormat dateformat = new SimpleDateFormat("HH:mm:ss");
+        SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String dtime=dateformat.format(date);
 
         return dtime;

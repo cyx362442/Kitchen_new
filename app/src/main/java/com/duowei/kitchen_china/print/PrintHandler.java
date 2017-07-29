@@ -1,16 +1,25 @@
 package com.duowei.kitchen_china.print;
 
 import android.content.Context;
+import android.os.RemoteException;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.widget.Toast;
 
+import com.duowei.kitchen_china.application.MyApplication;
 import com.duowei.kitchen_china.bean.Cfpb;
 import com.duowei.kitchen_china.event.PrintAmin;
+import com.duowei.kitchen_china.event.PrintConnect;
 import com.duowei.kitchen_china.uitls.DateTimes;
+import com.gprinter.aidl.GpService;
+import com.gprinter.command.EscCommand;
+import com.gprinter.command.GpCom;
+import com.gprinter.command.GpUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
+import java.util.Vector;
 
 /**
  * 打印相关
@@ -77,7 +86,9 @@ public class PrintHandler {
     }
 
     public void closePrint(){
-        mPrints[0].close();
+        if(mPrints!=null){
+            mPrints[0].close();
+        }
     }
 
     /**
@@ -134,5 +145,71 @@ public class PrintHandler {
 
         mIPrint.sendMsg("\n\n");
         mIPrint.sendMsg(Command.KNIFE);
+    }
+
+    public void printUsb(GpService mGpService,List<Cfpb> listCfpb){
+        EscCommand esc = new EscCommand();
+        for(int i=0;i<listCfpb.size();i++){
+            Cfpb cfpb = listCfpb.get(i);
+            esc.addInitializePrinter();
+            esc.addPrintAndFeedLines((byte) 2);
+            esc.addSelectPrintModes(EscCommand.FONT.FONTA, EscCommand.ENABLE.OFF, EscCommand.ENABLE.ON, EscCommand.ENABLE.ON, EscCommand.ENABLE.OFF);// 设置为倍高倍宽
+            esc.addText("桌号："+cfpb.getCzmc()+"\n"); // 桌号
+            esc.addSelectPrintModes(EscCommand.FONT.FONTA, EscCommand.ENABLE.OFF, EscCommand.ENABLE.OFF, EscCommand.ENABLE.OFF, EscCommand.ENABLE.OFF);// 取消倍高倍宽
+            esc.addText("点单员："+cfpb.getYhmc()+"    时间："+DateTimes.getTime()+"\n");
+            esc.addText("-------------------------------\n");
+            esc.addSelectPrintModes(EscCommand.FONT.FONTA, EscCommand.ENABLE.OFF, EscCommand.ENABLE.ON, EscCommand.ENABLE.ON, EscCommand.ENABLE.OFF);// 设置为倍高倍宽
+            esc.addText(cfpb.getYwcsl()+cfpb.getDw()+"  "+cfpb.getXmmc()+"\n\n");
+            if(!TextUtils.isEmpty(cfpb.getPz())){
+                esc.addText(cfpb.getPz());
+            }
+            esc.addText("\n\n\n\n\n");
+        }
+        Vector<Byte> datas = esc.getCommand(); // 发送数据
+        byte[] bytes = GpUtils.ByteTo_byte(datas);
+        String sss = Base64.encodeToString(bytes, Base64.DEFAULT);
+        int rs;
+        try {
+            rs = mGpService.sendEscCommand(0, sss);
+            GpCom.ERROR_CODE r = GpCom.ERROR_CODE.values()[rs];
+            if (r != GpCom.ERROR_CODE.SUCCESS) {
+                Toast.makeText(MyApplication.getContext(), GpCom.getErrorText(r), Toast.LENGTH_SHORT).show();
+                EventBus.getDefault().post(new PrintConnect());
+            }
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    public void printUsb(GpService mGpService,Cfpb cfpb){
+        EscCommand esc = new EscCommand();
+        esc.addInitializePrinter();
+        esc.addPrintAndFeedLines((byte) 2);
+        esc.addSelectPrintModes(EscCommand.FONT.FONTA, EscCommand.ENABLE.OFF, EscCommand.ENABLE.ON, EscCommand.ENABLE.ON, EscCommand.ENABLE.OFF);// 设置为倍高倍宽
+        esc.addText("桌号："+cfpb.getCzmc()+"\n"); // 桌号
+        esc.addSelectPrintModes(EscCommand.FONT.FONTA, EscCommand.ENABLE.OFF, EscCommand.ENABLE.OFF, EscCommand.ENABLE.OFF, EscCommand.ENABLE.OFF);// 取消倍高倍宽
+        esc.addText("点单员："+cfpb.getYhmc()+"    时间："+DateTimes.getTime()+"\n");
+        esc.addText("-------------------------------\n");
+        esc.addSelectPrintModes(EscCommand.FONT.FONTA, EscCommand.ENABLE.OFF, EscCommand.ENABLE.ON, EscCommand.ENABLE.ON, EscCommand.ENABLE.OFF);// 设置为倍高倍宽
+        esc.addText(cfpb.getYwcsl()+cfpb.getDw()+"  "+cfpb.getXmmc()+"\n\n");
+        if(!TextUtils.isEmpty(cfpb.getPz())){
+            esc.addText(cfpb.getPz());
+        }
+        esc.addText("\n\n\n\n\n");
+        Vector<Byte> datas = esc.getCommand(); // 发送数据
+        byte[] bytes = GpUtils.ByteTo_byte(datas);
+        String sss = Base64.encodeToString(bytes, Base64.DEFAULT);
+        int rs;
+        try {
+            rs = mGpService.sendEscCommand(0, sss);
+            GpCom.ERROR_CODE r = GpCom.ERROR_CODE.values()[rs];
+        if (r != GpCom.ERROR_CODE.SUCCESS) {
+            Toast.makeText(MyApplication.getContext(), GpCom.getErrorText(r), Toast.LENGTH_SHORT).show();
+            }
+        } catch (RemoteException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+        }
     }
 }

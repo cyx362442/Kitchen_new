@@ -7,8 +7,8 @@ android {
         applicationId "com.duowei.kitchen_china"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 2
-        versionName "V20170711"
+        versionCode 3
+        versionName "V20170712"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -37,5 +37,5 @@ dependencies {
     compile 'com.android.support:support-v4:25.3.1'
     compile 'com.android.support:support-vector-drawable:25.3.1'
     testCompile 'junit:junit:4.12'
-    compile files('libs/usbsdk.jar')
+    compile files('libs/gprintersdkv22.jar')
 }

@@ -1,20 +1,25 @@
 package com.duowei.kitchen_china.activity;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.content.ServiceConnection;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.IBinder;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.duowei.kitchen_china.R;
-import com.duowei.kitchen_china.application.MyApplication;
 import com.duowei.kitchen_china.bean.Cfpb;
 import com.duowei.kitchen_china.event.InputMsg;
 import com.duowei.kitchen_china.event.OrderFood;
 import com.duowei.kitchen_china.event.OutTimeFood;
 import com.duowei.kitchen_china.event.PrintAmin;
+import com.duowei.kitchen_china.event.PrintConnect;
 import com.duowei.kitchen_china.event.SearchFood;
 import com.duowei.kitchen_china.event.StartProgress;
 import com.duowei.kitchen_china.event.UpdateCfpb;
@@ -25,11 +30,13 @@ import com.duowei.kitchen_china.fragment.TopFragment2;
 import com.duowei.kitchen_china.httputils.Net;
 import com.duowei.kitchen_china.httputils.Post;
 import com.duowei.kitchen_china.print.PrintHandler;
-import com.duowei.kitchen_china.print.UsbPrint;
+import com.duowei.kitchen_china.print.PrintUsb;
 import com.duowei.kitchen_china.server.PollingService;
 import com.duowei.kitchen_china.sound.KeySound;
 import com.duowei.kitchen_china.uitls.DateTimes;
 import com.duowei.kitchen_china.uitls.PreferenceUtils;
+import com.gprinter.aidl.GpService;
+import com.gprinter.service.GpPrintService;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -50,36 +57,65 @@ public class MainActivity extends AppCompatActivity {
     private TopFragment2 mTopFragment2;
     private String searchMsg="";
     private KeySound mSound;
+    private String mPrintStytle;
+    private PreferenceUtils mPreferenceUtils;
+    private PrintHandler mPrintHandler;
+    private String mPrinterIP;
+
+    public static final String CONNECT_STATUS = "connect.status";
+    public static GpService mGpService = null;
+    private PrinterServiceConnection conn = null;
+
+    public static final int REQUESTCODE=200;
+
+    class PrinterServiceConnection implements ServiceConnection {
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mGpService = null;
+        }
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mGpService = GpService.Stub.asInterface(service);
+            mFragment.setGpService(mGpService);
+            PrintUsb.getInstance().intiPrint(MainActivity.this,mGpService);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         initUI();
         initFragment();
         mSound = KeySound.getContext(this);//初始化声音
+        mPreferenceUtils = PreferenceUtils.getInstance(this);
+        mPrintHandler=PrintHandler.getInstance();
 
         //记录登录时的本地时间
         long time =new Date(System.currentTimeMillis()).getTime();
         DateTimes.loginTime=time;
+        //初始化打印机
+        initPrint();
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==REQUESTCODE&&resultCode==SettingsActivity.RESULTCODE){
+            initPrint();
+        }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
-
-        String serviceIP = PreferenceUtils.getInstance(this).getServiceIp("serviceIP", "");
-        Net.url = "http://" + serviceIP + ":2233/server/ServerSvlt?";
-        String ketchen = PreferenceUtils.getInstance(this).getKetchen("et_kitchenName", "");
-        Net.sql_cfpb="select A.XH,A.xmbh,LTrim(A.xmmc)as xmmc,A.dw,(isnull(A.sl,0)-isnull(A.tdsl,0)-isnull(A.YWCSL,0))sl,\n" +
-                "A.pz,CONVERT(varchar(100), a.xdsj, 120)as xdsj,A.BY1 as czmc,datediff(minute,A.xdsj,getdate())fzs,A.yhmc,A.ywcsl,j.py,isnull(j.by13,9999999)cssj,A.by9 from cfpb A LEFT JOIN JYXMSZ J ON A.XMBH=J.XMBH\n" +
-                "where A.XDSJ BETWEEN DATEADD(mi,-180,GETDATE()) AND GETDATE() and (isnull(A.sl,0)-isnull(A.tdsl,0))>0 and a.pos='"+ketchen+"'\n" +
-                "order by A.xdsj,A.xmmc|";
-        //开启轮询服务
-        startServer();
+        getSql();
         //获取登录时的服务器时间、删除历史数据
         Post.getInstance().getServerTime();
+        //开启轮询服务
+        startServer();
     }
 
     @Override
@@ -91,13 +127,43 @@ public class MainActivity extends AppCompatActivity {
         decorView.setSystemUiVisibility(uiOptions);
         getWindow().setFlags(WindowManager.LayoutParams. FLAG_FULLSCREEN ,WindowManager.LayoutParams. FLAG_FULLSCREEN);
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+    }
 
+    private void initPrint() {
+        mPrintStytle = mPreferenceUtils.getPrintStytle("printStytle", getResources().getString(R.string.print_usb));
+        ConnectivityManager mConnectivityManager = (ConnectivityManager)this
+                .getSystemService(this.CONNECTIVITY_SERVICE);
+        NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
+        if (mNetworkInfo != null&&mNetworkInfo.isAvailable()&&mPrintStytle.equals(getResources().getString(R.string.print_net))) {//网络打印机
+            mPrinterIP = mPreferenceUtils.getPrinterIp("printerIP","");
+            mPrintHandler.setIPrint(null);
+            mPrintHandler.initPrint(this, mPrinterIP);
+        }else if(mPrintStytle.equals(getResources().getString(R.string.print_usb))){//USB打印机
+            connectionUsbPrint();
+        }
     }
 
     /*开启网络轮询服务*/
     private void startServer() {
         mIntent = new Intent(this, PollingService.class);
         startService(mIntent);
+    }
+
+    private void getSql() {
+        String serviceIP = mPreferenceUtils.getServiceIp("serviceIP", "");
+        Net.url = "http://" + serviceIP + ":2233/server/ServerSvlt?";
+        String ketchen = mPreferenceUtils.getKetchen("et_kitchenName", "");
+        Net.sql_cfpb="select A.XH,A.xmbh,LTrim(A.xmmc)as xmmc,A.dw,(isnull(A.sl,0)-isnull(A.tdsl,0)-isnull(A.YWCSL,0))sl,\n" +
+                "A.pz,CONVERT(varchar(100), a.xdsj, 120)as xdsj,A.BY1 as czmc,datediff(minute,A.xdsj,getdate())fzs,A.yhmc,A.ywcsl,j.py,isnull(j.by13,9999999)cssj,A.by9 from cfpb A LEFT JOIN JYXMSZ J ON A.XMBH=J.XMBH\n" +
+                "where A.XDSJ BETWEEN DATEADD(mi,-180,GETDATE()) AND GETDATE() and (isnull(A.sl,0)-isnull(A.tdsl,0))>0 and a.pos='"+ketchen+"'\n" +
+                "order by A.xdsj,A.xmmc|";
+    }
+
+    /*绑定USB打印机*/
+    private void connectionUsbPrint() {
+            conn = new PrinterServiceConnection();
+            Intent intent = new Intent(this, GpPrintService.class);
+            bindService(intent, conn, Context.BIND_AUTO_CREATE); // bindService
     }
 
     private void initFragment() {
@@ -202,8 +268,7 @@ public class MainActivity extends AppCompatActivity {
     @Subscribe
     public void usbPrintState(UsbState event){
         if(event.state.equals(getResources().getString(R.string.usb_connect))){
-            UsbPrint.getInstance(this).intUsbPrint();
-            UsbPrint.getInstance(this).connectUsbPrint();
+            PrintUsb.getInstance().intiPrint(this,mGpService);
         }else if(event.state.equals(getResources().getString(R.string.usb_disconnect))){
             mSound.playSound('1',0);
             Toast.makeText(this,"USB打印机己断开",Toast.LENGTH_SHORT).show();
@@ -211,6 +276,12 @@ public class MainActivity extends AppCompatActivity {
             mSound.playSound('2',0);
             Toast.makeText(this,"网络己断开，请检查",Toast.LENGTH_LONG).show();
         }
+    }
+
+    /* 重新连接打印机*/
+    @Subscribe
+    public void reConnectPrint(PrintConnect event){
+        initPrint();
     }
 
     @Override
@@ -223,6 +294,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if(conn!=null){
+            unbindService(conn);
+        }
         PrintHandler.getInstance().closePrint();
     }
 }

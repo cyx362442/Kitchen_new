@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,9 +19,9 @@ import com.duowei.kitchen_china.event.StartProgress;
 import com.duowei.kitchen_china.httputils.Net;
 import com.duowei.kitchen_china.httputils.Post;
 import com.duowei.kitchen_china.print.PrintHandler;
-import com.duowei.kitchen_china.print.UsbPrint;
 import com.duowei.kitchen_china.uitls.DateTimes;
 import com.duowei.kitchen_china.uitls.PreferenceUtils;
+import com.gprinter.aidl.GpService;
 
 import org.greenrobot.eventbus.EventBus;
 import org.litepal.crud.DataSupport;
@@ -43,6 +42,8 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
     private int currentPosition=0;
     private String mPrintStytle;
 
+    private GpService mGpService = null;
+
     public MainFragment() {
         // Required empty public constructor
     }
@@ -51,7 +52,6 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
         View inflate = inflater.inflate(R.layout.fragment_main, container, false);
         listCfpb=new ArrayList<>();
         listCfpbComplete =new ArrayList<>();
@@ -95,13 +95,17 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
         mRecAdapter.notifyDataSetChanged();
     }
 
+    public void setGpService(GpService gpService) {
+        mGpService = gpService;
+    }
+
     public void updateSuccess(){
         Post.getInstance().postCfpb(Net.sql_cfpb);
         DataSupport.saveAll(listCfpbComplete);
         if(mPrintStytle.equals(getResources().getString(R.string.print_net))){//网络打印机
             PrintHandler.getInstance().print(listCfpbComplete);
         }else if(mPrintStytle.equals(getResources().getString(R.string.print_usb))){//usb打印机
-            UsbPrint.getInstance(getActivity()).usbPrint(listCfpbComplete);
+            PrintHandler.getInstance().printUsb(mGpService,listCfpbComplete);
         }
     }
 

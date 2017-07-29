@@ -2,10 +2,8 @@ package com.duowei.kitchen_china.httputils;
 
 
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.VolleyError;
-import com.duowei.kitchen_china.application.MyApplication;
 import com.duowei.kitchen_china.bean.Cfpb;
 import com.duowei.kitchen_china.bean.Cfpb_item;
 import com.duowei.kitchen_china.event.OrderFood;
@@ -110,6 +108,7 @@ public class Post {
                     Date datetime = dateFormat.parse(fwqsj);
                     long currentServerTime = datetime.getTime();
                     DateTimes.serverTime=currentServerTime;
+                    Log.e("DateTimes.serverTime==",DateTimes.serverTime+"");
 
                     /*删除2天之前的历史数据*/
                     long l = currentServerTime - 2*24*60*60*1000;

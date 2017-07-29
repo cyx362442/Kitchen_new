@@ -11,6 +11,10 @@
     <uses-permission android:name="android.permission.access_network_state" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.hardware.usb.accessory"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+
     <application
         android:name=".application.MyApplication"
         android:allowBackup="true"
@@ -94,6 +98,18 @@
                 <action android:name="android.net.wifi.STATE_CHANGE" />
             </intent-filter>
         </receiver>
+
+        <service
+            android:name="com.gprinter.service.GpPrintService"
+            android:enabled="true"
+            android:exported="true"
+            android:label="GpPrintService">
+            <intent-filter>
+                <action android:name="com.gprinter.aidl.GpPrintService"/>
+            </intent-filter>
+        </service>
+        <service android:name="com.gprinter.service.AllService">
+        </service>
     </application>
 
 </manifest>
