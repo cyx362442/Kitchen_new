@@ -64,6 +64,22 @@ public class SellOutActivity extends AppCompatActivity {
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.options_menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+        if(item.getItemId()==R.id.menu_exit){
+            finish();
+        }
+        return true;
+    }
+
     private void initFragment() {
         mSelloutFragment = new SelloutFragment();
         mUnSellOutFragment = new UnSellOutFragment();

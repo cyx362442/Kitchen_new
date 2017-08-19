@@ -16,6 +16,9 @@
     <string name="print_usb">USB打印机</string>
     <string name="print_net">网络打印机</string>
 
+    <string name="version">版本号</string>
+    <string name="update">升级</string>
+
     <string name="msg_getpermission">打印机USB权限获取成功</string>
     <string name="msg_conn_state">打印机USB权限获取失败</string>
     <string name="none_usb_device">none usb device connected</string>

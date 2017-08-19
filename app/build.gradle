@@ -7,8 +7,8 @@ android {
         applicationId "com.duowei.kitchen_china"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 6
-        versionName "V20170730"
+        versionCode 19
+        versionName "V20170818"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -25,6 +25,7 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    compile files('libs/gprintersdkv22.jar')
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.google.code.gson:gson:2.8.0'
@@ -36,6 +37,7 @@ dependencies {
     compile 'org.litepal.android:core:1.5.1'
     compile 'com.android.support:support-v4:25.3.1'
     compile 'com.android.support:support-vector-drawable:25.3.1'
+    compile 'com.arialyy.aria:aria-core:3.2.20'
     testCompile 'junit:junit:4.12'
-    compile files('libs/gprintersdkv22.jar')
+    annotationProcessor 'com.arialyy.aria:aria-compiler:3.2.20'
 }

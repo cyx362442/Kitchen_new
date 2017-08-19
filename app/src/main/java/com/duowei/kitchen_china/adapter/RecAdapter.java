@@ -1,46 +1,25 @@
 package com.duowei.kitchen_china.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.os.CountDownTimer;
-import android.os.RemoteException;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Base64;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.duowei.kitchen_china.R;
-import com.duowei.kitchen_china.activity.MainActivity;
-import com.duowei.kitchen_china.application.MyApplication;
 import com.duowei.kitchen_china.bean.Cfpb;
 import com.duowei.kitchen_china.bean.Cfpb_item;
 import com.duowei.kitchen_china.dialog.DigitInput;
 import com.duowei.kitchen_china.dialog.PopuShow;
-import com.duowei.kitchen_china.event.UsbState;
-import com.duowei.kitchen_china.uitls.ColorAnim;
-import com.gprinter.command.EscCommand;
-import com.gprinter.command.GpCom;
-import com.gprinter.command.GpUtils;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.Vector;
+
 
 /**
  * Created by Administrator on 2017-06-22.
@@ -120,10 +99,14 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHold> {
         List<Cfpb_item> listCfpb_item = cfpb.getListCfpb();
 
         //获取当前菜品对应第一个的口味备注
-        if(!TextUtils.isEmpty(listCfpb_item.get(0).pz)){
+        String pz = listCfpb_item.get(0).pz;
+        if(!TextUtils.isEmpty(pz)){
             holder.mTvBeizhu.setVisibility(View.VISIBLE);
-            holder.mTvBeizhu.setText(listCfpb_item.get(0).pz);
-        }else if(TextUtils.isEmpty(listCfpb_item.get(0).pz)){
+            if(pz.contains("&lt;")&&pz.contains("&gt;")){
+                pz=pz.replaceAll("&lt;", "<").replaceAll("&gt;", ">");
+            }
+            holder.mTvBeizhu.setText(pz);
+        }else if(TextUtils.isEmpty(pz)){
             holder.mTvBeizhu.setVisibility(View.INVISIBLE);
         }
         //获取每列单品总数量
@@ -185,7 +168,7 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHold> {
         holder.mTvName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mPopuShow.showPopuWindow(view,cfpb.getXmmc());
+                mPopuShow.showPopuWindow(context,view,cfpb);
             }
         });
     }

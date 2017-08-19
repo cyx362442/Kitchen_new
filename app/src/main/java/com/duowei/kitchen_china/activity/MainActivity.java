@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -23,11 +25,13 @@ import com.duowei.kitchen_china.event.PrintAmin;
 import com.duowei.kitchen_china.event.PrintConnect;
 import com.duowei.kitchen_china.event.SearchFood;
 import com.duowei.kitchen_china.event.StartProgress;
+import com.duowei.kitchen_china.event.Update;
 import com.duowei.kitchen_china.event.UpdateCfpb;
 import com.duowei.kitchen_china.event.UsbState;
 import com.duowei.kitchen_china.fragment.MainFragment;
 import com.duowei.kitchen_china.fragment.TopFragment;
 import com.duowei.kitchen_china.fragment.TopFragment2;
+import com.duowei.kitchen_china.fragment.UpdateFragment;
 import com.duowei.kitchen_china.httputils.Net;
 import com.duowei.kitchen_china.httputils.Post;
 import com.duowei.kitchen_china.print.PrintHandler;
@@ -97,7 +101,8 @@ public class MainActivity extends AppCompatActivity {
         DateTimes.loginTime=time;
         //初始化打印机
         initPrint();
-
+        //检测版本
+        Post.getInstance().checkUpdate(this,true);
     }
 
     @Override
@@ -286,6 +291,16 @@ public class MainActivity extends AppCompatActivity {
     @Subscribe
     public void reConnectPrint(PrintConnect event){
         initPrint();
+    }
+
+    @Subscribe
+    public void appUpdate(Update event){
+//        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//        UpdateFragment fragment = UpdateFragment.newInstance(event.url,event.name);
+//        fragment.show(ft,getString(R.string.update));
+        Uri uri = Uri.parse(event.url);
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(intent);
     }
 
     @Override

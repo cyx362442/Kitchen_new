@@ -31,7 +31,7 @@ public class PollingService extends Service {
             @Override
             public void run() {
                 Post.getInstance().postCfpb(Net.sql_cfpb);
-                mHandler.postDelayed(mRunnable,5000);
+                mHandler.postDelayed(mRunnable,8000);
             }
         }, 1000);
     }

@@ -8,6 +8,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -139,14 +140,17 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
         mRecAdapter.setIndex(index);
         Cfpb cfpb = listCfpb.get(index);
         List<Cfpb_item> listCfpb_item = cfpb.getListCfpb();
-        for(int i=0;i<listCfpb.size();i++){
+        for(int i=0;i<listCfpb_item.size();i++){
             if(num>0){
                 Cfpb_item cfpbItem = listCfpb_item.get(i);
                 if(cfpbItem.sl1<=num){//当前桌号待删除的单品数量<=num,直接删除这行
-                    sql+="delete from cfpb where xh='"+cfpbItem.xh+"'|";
+                    sql += "insert into CFPBYWC (XH, MTXH, WMDBH, XMBH, XMMC, DW, SL, PZ, XSZT, YHMC, POS, TDSL, XDSJ, WCSJ,      BY1, BY2, BY3, BY4, BY5, BY6, BY7) " +
+                            "             select XH, MTXH, WMDBH, XMBH, XMMC, DW, SL, PZ, XSZT, YHMC, POS, TDSL, XDSJ, GETDATE(), BY1, BY2, BY3, BY4, BY5, BY6, BY7 " +
+                            "             from CFPB where xh = " + cfpbItem.xh + "|";
+                    sql+="delete from cfpb where xh="+cfpbItem.xh+"|";
                     tempNum=cfpbItem.sl1;
                 }else {//当前桌号待删除的单品数量>num,更新己用数量字段
-                    sql+="update cfpb set ywcsl=isnull(ywcsl,0)+"+num+" where xh='"+cfpbItem.xh+"'|";
+                    sql+="update cfpb set ywcsl=isnull(ywcsl,0)+"+num+" where xh="+cfpbItem.xh+"|";
                     tempNum=num;
                 }
                 //己完成

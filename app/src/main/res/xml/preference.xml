@@ -25,6 +25,9 @@
             android:inputType="textUri"
             android:title="网络打印机IP">
         </EditTextPreference>
+       <Preference
+           android:key="et_version"
+           android:title="版本更新"></Preference>
         <CheckBoxPreference
             android:key="checkbox"
             android:title="是否开机自启动"
