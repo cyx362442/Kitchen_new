@@ -7,8 +7,8 @@ android {
         applicationId "com.duowei.kitchen_china"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 19
-        versionName "V20170818"
+        versionCode 22
+        versionName "V20170822"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -37,7 +37,6 @@ dependencies {
     compile 'org.litepal.android:core:1.5.1'
     compile 'com.android.support:support-v4:25.3.1'
     compile 'com.android.support:support-vector-drawable:25.3.1'
-    compile 'com.arialyy.aria:aria-core:3.2.20'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.arialyy.aria:aria-compiler:3.2.20'
 }

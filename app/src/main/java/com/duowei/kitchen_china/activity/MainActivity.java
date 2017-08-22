@@ -6,12 +6,10 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.IBinder;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -295,12 +293,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe
     public void appUpdate(Update event){
-//        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//        UpdateFragment fragment = UpdateFragment.newInstance(event.url,event.name);
-//        fragment.show(ft,getString(R.string.update));
-        Uri uri = Uri.parse(event.url);
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        startActivity(intent);
+        UpdateFragment updateFragment = UpdateFragment.newInstance(event.url, event.name);
+        updateFragment.show(getSupportFragmentManager(),getString(R.string.update));
     }
 
     @Override

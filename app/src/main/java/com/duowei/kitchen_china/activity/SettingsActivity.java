@@ -70,12 +70,12 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Subscribe
     public void updateNow(Update event){
-//       android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//        UpdateFragment fragment = UpdateFragment.newInstance(event.url,event.name);
-//        fragment.show(ft,getString(R.string.update));
-        Uri uri = Uri.parse(event.url);
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        startActivity(intent);
+       android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        UpdateFragment fragment = UpdateFragment.newInstance(event.url,event.name);
+        fragment.show(ft,getString(R.string.update));
+//        Uri uri = Uri.parse(event.url);
+//        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+//        startActivity(intent);
     }
 
     public static class SettingFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener, Preference.OnPreferenceClickListener {
