@@ -36,6 +36,7 @@ public class UpdateFragment extends DialogFragment{
     public static final Uri CONTENT_URI = Uri.parse("content://downloads/my_downloads");
     private DownloadChangeObserver mObserver;
     private String mName;
+    private DownloadManager.Request mRequest;
 
     public static UpdateFragment newInstance(String url,String name){
         UpdateFragment fragment = new UpdateFragment();
@@ -60,14 +61,11 @@ public class UpdateFragment extends DialogFragment{
         }
         deleteAllFiles(file);
 
-        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
-        request.allowScanningByMediaScanner();
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        request.setTitle("下载APK...");
+        mRequest = new DownloadManager.Request(Uri.parse(url));
         //自定义下载保存目录
-        request.setDestinationUri(Uri.fromFile(new File(SDPATH+ mName)));
+        mRequest.setDestinationUri(Uri.fromFile(new File(SDPATH+ mName)));
         mDownloadManager = (DownloadManager)getActivity().getSystemService(DOWNLOAD_SERVICE);
-        mEnqueue = mDownloadManager.enqueue(request);
+        mEnqueue = mDownloadManager.enqueue(mRequest);
 
         mObserver = new DownloadChangeObserver(null);
         getActivity().getContentResolver().registerContentObserver(CONTENT_URI, true, mObserver);
@@ -121,6 +119,7 @@ public class UpdateFragment extends DialogFragment{
                     installintent.setDataAndType(Uri.fromFile(new File(SDPATH+mName)),
                             "application/vnd.android.package-archive");//存储位置为Android/data/包名/file/Download文件夹
                     getActivity().startActivity(installintent);
+                    mRequest.setNotificationVisibility(View.GONE);
                     dismiss();
                     break;
                 case DownloadManager.STATUS_FAILED:
