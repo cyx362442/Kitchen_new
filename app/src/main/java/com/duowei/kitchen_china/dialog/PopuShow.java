@@ -37,7 +37,7 @@ public class PopuShow {
             int width = wm.getDefaultDisplay().getWidth();
 
             popView = LayoutInflater.from(context).inflate(R.layout.popu_item,null);
-            mPopupWindow = new PopupWindow(popView, width/4+20, RecyclerView.LayoutParams.WRAP_CONTENT);
+            mPopupWindow = new PopupWindow(popView, width/3+20, RecyclerView.LayoutParams.WRAP_CONTENT);
             mPopupWindow.setBackgroundDrawable(new BitmapDrawable());                            // 指定 PopupWindow 的背景
             mPopupWindow.setFocusable(false);                   // 设定 PopupWindow 取的焦点，创建出来的 PopupWindow 默认无焦点
         }

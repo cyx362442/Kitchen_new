@@ -7,9 +7,9 @@ import android.content.ServiceConnection;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -214,7 +214,8 @@ public class MainActivity extends AppCompatActivity {
             tempList.clear();
             for(int i=0;i<mCfpbList.size();i++){
                 Cfpb cfpb = mCfpbList.get(i);
-                if(cfpb.getFzs()>cfpb.getCssj()){
+                String cssj = cfpb.getCssj();
+                if(TextUtils.isEmpty(cssj)&&cfpb.getFzs()>Integer.parseInt(cssj)){
                     tempList.add(cfpb);
                 }
             }

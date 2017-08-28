@@ -21,7 +21,7 @@ public class KeySound {
 		initSoundPool();
 		return ks;
 		}
-	public static void playSound(char sound, int loop) {
+	public static synchronized void playSound(char sound, int loop) {
 		String log;
 		AudioManager am = (AudioManager) context
 				.getSystemService(Context.AUDIO_SERVICE);
@@ -52,5 +52,6 @@ public class KeySound {
 		hm.put('1',sp.load(context,R.raw.usbprint,0));
 		hm.put('2',sp.load(context,R.raw.netstate,0));
 		hm.put('3',sp.load(context,R.raw.usbreconnect,0));
+		hm.put('4',sp.load(context,R.raw.outtime,0));
 	}
 }

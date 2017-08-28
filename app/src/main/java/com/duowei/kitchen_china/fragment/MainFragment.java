@@ -1,6 +1,5 @@
 package com.duowei.kitchen_china.fragment;
 
-
 import android.app.Fragment;
 import android.os.Bundle;
 import android.os.RemoteException;
@@ -8,16 +7,13 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.duowei.kitchen_china.R;
 import com.duowei.kitchen_china.adapter.RecAdapter;
 import com.duowei.kitchen_china.adapter.SpacesItemDecoration;
-import com.duowei.kitchen_china.application.MyApplication;
 import com.duowei.kitchen_china.bean.Cfpb;
 import com.duowei.kitchen_china.bean.Cfpb_item;
 import com.duowei.kitchen_china.event.StartProgress;
@@ -78,7 +74,7 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
 
     private void initRecy(View inflate) {
         RecyclerView rv = (RecyclerView) inflate.findViewById(R.id.recycleView);
-        rv.setLayoutManager(new GridLayoutManager(getActivity(),4));//gridview布局,4列
+        rv.setLayoutManager(new GridLayoutManager(getActivity(),3));//gridview布局,4列
         rv.addItemDecoration(new SpacesItemDecoration(5));//设置item边距
         rv.setItemAnimator(new DefaultItemAnimator());
         mRecAdapter = new RecAdapter(getActivity(), listCfpb);

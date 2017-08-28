@@ -16,6 +16,7 @@ import com.duowei.kitchen_china.bean.Cfpb;
 import com.duowei.kitchen_china.bean.Cfpb_item;
 import com.duowei.kitchen_china.dialog.DigitInput;
 import com.duowei.kitchen_china.dialog.PopuShow;
+import com.duowei.kitchen_china.uitls.ColorAnim;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,17 +99,17 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHold> {
         holder.mTvName.setText(cfpb.getXmmc());
         List<Cfpb_item> listCfpb_item = cfpb.getListCfpb();
 
-        //获取当前菜品对应第一个的口味备注
-        String pz = listCfpb_item.get(0).pz;
-        if(!TextUtils.isEmpty(pz)){
-            holder.mTvBeizhu.setVisibility(View.VISIBLE);
-            if(pz.contains("&lt;")&&pz.contains("&gt;")){
-                pz=pz.replaceAll("&lt;", "<").replaceAll("&gt;", ">");
-            }
-            holder.mTvBeizhu.setText(pz);
-        }else if(TextUtils.isEmpty(pz)){
-            holder.mTvBeizhu.setVisibility(View.INVISIBLE);
-        }
+        //获取当前菜品对应第一个的口味备注(这部份暂不要)
+//        String pz = listCfpb_item.get(0).pz;
+//        if(!TextUtils.isEmpty(pz)){
+//            holder.mTvBeizhu.setVisibility(View.VISIBLE);
+//            if(pz.contains("&lt;")&&pz.contains("&gt;")){
+//                pz=pz.replaceAll("&lt;", "<").replaceAll("&gt;", ">");
+//            }
+//            holder.mTvBeizhu.setText(pz);
+//        }else if(TextUtils.isEmpty(pz)){
+//            holder.mTvBeizhu.setVisibility(View.INVISIBLE);
+//        }
         //获取每列单品总数量
         for(Cfpb_item cfpb_item: listCfpb_item){
             count+=cfpb_item.sl1;
@@ -136,7 +137,8 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHold> {
         }
 
         //超时单品
-        if(cfpb.getFzs()>cfpb.getCssj()){
+        String cssj = cfpb.getCssj();
+        if(!TextUtils.isEmpty(cssj)&&cfpb.getFzs()>Integer.parseInt(cssj)){
             holder.btnContinue.setBackgroundResource(R.drawable.shape_contiune_outtime);
             holder.mRecyclerView.setBackgroundResource(R.drawable.cook_top_outtime);
         }else{
