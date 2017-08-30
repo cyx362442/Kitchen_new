@@ -8,6 +8,7 @@
     <string name="allfood">全部菜品</string>
     <string name="searchfood">查询菜品</string>
     <string name="outtimefood">超时单品</string>
+    <string name="cook">制作</string>
 
     <string name="usb_connect">连接</string>
     <string name="usb_disconnect">断开</string>

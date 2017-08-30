@@ -16,8 +16,10 @@ import com.duowei.kitchen_china.adapter.RecAdapter;
 import com.duowei.kitchen_china.adapter.SpacesItemDecoration;
 import com.duowei.kitchen_china.bean.Cfpb;
 import com.duowei.kitchen_china.bean.Cfpb_item;
+import com.duowei.kitchen_china.event.Completes;
 import com.duowei.kitchen_china.event.StartProgress;
 import com.duowei.kitchen_china.event.UsbState;
+import com.duowei.kitchen_china.fragment.dialog.CookFragment;
 import com.duowei.kitchen_china.httputils.Net;
 import com.duowei.kitchen_china.httputils.Post;
 import com.duowei.kitchen_china.print.PrintHandler;
@@ -29,6 +31,7 @@ import com.gprinter.command.GpCom;
 import com.gprinter.command.GpUtils;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
@@ -49,6 +52,7 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
     private String mPrintStytle;
 
     private GpService mGpService = null;
+    private boolean mMakeModel;
 
     public MainFragment() {
         // Required empty public constructor
@@ -59,6 +63,8 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View inflate = inflater.inflate(R.layout.fragment_main, container, false);
+        EventBus.getDefault().register(MainFragment.this);
+        mMakeModel = PreferenceUtils.getInstance(getActivity()).getMakeModel("spf_makeModel", false);
         listCfpb=new ArrayList<>();
         listCfpbComplete =new ArrayList<>();
         initRecy(inflate);
@@ -70,6 +76,11 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
         super.onResume();
         PreferenceUtils instance = PreferenceUtils.getInstance(getActivity());
         mPrintStytle = instance.getPrintStytle("printStytle", getResources().getString(R.string.print_usb));
+    }
+
+    @Subscribe
+    public void setListCfpbComplete(Completes event){
+        listCfpbComplete=event.getListCfpbComplete();
     }
 
     private void initRecy(View inflate) {
@@ -123,11 +134,15 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
     /**继续按键点击事件*/
     @Override
     public void setOnContinueClickListener(int index,float num) {
+        currentPosition=index;
         if(mPrintStytle.equals(getActivity().getResources().getString(R.string.print_usb))){
             if (usbPrintConnect()) return;
         }
-
-        currentPosition=index;
+        if(mMakeModel==true){//启用制作模式
+            CookFragment fragment = CookFragment.newInstance(listCfpb.get(index));
+            fragment.show(getFragmentManager(),getString(R.string.cook));
+            return;
+        }
         float tempNum=0;
         Cfpb cfpb21=null;
         listCfpbComplete.clear();
@@ -184,5 +199,11 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
             e.printStackTrace();
         }
         return false;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(MainFragment.this);
     }
 }

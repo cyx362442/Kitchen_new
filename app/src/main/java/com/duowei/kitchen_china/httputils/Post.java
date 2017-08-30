@@ -84,7 +84,10 @@ public class Post {
                         //抓取每个单品所包含的餐桌数据集
                         for (int j = 0; j < cfpb.length; j++) {
                             if ((cfpb[j].getXmbh()).equals(cfpb[i].getXmbh())) {
-                                Cfpb_item cfpb_item = new Cfpb_item(cfpb[j].getXmbh(), cfpb[j].getCzmc(), cfpb[j].getSl(), cfpb[j].getFzs(), cfpb[j].getXH(), cfpb[j].getPz());
+                                Cfpb_item cfpb_item = new Cfpb_item(cfpb[j].getXmbh(), cfpb[j].getCzmc(),
+                                        cfpb[j].getSl(), cfpb[j].getFzs(),
+                                        cfpb[j].getXH(), cfpb[j].getPz(),
+                                        cfpb[j].getXszt(),cfpb[j].getBy10());
                                 List<Cfpb_item> list = cfpb[i].getListCfpb();
                                 list.add(cfpb_item);
                                 cfpb[i].setListCfpb(list);

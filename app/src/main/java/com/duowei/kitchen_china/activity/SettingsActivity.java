@@ -14,6 +14,7 @@ import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.preference.SwitchPreference;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -46,6 +47,7 @@ public class SettingsActivity extends AppCompatActivity {
     private static Preference etVersion;
     private static String mVersionName;
     private static int mVersionCode;
+    private static SwitchPreference spf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,9 +75,6 @@ public class SettingsActivity extends AppCompatActivity {
        android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         UpdateFragment fragment = UpdateFragment.newInstance(event.url,event.name);
         fragment.show(ft,getString(R.string.update));
-//        Uri uri = Uri.parse(event.url);
-//        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-//        startActivity(intent);
     }
 
     public static class SettingFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener, Preference.OnPreferenceClickListener {
@@ -92,6 +91,7 @@ public class SettingsActivity extends AppCompatActivity {
             listPrint = (ListPreference) findPreference("printStytle");
             mEtPrinterIP = (EditTextPreference) findPreference("et_printerIP");
             etVersion = findPreference("et_version");
+            spf = (SwitchPreference) findPreference("spf_makeModel");
             mCheckbox = (CheckBoxPreference) findPreference("checkbox");
             mEtServiceIP.setSummary(mPreferenceUtils.getServiceIp("serviceIP",""));
             etKetchen.setSummary(mPreferenceUtils.getKetchen("et_kitchenName",""));
@@ -100,6 +100,7 @@ public class SettingsActivity extends AppCompatActivity {
             etVersion.setSummary(mVersionName);
             etVersion.setTitle("版本更新(V"+mVersionCode+")");
             etVersion.setOnPreferenceClickListener(this);
+            spf.setChecked(mPreferenceUtils.getMakeModel("spf_makeModel",false));
             mCheckbox.setChecked(mPreferenceUtils.getAutoStart("auto",true));
             SharedPreferences sharedPreferences = getPreferenceScreen().getSharedPreferences();
             sharedPreferences.registerOnSharedPreferenceChangeListener(this);
@@ -123,6 +124,11 @@ public class SettingsActivity extends AppCompatActivity {
                 String printerIP = sharedPreferences.getString("et_printerIP", "");
                 mEtPrinterIP.setSummary(printerIP);
                 mPreferenceUtils.setPrinterIp("printerIP",printerIP);
+            }else if(key.equals("spf_makeModel")){
+                boolean make = mPreferenceUtils.getMakeModel("spf_makeModel", false);
+                make=!make;
+                spf.setChecked(make);
+                mPreferenceUtils.setMakeModel("spf_makeModel",make);
             }else if(key.equals("checkbox")){
                 boolean auto=mPreferenceUtils.getAutoStart("auto", true);
                 auto=!auto;

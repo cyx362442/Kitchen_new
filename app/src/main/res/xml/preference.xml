@@ -28,6 +28,10 @@
        <Preference
            android:key="et_version"
            android:title="版本更新"></Preference>
+        <SwitchPreference
+            android:key="spf_makeModel"
+            android:title="是否启用制作模式"
+            android:checked="false"></SwitchPreference>
         <CheckBoxPreference
             android:key="checkbox"
             android:title="是否开机自启动"

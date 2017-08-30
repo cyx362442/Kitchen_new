@@ -1,5 +1,7 @@
 package com.duowei.kitchen_china.adapter;
 
+import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,7 +18,10 @@ import com.duowei.kitchen_china.bean.Cfpb;
 import com.duowei.kitchen_china.bean.Cfpb_item;
 import com.duowei.kitchen_china.dialog.DigitInput;
 import com.duowei.kitchen_china.dialog.PopuShow;
+import com.duowei.kitchen_china.fragment.MainFragment;
+import com.duowei.kitchen_china.fragment.dialog.CookFragment;
 import com.duowei.kitchen_china.uitls.ColorAnim;
+import com.duowei.kitchen_china.uitls.PreferenceUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +40,8 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHold> {
 
     private onItemClickListener itemListener;
     private onContinueClickListener continueLisener;
-    private final PopuShow mPopuShow;//点击菜品名称弹出popuwindow
+    private  PopuShow mPopuShow;//点击菜品名称弹出popuwindow
+    private  boolean mMakeModel;
 
     public RecAdapter(Context context,List<Cfpb> listCfpb) {
         this.context = context;
@@ -43,6 +49,7 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHold> {
         mLayoutInflater = LayoutInflater.from(context);
         listCfpb_item=new ArrayList<>();
         mPopuShow = PopuShow.getInstance(context);
+        mMakeModel = PreferenceUtils.getInstance(context).getMakeModel("spf_makeModel", false);
     }
 
     public void setList(List<Cfpb> listCfpb){
@@ -84,10 +91,19 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHold> {
         viewHold.mRecyclerView.setAdapter(viewHold.mRecAdapterItem);
 
         viewHold.mLl= (LinearLayout) inflate.findViewById(R.id.linearLayout);
+        viewHold.mLlMake= (LinearLayout) inflate.findViewById(R.id.ll_make);
+        if(mMakeModel==true){//是否启用制作模式
+            viewHold.mLlMake.setVisibility(View.VISIBLE);
+        }else{
+            viewHold.mLlMake.setVisibility(View.GONE);
+        }
+
         viewHold.mTvName= (TextView) inflate.findViewById(R.id.tv_name);
         viewHold.mTvBeizhu= (TextView) inflate.findViewById(R.id.tv_beizhu);
         viewHold.mTvNum= (TextView) inflate.findViewById(R.id.tv_num);
         viewHold.mTvDw= (TextView) inflate.findViewById(R.id.tv_dw);
+        viewHold.mTvCooking= (TextView) inflate.findViewById(R.id.tv_cooking);
+        viewHold.mTvUnCook= (TextView) inflate.findViewById(R.id.tv_uncook);
         viewHold.btnContinue= (Button) inflate.findViewById(R.id.btn_continue);
         return viewHold;
     }
@@ -95,28 +111,22 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHold> {
     @Override
     public void onBindViewHolder(final ViewHold holder, final int position) {
         float count=0;
+        float done=0;
         final Cfpb cfpb = listCfpb.get(position);
         holder.mTvName.setText(cfpb.getXmmc());
         List<Cfpb_item> listCfpb_item = cfpb.getListCfpb();
-
-        //获取当前菜品对应第一个的口味备注(这部份暂不要)
-//        String pz = listCfpb_item.get(0).pz;
-//        if(!TextUtils.isEmpty(pz)){
-//            holder.mTvBeizhu.setVisibility(View.VISIBLE);
-//            if(pz.contains("&lt;")&&pz.contains("&gt;")){
-//                pz=pz.replaceAll("&lt;", "<").replaceAll("&gt;", ">");
-//            }
-//            holder.mTvBeizhu.setText(pz);
-//        }else if(TextUtils.isEmpty(pz)){
-//            holder.mTvBeizhu.setVisibility(View.INVISIBLE);
-//        }
         //获取每列单品总数量
         for(Cfpb_item cfpb_item: listCfpb_item){
             count+=cfpb_item.sl1;
+            if("1".equals(cfpb_item.getBy10())){
+                done+=cfpb_item.sl1;
+            }
         }
 
         holder.mTvNum.setText(count+"");
         holder.mTvDw.setText(cfpb.getDw());
+        holder.mTvCooking.setText(done+cfpb.getDw());
+        holder.mTvUnCook.setText((count-done)+cfpb.getDw());
 
         //刷新顶部子Recycleview
         holder.mRecAdapterItem.setListCfpb_item(listCfpb_item);
@@ -151,6 +161,10 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHold> {
         holder.btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(mMakeModel==true){//启用了制作模式
+                    continueLisener.setOnContinueClickListener(position,0);
+                    return;
+                }
                 if(finalCount <=1){//数量小于等于1，直接删删
                     continueLisener.setOnContinueClickListener(position,cfpb.getSl());
                 }else{//数量大于1，修改数量
@@ -185,11 +199,14 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHold> {
             super(itemView);
         }
         LinearLayout mLl;
+        LinearLayout mLlMake;
         RecyclerView mRecyclerView;
         TextView mTvName;
         TextView mTvBeizhu;
         TextView mTvNum;
         TextView mTvDw;
+        TextView mTvCooking;
+        TextView mTvUnCook;
         Button btnContinue;
         RecAdapter_item mRecAdapterItem;
     }

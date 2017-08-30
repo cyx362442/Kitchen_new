@@ -76,7 +76,7 @@
                     <Button
                         android:id="@+id/btn_overtime"
                         style="@style/TopButton"
-                        android:textColor="@color/orange"
+                        android:textColor="@color/white"
                         android:text="超时单品"/>
                     <Button
                         android:id="@+id/btn_saleout"

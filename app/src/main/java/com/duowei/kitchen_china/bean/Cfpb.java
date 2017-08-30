@@ -2,6 +2,7 @@ package com.duowei.kitchen_china.bean;
 
 import org.litepal.crud.DataSupport;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +10,7 @@ import java.util.List;
  * Created by Administrator on 2017-06-23.
  */
 
-public class Cfpb extends DataSupport{
+public class Cfpb extends DataSupport implements Serializable{
 
     /**
      * XH : 10105
@@ -33,12 +34,30 @@ public class Cfpb extends DataSupport{
     private String czmc;
     private int fzs;
     private String yhmc;
+    private String xszt;
     private float ywcsl;
     private String py;
     private String cssj;
     private String by9;//最后一次点击
+    private String by10;
     private String wcsj;
     private long time;
+
+    public String getXszt() {
+        return xszt;
+    }
+
+    public void setXszt(String xszt) {
+        this.xszt = xszt;
+    }
+
+    public String getBy10() {
+        return by10;
+    }
+
+    public void setBy10(String by10) {
+        this.by10 = by10;
+    }
 
     public String getPy() {
         return py;

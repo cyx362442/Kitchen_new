@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
         Net.url = "http://" + serviceIP + ":2233/server/ServerSvlt?";
         String ketchen = mPreferenceUtils.getKetchen("et_kitchenName", "");
         Net.sql_cfpb="select A.XH,A.xmbh,LTrim(A.xmmc)as xmmc,A.dw,(isnull(A.sl,0)-isnull(A.tdsl,0)-isnull(A.YWCSL,0))sl,\n" +
-                "A.pz,CONVERT(varchar(100), a.xdsj, 120)as xdsj,A.BY1 as czmc,datediff(minute,A.xdsj,getdate())fzs,A.yhmc,A.ywcsl,j.py,isnull(j.by13,9999999)cssj,A.by9 from cfpb A LEFT JOIN JYXMSZ J ON A.XMBH=J.XMBH\n" +
+                "A.pz,CONVERT(varchar(100), a.xdsj, 120)as xdsj,A.BY1 as czmc,datediff(minute,A.xdsj,getdate())fzs,A.yhmc,isnull(A.xszt,'')xszt,A.ywcsl,j.py,isnull(j.by13,9999999)cssj,A.by9,A.by10 from cfpb A LEFT JOIN JYXMSZ J ON A.XMBH=J.XMBH\n" +
                 "where A.XDSJ BETWEEN DATEADD(mi,-180,GETDATE()) AND GETDATE() and (isnull(A.sl,0)-isnull(A.tdsl,0))>0 and a.pos='"+ketchen+"'\n" +
                 "order by A.xdsj,A.xmmc|";
     }
@@ -215,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
             for(int i=0;i<mCfpbList.size();i++){
                 Cfpb cfpb = mCfpbList.get(i);
                 String cssj = cfpb.getCssj();
-                if(TextUtils.isEmpty(cssj)&&cfpb.getFzs()>Integer.parseInt(cssj)){
+                if(!TextUtils.isEmpty(cssj)&&cfpb.getFzs()>Integer.parseInt(cssj)){
                     tempList.add(cfpb);
                 }
             }

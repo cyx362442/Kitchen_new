@@ -28,7 +28,6 @@ import com.duowei.kitchen_china.httputils.Net;
 import com.duowei.kitchen_china.httputils.Post;
 import com.duowei.kitchen_china.sound.KeySound;
 import com.duowei.kitchen_china.uitls.ColorAnim;
-import com.gprinter.aidl.GpService;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -102,10 +101,10 @@ public class TopFragment extends Fragment {
             }
         }
         mTvCooked.setText(foodCount + "份");
+        Handler handler = new Handler();
         //超时单品、新订单声音、动画
         if (foodCount > tempNum&&outTime>tempOutTime) {
             mSound.playSound('4',0);
-            Handler handler = new Handler();
             handler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -124,12 +123,18 @@ public class TopFragment extends Fragment {
         //超时单品声音
         else if(outTime>tempOutTime){
             mSound.playSound('4',0);
-            try {
-                Thread.sleep(2000);
-                mSound.playSound('4',0);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            ColorAnim.getInstacne(getActivity()).startBackground(mBtnOvertime);
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(2000);
+                        mSound.playSound('4',0);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         }
         //新的订单
         else if(foodCount > tempNum){
@@ -170,11 +175,11 @@ public class TopFragment extends Fragment {
                 if (isOutTime == false) {
                     EventBus.getDefault().post(new OutTimeFood(getResources().getString(R.string.outtimefood)));
                     mBtnOvertime.setText("全部单品");
-                    mBtnOvertime.setTextColor(getResources().getColor(R.color.white));
+                    mBtnOvertime.setBackground(getResources().getDrawable(R.drawable.button_orange));
                 } else {
                     EventBus.getDefault().post(new OutTimeFood(getResources().getString(R.string.allfood)));
                     mBtnOvertime.setText("超时单品");
-                    mBtnOvertime.setTextColor(getResources().getColor(R.color.orange));
+                    mBtnOvertime.setBackground(getResources().getDrawable(R.drawable.button_blue));
                 }
                 isOutTime = !isOutTime;
                 //马上发起服务器查询
