@@ -6,4 +6,9 @@
         <item>@string/print_net</item>
         <item>@string/print_server</item>
     </string-array>
+    <string-array name="list_colums">
+        <item>@string/three</item>
+        <item>@string/four</item>
+        <item>@string/five</item>
+    </string-array>
 </resources>

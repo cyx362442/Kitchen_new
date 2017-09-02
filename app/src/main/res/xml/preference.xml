@@ -25,6 +25,13 @@
             android:inputType="textUri"
             android:title="网络打印机IP">
         </EditTextPreference>
+        <ListPreference
+            android:key="listColums"
+            android:title="显示列数"
+            android:entries="@array/list_colums"
+            android:entryValues="@array/list_colums"
+            android:dialogTitle="请选择列数">
+        </ListPreference>
        <Preference
            android:key="et_version"
            android:title="版本更新"></Preference>

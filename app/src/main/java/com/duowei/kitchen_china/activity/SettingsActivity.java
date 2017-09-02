@@ -42,6 +42,7 @@ public class SettingsActivity extends AppCompatActivity {
     private static String mVersionName;
     private static int mVersionCode;
     private static SwitchPreference spf;
+    private static ListPreference listColums;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +84,7 @@ public class SettingsActivity extends AppCompatActivity {
             mEtServiceIP = (EditTextPreference)findPreference("et_serviceIP");
             etKetchen = (EditTextPreference) findPreference("et_kitchenName");
             listPrint = (ListPreference) findPreference("printStytle");
+            listColums = (ListPreference) findPreference("listColums");
             mEtPrinterIP = (EditTextPreference) findPreference("et_printerIP");
             etVersion = findPreference("et_version");
             spf = (SwitchPreference) findPreference("spf_makeModel");
@@ -90,6 +92,8 @@ public class SettingsActivity extends AppCompatActivity {
             mEtServiceIP.setSummary(mPreferenceUtils.getServiceIp("serviceIP",""));
             etKetchen.setSummary(mPreferenceUtils.getKetchen("et_kitchenName",""));
             listPrint.setSummary(mPreferenceUtils.getPrintStytle("printStytle",getResources().getString(R.string.closeprint)));
+            listColums.setSummary(mPreferenceUtils.getListColums("listColums",getString(R.string.three)));
+
             mEtPrinterIP.setSummary(mPreferenceUtils.getPrinterIp("printerIP",""));
             etVersion.setSummary(mVersionName);
             etVersion.setTitle("版本更新(V"+mVersionCode+")");
@@ -118,6 +122,10 @@ public class SettingsActivity extends AppCompatActivity {
                 String printerIP = sharedPreferences.getString("et_printerIP", "");
                 mEtPrinterIP.setSummary(printerIP);
                 mPreferenceUtils.setPrinterIp("printerIP",printerIP);
+            }else if(key.equals("listColums")){
+                String colums = sharedPreferences.getString("listColums", "");
+                listColums.setSummary(colums);
+                mPreferenceUtils.setListColums("listColums",colums);
             }else if(key.equals("spf_makeModel")){
                 boolean make = mPreferenceUtils.getMakeModel("spf_makeModel", false);
                 make=!make;

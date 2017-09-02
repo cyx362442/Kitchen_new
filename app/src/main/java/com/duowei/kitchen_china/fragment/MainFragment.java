@@ -7,12 +7,10 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.volley.VolleyError;
 import com.duowei.kitchen_china.R;
 import com.duowei.kitchen_china.adapter.RecAdapter;
 import com.duowei.kitchen_china.adapter.SpacesItemDecoration;
@@ -22,10 +20,8 @@ import com.duowei.kitchen_china.event.Completes;
 import com.duowei.kitchen_china.event.StartProgress;
 import com.duowei.kitchen_china.event.UsbState;
 import com.duowei.kitchen_china.fragment.dialog.CookFragment;
-import com.duowei.kitchen_china.httputils.DownHTTP;
 import com.duowei.kitchen_china.httputils.Net;
 import com.duowei.kitchen_china.httputils.Post;
-import com.duowei.kitchen_china.httputils.VolleyResultListener;
 import com.duowei.kitchen_china.print.PrintHandler;
 import com.duowei.kitchen_china.uitls.DateTimes;
 import com.duowei.kitchen_china.uitls.PreferenceUtils;
@@ -57,6 +53,7 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
 
     private GpService mGpService = null;
     private boolean mMakeModel;
+    private String mColums;
 
     public MainFragment() {
         // Required empty public constructor
@@ -68,7 +65,9 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
         // Inflate the layout for this fragment
         View inflate = inflater.inflate(R.layout.fragment_main, container, false);
         EventBus.getDefault().register(MainFragment.this);
-        mMakeModel = PreferenceUtils.getInstance(getActivity()).getMakeModel("spf_makeModel", false);
+        PreferenceUtils preferenceUtils = PreferenceUtils.getInstance(getActivity());
+        mMakeModel = preferenceUtils.getMakeModel("spf_makeModel", false);
+        mColums = preferenceUtils.getListColums("listColums", getString(R.string.three));
         listCfpb=new ArrayList<>();
         listCfpbComplete =new ArrayList<>();
         initRecy(inflate);
@@ -88,8 +87,9 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
     }
 
     private void initRecy(View inflate) {
+        int colum = Integer.parseInt(mColums);
         RecyclerView rv = (RecyclerView) inflate.findViewById(R.id.recycleView);
-        rv.setLayoutManager(new GridLayoutManager(getActivity(),3));//gridview布局,4列
+        rv.setLayoutManager(new GridLayoutManager(getActivity(),colum));//gridview布局,4列
         rv.addItemDecoration(new SpacesItemDecoration(5));//设置item边距
         rv.setItemAnimator(new DefaultItemAnimator());
         mRecAdapter = new RecAdapter(getActivity(), listCfpb);
