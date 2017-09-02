@@ -1,12 +1,9 @@
 package com.duowei.kitchen_china.adapter;
 
-import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +15,6 @@ import com.duowei.kitchen_china.bean.Cfpb;
 import com.duowei.kitchen_china.bean.Cfpb_item;
 import com.duowei.kitchen_china.dialog.DigitInput;
 import com.duowei.kitchen_china.dialog.PopuShow;
-import com.duowei.kitchen_china.fragment.MainFragment;
-import com.duowei.kitchen_china.fragment.dialog.CookFragment;
-import com.duowei.kitchen_china.uitls.ColorAnim;
 import com.duowei.kitchen_china.uitls.PreferenceUtils;
 
 import java.util.ArrayList;
@@ -123,10 +117,25 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHold> {
             }
         }
 
+        if(mMakeModel==true){
+            holder.mTvBeizhu.setVisibility(View.GONE);
+        }else{
+            String pz = listCfpb_item.get(0).pz;
+            if(!TextUtils.isEmpty(pz)){
+                holder.mTvBeizhu.setVisibility(View.VISIBLE);
+                if(pz.contains("&lt;")&&pz.contains("&gt;")){
+                    pz=pz.replaceAll("&lt;", "<").replaceAll("&gt;", ">");
+                }
+                holder.mTvBeizhu.setText(pz);
+            }else if(TextUtils.isEmpty(pz)){
+                holder.mTvBeizhu.setVisibility(View.INVISIBLE);
+            }
+        }
+
         holder.mTvNum.setText(count+"");
         holder.mTvDw.setText(cfpb.getDw());
-        holder.mTvCooking.setText(done+cfpb.getDw());
-        holder.mTvUnCook.setText((count-done)+cfpb.getDw());
+        holder.mTvCooking.setText(done+"");
+        holder.mTvUnCook.setText((count-done)+"");
 
         //刷新顶部子Recycleview
         holder.mRecAdapterItem.setListCfpb_item(listCfpb_item);

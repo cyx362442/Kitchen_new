@@ -1,14 +1,10 @@
 package com.duowei.kitchen_china.activity;
 
 import android.app.FragmentTransaction;
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
@@ -17,12 +13,10 @@ import android.preference.PreferenceFragment;
 import android.preference.SwitchPreference;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import com.duowei.kitchen_china.R;
 import com.duowei.kitchen_china.event.Update;
@@ -95,7 +89,7 @@ public class SettingsActivity extends AppCompatActivity {
             mCheckbox = (CheckBoxPreference) findPreference("checkbox");
             mEtServiceIP.setSummary(mPreferenceUtils.getServiceIp("serviceIP",""));
             etKetchen.setSummary(mPreferenceUtils.getKetchen("et_kitchenName",""));
-            listPrint.setSummary(mPreferenceUtils.getPrintStytle("printStytle",getResources().getString(R.string.print_usb)));
+            listPrint.setSummary(mPreferenceUtils.getPrintStytle("printStytle",getResources().getString(R.string.closeprint)));
             mEtPrinterIP.setSummary(mPreferenceUtils.getPrinterIp("printerIP",""));
             etVersion.setSummary(mVersionName);
             etVersion.setTitle("版本更新(V"+mVersionCode+")");

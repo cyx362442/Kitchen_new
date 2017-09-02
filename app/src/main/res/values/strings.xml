@@ -14,6 +14,8 @@
     <string name="usb_disconnect">断开</string>
     <string name="net_disconnect">网络断开</string>
     <string name="reconnect">重新连接</string>
+
+    <string name="closeprint">关闭</string>
     <string name="print_usb">USB打印机</string>
     <string name="print_net">网络打印机</string>
 

@@ -15,7 +15,7 @@
         <ListPreference
             android:key="printStytle"
             android:title="打印机类型"
-            android:summary="USB打印机"
+            android:summary="关闭"
             android:entries="@array/list_print_stytle"
             android:entryValues="@array/list_print_stytle"
             android:dialogTitle="请选择打印机" ></ListPreference>

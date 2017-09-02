@@ -110,8 +110,6 @@ public class TopFragment extends Fragment {
                 public void run() {
                     try {
                         Thread.sleep(2000);
-                        mSound.playSound('4',0);
-                        Thread.sleep(3000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

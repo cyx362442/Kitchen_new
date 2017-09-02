@@ -43,7 +43,7 @@ public class HistoryAdapter extends BaseAdapter{
         this.context = context;
         this.listCfpb = listCfpb;
         mLayoutInflater = LayoutInflater.from(context);
-        mPrintStytle = PreferenceUtils.getInstance(context).getPrintStytle("printStytle", context.getResources().getString(R.string.print_usb));
+        mPrintStytle = PreferenceUtils.getInstance(context).getPrintStytle("printStytle", context.getResources().getString(R.string.closeprint));
     }
 
     public void setList(List<Cfpb>listCfpb){

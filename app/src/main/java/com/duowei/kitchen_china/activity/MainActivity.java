@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initPrint() {
-        mPrintStytle = mPreferenceUtils.getPrintStytle("printStytle", getResources().getString(R.string.print_usb));
+        mPrintStytle = mPreferenceUtils.getPrintStytle("printStytle", getResources().getString(R.string.closeprint));
         ConnectivityManager mConnectivityManager = (ConnectivityManager)this
                 .getSystemService(this.CONNECTIVITY_SERVICE);
         NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();

@@ -42,7 +42,6 @@
                             android:background="@drawable/shape_beizhu_yellow"
                             android:textColor="#ffffff"
                             android:padding="3dp"
-                            android:visibility="gone"
                             />
                     </LinearLayout>
                     <LinearLayout

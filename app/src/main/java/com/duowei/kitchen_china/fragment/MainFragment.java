@@ -75,7 +75,7 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
     public void onResume() {
         super.onResume();
         PreferenceUtils instance = PreferenceUtils.getInstance(getActivity());
-        mPrintStytle = instance.getPrintStytle("printStytle", getResources().getString(R.string.print_usb));
+        mPrintStytle = instance.getPrintStytle("printStytle", getResources().getString(R.string.closeprint));
     }
 
     @Subscribe
@@ -101,8 +101,9 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
         }else if(list.size()<tempList){//list变小，启用删除动画
             mRecAdapter.notifyItemRemoved(currentPosition);
             mRecAdapter.notifyItemRangeChanged(currentPosition,mRecAdapter.getItemCount());
-        }else if(list.size()>tempList){//list变大，启用增加动画
-            mRecAdapter.notifyItemInserted(0);
+        }
+        else if(list.size()>tempList){//list变大，启用增加动画
+            mRecAdapter.notifyItemInserted(list.size()-1);
         }
         tempList=list.size();
     }

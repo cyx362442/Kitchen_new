@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,7 +22,7 @@ import com.duowei.kitchen_china.R;
 public class DigitInput implements View.OnClickListener{
     private TextView mTvTitle;
     private TextView mContent;
-    private TextView mTvInput;
+    private EditText mEtInput;
 
     private DigitInput(){}
     private static DigitInput mDigitInput=null;
@@ -84,7 +85,7 @@ public class DigitInput implements View.OnClickListener{
     private void initKey(String title,String contents) {
         mTvTitle = (TextView) mLayout.findViewById(R.id.tv_title);
         mContent = (TextView) mLayout.findViewById(R.id.tv_content);
-        mTvInput = (TextView) mLayout.findViewById(R.id.tv_input);
+        mEtInput = (EditText) mLayout.findViewById(R.id.tv_input);
         mLayout.findViewById(R.id.key1).setOnClickListener(this);
         mLayout.findViewById(R.id.key2).setOnClickListener(this);
         mLayout.findViewById(R.id.key3).setOnClickListener(this);
@@ -144,19 +145,20 @@ public class DigitInput implements View.OnClickListener{
             case R.id.keydel:
                 if(str.length()>0){
                     str=str.substring(0,str.length()-1);
-                    mTvInput.setText(str);
+                    mEtInput.setText(str);
                 }
                 break;
             case R.id.tv_cancel:
                 cancel();
                 break;
             case R.id.tv_confirm:
-                if(TextUtils.isEmpty(str)){
+                String input = mEtInput.getText().toString().trim();
+                if(TextUtils.isEmpty(input)){
                     Toast.makeText(context,"请输入数量", Toast.LENGTH_SHORT).show();
-                }else if(num!=0&&num<Float.parseFloat(str)){
+                }else if(num!=0&&num<Float.parseFloat(input)){
                     Toast.makeText(context,"输入数量大于现在数量", Toast.LENGTH_SHORT).show();
                 }else{
-                    listener.confirmListener(title,str);
+                    listener.confirmListener(title,input);
                 }
                 break;
         }
@@ -164,7 +166,8 @@ public class DigitInput implements View.OnClickListener{
 
     private void inputNum(String num) {
         str=str+num;
-        mTvInput.setText(str);
+        mEtInput.setText(str);
+        mEtInput.setSelection(str.length());
     }
 
     public void cancel(){

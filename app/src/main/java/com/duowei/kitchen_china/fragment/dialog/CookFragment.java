@@ -5,8 +5,10 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
@@ -66,6 +68,13 @@ public class CookFragment extends DialogFragment implements View.OnClickListener
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         AlertDialog dialog = builder.setView(inflate).show();
+        //设置dialog宽度
+        Window window = dialog.getWindow();
+        WindowManager.LayoutParams wlp = window.getAttributes();
+        Display d = window.getWindowManager().getDefaultDisplay();
+        //获取屏幕宽
+        wlp.width = (int) (d.getWidth())*3/4;
+        window.setAttributes(wlp);
         return dialog;
     }
 
