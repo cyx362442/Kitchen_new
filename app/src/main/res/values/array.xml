@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="list_print_stytle">
-        <item>关闭</item>
-        <item>USB打印机</item>
-        <item>网络打印机</item>
+        <item>@string/closeprint</item>
+        <item>@string/print_usb</item>
+        <item>@string/print_net</item>
+        <item>@string/print_server</item>
     </string-array>
 </resources>

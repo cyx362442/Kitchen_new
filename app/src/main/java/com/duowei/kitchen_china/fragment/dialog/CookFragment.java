@@ -21,6 +21,7 @@ import com.duowei.kitchen_china.event.Completes;
 import com.duowei.kitchen_china.event.StartProgress;
 import com.duowei.kitchen_china.httputils.Post;
 import com.duowei.kitchen_china.uitls.DateTimes;
+import com.duowei.kitchen_china.uitls.PreferenceUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -36,6 +37,7 @@ public class CookFragment extends DialogFragment implements View.OnClickListener
     private CookListAdapter mAdapter;
     private List<Cfpb> listCfpbComplete;//己完成的
     private Cfpb mCfpb;
+    private String mPrintStytle;
 
     public static CookFragment newInstance(Cfpb cfpb) {
         Bundle args = new Bundle();
@@ -52,6 +54,9 @@ public class CookFragment extends DialogFragment implements View.OnClickListener
         mCfpb = (Cfpb) getArguments().getSerializable("cfpb");
         listCfpbComplete=new ArrayList<>();
         mListCfpb = mCfpb.getListCfpb();
+        PreferenceUtils instance = PreferenceUtils.getInstance(getActivity());
+        mPrintStytle = instance.getPrintStytle("printStytle", getResources().getString(R.string.closeprint));
+
         TextView tvTitle = (TextView) inflate.findViewById(R.id.tv_title);
         tvTitle.setText(mCfpb.getXmmc());
         inflate.findViewById(R.id.btn_cancelall).setOnClickListener(this);
@@ -96,12 +101,18 @@ public class CookFragment extends DialogFragment implements View.OnClickListener
                 listCfpbComplete.clear();
                 for(int i=0;i<mListCfpb.size();i++){
                     Cfpb_item item = mListCfpb.get(i);
+                    //制作
                     if("1".equals(item.getBy10())){
                         sql+="update cfpb set by10='1' where xh='"+item.xh+"'|";
                     }else {
                         sql+="update cfpb set by10='0' where xh='"+item.xh+"'|";
                     }
+                    //完成
                     if("1".equals(item.getWc())){
+                        if(mPrintStytle.equals(getString(R.string.print_server))){//使用打印服务器的
+                            sql+="insert into pbdyxxb(xh,wmdbh,xmbh,xmmc,dw,sl,pz,syyxm,xtbz,czsj,zh)" +
+                                    "select xh,wmdbh,xmbh,xmmc,dw,"+item.sl1+",pz,yhmc,'3',getdate(),by1 from cfpb where XH='"+item.xh+"'|";
+                        }
                         sql+="delete from cfpb where xh='"+item.xh+"'|";
                         Cfpb cfpb = new Cfpb(mCfpb.getXH(), mCfpb.getXmbh(), mCfpb.getXmmc(), mCfpb.getDw(),
                                 item.sl1, item.pz, mCfpb.getXdsj(), item.czmc1,

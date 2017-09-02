@@ -7,10 +7,12 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.volley.VolleyError;
 import com.duowei.kitchen_china.R;
 import com.duowei.kitchen_china.adapter.RecAdapter;
 import com.duowei.kitchen_china.adapter.SpacesItemDecoration;
@@ -20,8 +22,10 @@ import com.duowei.kitchen_china.event.Completes;
 import com.duowei.kitchen_china.event.StartProgress;
 import com.duowei.kitchen_china.event.UsbState;
 import com.duowei.kitchen_china.fragment.dialog.CookFragment;
+import com.duowei.kitchen_china.httputils.DownHTTP;
 import com.duowei.kitchen_china.httputils.Net;
 import com.duowei.kitchen_china.httputils.Post;
+import com.duowei.kitchen_china.httputils.VolleyResultListener;
 import com.duowei.kitchen_china.print.PrintHandler;
 import com.duowei.kitchen_china.uitls.DateTimes;
 import com.duowei.kitchen_china.uitls.PreferenceUtils;
@@ -159,9 +163,19 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
                     sql += "insert into CFPBYWC (XH, MTXH, WMDBH, XMBH, XMMC, DW, SL, PZ, XSZT, YHMC, POS, TDSL, XDSJ, WCSJ,      BY1, BY2, BY3, BY4, BY5, BY6, BY7) " +
                             "             select XH, MTXH, WMDBH, XMBH, XMMC, DW, SL, PZ, XSZT, YHMC, POS, TDSL, XDSJ, GETDATE(), BY1, BY2, BY3, BY4, BY5, BY6, BY7 " +
                             "             from CFPB where xh = " + cfpbItem.xh + "|";
+                    if(mPrintStytle.equals(getString(R.string.print_server))){//使用打印服务器
+                        sql+="insert into pbdyxxb(xh,wmdbh,xmbh,xmmc,dw,sl,pz,syyxm,xtbz,czsj,zh)" +
+                                "select xh,wmdbh,xmbh,xmmc,dw,"+cfpbItem.sl1+",pz,yhmc,'3',getdate(),by1 from cfpb where XH='"+cfpbItem.xh+"'|";
+                    }
+
                     sql+="delete from cfpb where xh="+cfpbItem.xh+"|";
                     tempNum=cfpbItem.sl1;
                 }else {//当前桌号待删除的单品数量>num,更新己用数量字段
+                    if(mPrintStytle.equals(getString(R.string.print_server))){//使用打印服务器
+                        sql+="insert into pbdyxxb(xh,wmdbh,xmbh,xmmc,dw,sl,pz,syyxm,xtbz,czsj,zh)" +
+                                "select xh,wmdbh,xmbh,xmmc,dw,"+num+",pz,yhmc,'3',getdate(),by1 from cfpb where XH='"+cfpbItem.xh+"'|";
+                    }
+
                     sql+="update cfpb set ywcsl=isnull(ywcsl,0)+"+num+" where xh="+cfpbItem.xh+"|";
                     tempNum=num;
                 }
