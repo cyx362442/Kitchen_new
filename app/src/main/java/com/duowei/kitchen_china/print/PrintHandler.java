@@ -5,6 +5,7 @@ import android.os.RemoteException;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.duowei.kitchen_china.R;
@@ -121,7 +122,13 @@ public class PrintHandler {
             mIPrint.sendMsg(Command.WEIGHT);
             mIPrint.sendMsg(cfpb.getYwcsl()+ cfpb.getDw()+"   "+ cfpb.getXmmc()+"\n");
             mIPrint.sendMsg("\n");
-            mIPrint.sendMsg(cfpb.getPz());
+            String pz = cfpb.getPz();
+            if(!TextUtils.isEmpty(pz)){
+                if(pz.contains("&lt;")&&pz.contains("&gt;")){
+                    pz=pz.replaceAll("&lt;", "<").replaceAll("&gt;", ">");
+                }
+            }
+            mIPrint.sendMsg(pz);
 
             mIPrint.sendMsg("\n\n");
             mIPrint.sendMsg(Command.KNIFE);
@@ -145,8 +152,13 @@ public class PrintHandler {
         mIPrint.sendMsg(Command.WEIGHT);
         mIPrint.sendMsg(cfpb.getYwcsl()+ cfpb.getDw()+"   "+ cfpb.getXmmc()+"\n");
         mIPrint.sendMsg("\n");
-        mIPrint.sendMsg(cfpb.getPz());
-
+        String pz = cfpb.getPz();
+        if(!TextUtils.isEmpty(pz)){
+            if(pz.contains("&lt;")&&pz.contains("&gt;")){
+                pz=pz.replaceAll("&lt;", "<").replaceAll("&gt;", ">");
+            }
+        }
+        mIPrint.sendMsg(pz);
         mIPrint.sendMsg("\n\n");
         mIPrint.sendMsg(Command.KNIFE);
     }
@@ -164,9 +176,13 @@ public class PrintHandler {
             esc.addText("-------------------------------\n");
             esc.addSelectPrintModes(EscCommand.FONT.FONTA, EscCommand.ENABLE.OFF, EscCommand.ENABLE.ON, EscCommand.ENABLE.ON, EscCommand.ENABLE.OFF);// 设置为倍高倍宽
             esc.addText(cfpb.getYwcsl()+cfpb.getDw()+"  "+cfpb.getXmmc()+"\n\n");
-            if(!TextUtils.isEmpty(cfpb.getPz())){
-                esc.addText(cfpb.getPz());
+            String pz = cfpb.getPz();
+            if(!TextUtils.isEmpty(pz)){
+                if(pz.contains("&lt;")&&pz.contains("&gt;")){
+                    pz=pz.replaceAll("&lt;", "<").replaceAll("&gt;", ">");
+                }
             }
+            esc.addText(pz);
             esc.addText("\n\n\n\n\n");
         }
         Vector<Byte> datas = esc.getCommand(); // 发送数据

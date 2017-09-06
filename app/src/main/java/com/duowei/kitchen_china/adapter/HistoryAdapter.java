@@ -2,6 +2,7 @@ package com.duowei.kitchen_china.adapter;
 
 import android.content.Context;
 import android.os.RemoteException;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -89,7 +90,16 @@ public class HistoryAdapter extends BaseAdapter{
         hold.tvName.setText(cfpb.getXmmc());
         hold.tvTable.setText(cfpb.getCzmc());
         hold.tvNum.setText(cfpb.getSl()+"");
-        hold.tvBeizhu.setText(cfpb.getPz());
+        String pz =cfpb.getPz();
+        if(!TextUtils.isEmpty(pz)){
+            hold.tvBeizhu.setVisibility(View.VISIBLE);
+            if(pz.contains("&lt;")&&pz.contains("&gt;")){
+                pz=pz.replaceAll("&lt;", "<").replaceAll("&gt;", ">");
+            }
+            hold.tvBeizhu.setText(pz);
+        }else if(TextUtils.isEmpty(pz)){
+            hold.tvBeizhu.setVisibility(View.INVISIBLE);
+        }
         hold.tvOrderTime.setText(cfpb.getXdsj());
         String wcsj = cfpb.getWcsj();
         String sb = wcsj.substring(wcsj.length() - 8, wcsj.length());
