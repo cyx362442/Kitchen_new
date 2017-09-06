@@ -113,6 +113,10 @@ public class CookFragment extends DialogFragment implements View.OnClickListener
                             sql+="insert into pbdyxxb(xh,wmdbh,xmbh,xmmc,dw,sl,pz,syyxm,xtbz,czsj,zh)" +
                                     "select xh,wmdbh,xmbh,xmmc,dw,"+item.sl1+",pz,yhmc,'3',getdate(),by1 from cfpb where XH='"+item.xh+"'|";
                         }
+                        //插入己完成
+                        sql += "insert into CFPBYWC (XH, MTXH, WMDBH, XMBH, XMMC, DW, SL, PZ, XSZT, YHMC, POS, TDSL, XDSJ, WCSJ,      BY1, BY2, BY3, BY4, BY5, BY6, BY7) " +
+                                "             select XH, MTXH, WMDBH, XMBH, XMMC, DW, SL, PZ, XSZT, YHMC, POS, TDSL, XDSJ, GETDATE(), BY1, BY2, BY3, BY4, BY5, BY6, BY7 " +
+                                "             from CFPB where xh = " + item.xh + "|";
                         sql+="delete from cfpb where xh='"+item.xh+"'|";
                         Cfpb cfpb = new Cfpb(mCfpb.getXH(), mCfpb.getXmbh(), mCfpb.getXmmc(), mCfpb.getDw(),
                                 item.sl1, item.pz, mCfpb.getXdsj(), item.czmc1,

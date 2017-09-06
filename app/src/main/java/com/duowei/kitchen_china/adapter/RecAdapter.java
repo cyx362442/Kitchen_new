@@ -104,8 +104,8 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHold> {
 
     @Override
     public void onBindViewHolder(final ViewHold holder, final int position) {
-        float count=0;
-        float done=0;
+        float count=0;//总数
+        float done=0;//制作中
         final Cfpb cfpb = listCfpb.get(position);
         holder.mTvName.setText(cfpb.getXmmc());
         List<Cfpb_item> listCfpb_item = cfpb.getListCfpb();
