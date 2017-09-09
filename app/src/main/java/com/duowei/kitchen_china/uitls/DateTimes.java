@@ -64,4 +64,9 @@ public class DateTimes {
         }
         return mTime;
     }
+    public static String getSysTime(){
+        Date curDate = new Date(System.currentTimeMillis());
+        SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return dateformat.format(curDate);
+    }
 }

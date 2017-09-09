@@ -120,7 +120,7 @@ public class CookFragment extends DialogFragment implements View.OnClickListener
                         sql+="delete from cfpb where xh='"+item.xh+"'|";
                         Cfpb cfpb = new Cfpb(mCfpb.getXH(), mCfpb.getXmbh(), mCfpb.getXmmc(), mCfpb.getDw(),
                                 item.sl1, item.pz, mCfpb.getXdsj(), item.czmc1,
-                                item.fzs, mCfpb.getYhmc(), item.sl1, DateTimes.getTime(),
+                                item.fzs, mCfpb.getYhmc(), item.sl1, DateTimes.getSysTime(),
                                 DateTimes.getTime2(mCfpb.getXdsj()));
                         listCfpbComplete.add(cfpb);
                     }

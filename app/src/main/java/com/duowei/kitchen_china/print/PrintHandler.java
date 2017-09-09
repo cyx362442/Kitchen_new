@@ -4,16 +4,12 @@ import android.content.Context;
 import android.os.RemoteException;
 import android.text.TextUtils;
 import android.util.Base64;
-import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import com.duowei.kitchen_china.R;
 import com.duowei.kitchen_china.application.MyApplication;
 import com.duowei.kitchen_china.bean.Cfpb;
 import com.duowei.kitchen_china.event.PrintAmin;
-import com.duowei.kitchen_china.event.PrintConnect;
-import com.duowei.kitchen_china.event.UpdateCfpb;
 import com.duowei.kitchen_china.event.UsbState;
 import com.duowei.kitchen_china.uitls.DateTimes;
 import com.gprinter.aidl.GpService;
@@ -116,7 +112,7 @@ public class PrintHandler {
             mIPrint.sendMsg("桌号："+ cfpb.getCzmc()+"\n");
             Command.WEIGHT[2]=0x01;
             mIPrint.sendMsg(Command.WEIGHT);
-            mIPrint.sendMsg("点单员："+ cfpb.getYhmc()+"    时间："+ DateTimes.getTime()+"\n");
+            mIPrint.sendMsg("点单员："+ cfpb.getYhmc()+"    时间："+ cfpb.getXdsj()+"\n");
             mIPrint.sendMsg("---------------------------------------\n");
             Command.WEIGHT[2] = 0x11;
             mIPrint.sendMsg(Command.WEIGHT);
@@ -129,7 +125,6 @@ public class PrintHandler {
                 }
             }
             mIPrint.sendMsg(pz);
-
             mIPrint.sendMsg("\n\n");
             mIPrint.sendMsg(Command.KNIFE);
         }
@@ -137,7 +132,6 @@ public class PrintHandler {
     public void printSingle(Cfpb cfpb){
         mIPrint.sendMsg(Command.ALIGN_CENTER);
         mIPrint.sendMsg("复打小票\n");
-
         mIPrint.sendMsg(Command.INIT);
         mIPrint.sendMsg(Command.ALIGN_LEFT);
         mIPrint.sendMsg(Command.BOLD);
@@ -146,7 +140,7 @@ public class PrintHandler {
         mIPrint.sendMsg("桌号："+ cfpb.getCzmc()+"\n");
         Command.WEIGHT[2]=0x01;
         mIPrint.sendMsg(Command.WEIGHT);
-        mIPrint.sendMsg("点单员："+ cfpb.getYhmc()+"    时间："+ DateTimes.getTime()+"\n");
+        mIPrint.sendMsg("点单员："+ cfpb.getYhmc()+"    时间："+ cfpb.getXdsj()+"\n");
         mIPrint.sendMsg("---------------------------------------\n");
         Command.WEIGHT[2] = 0x11;
         mIPrint.sendMsg(Command.WEIGHT);
@@ -172,7 +166,7 @@ public class PrintHandler {
             esc.addSelectPrintModes(EscCommand.FONT.FONTA, EscCommand.ENABLE.OFF, EscCommand.ENABLE.ON, EscCommand.ENABLE.ON, EscCommand.ENABLE.OFF);// 设置为倍高倍宽
             esc.addText("桌号："+cfpb.getCzmc()+"\n"); // 桌号
             esc.addSelectPrintModes(EscCommand.FONT.FONTA, EscCommand.ENABLE.OFF, EscCommand.ENABLE.OFF, EscCommand.ENABLE.OFF, EscCommand.ENABLE.OFF);// 取消倍高倍宽
-            esc.addText("点单员："+cfpb.getYhmc()+"    时间："+DateTimes.getTime()+"\n");
+            esc.addText("点单员："+cfpb.getYhmc()+"    时间："+cfpb.getXdsj()+"\n");
             esc.addText("-------------------------------\n");
             esc.addSelectPrintModes(EscCommand.FONT.FONTA, EscCommand.ENABLE.OFF, EscCommand.ENABLE.ON, EscCommand.ENABLE.ON, EscCommand.ENABLE.OFF);// 设置为倍高倍宽
             esc.addText(cfpb.getYwcsl()+cfpb.getDw()+"  "+cfpb.getXmmc()+"\n\n");
@@ -208,7 +202,7 @@ public class PrintHandler {
         esc.addSelectPrintModes(EscCommand.FONT.FONTA, EscCommand.ENABLE.OFF, EscCommand.ENABLE.ON, EscCommand.ENABLE.ON, EscCommand.ENABLE.OFF);// 设置为倍高倍宽
         esc.addText("桌号："+cfpb.getCzmc()+"\n"); // 桌号
         esc.addSelectPrintModes(EscCommand.FONT.FONTA, EscCommand.ENABLE.OFF, EscCommand.ENABLE.OFF, EscCommand.ENABLE.OFF, EscCommand.ENABLE.OFF);// 取消倍高倍宽
-        esc.addText("点单员："+cfpb.getYhmc()+"    时间："+DateTimes.getTime()+"\n");
+        esc.addText("点单员："+cfpb.getYhmc()+"    时间："+cfpb.getXdsj()+"\n");
         esc.addText("-------------------------------\n");
         esc.addSelectPrintModes(EscCommand.FONT.FONTA, EscCommand.ENABLE.OFF, EscCommand.ENABLE.ON, EscCommand.ENABLE.ON, EscCommand.ENABLE.OFF);// 设置为倍高倍宽
         esc.addText(cfpb.getYwcsl()+cfpb.getDw()+"  "+cfpb.getXmmc()+"\n\n");

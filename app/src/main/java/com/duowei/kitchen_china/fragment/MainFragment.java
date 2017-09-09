@@ -182,7 +182,7 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
                 //己完成
                 cfpb21 = new Cfpb(cfpb.getXH(), cfpb.getXmbh(), cfpb.getXmmc(), cfpb.getDw(),
                             cfpbItem.sl1, cfpbItem.pz, cfpb.getXdsj(), cfpbItem.czmc1,
-                            cfpbItem.fzs, cfpb.getYhmc(), tempNum, DateTimes.getTime(),
+                            cfpbItem.fzs, cfpb.getYhmc(), tempNum, DateTimes.getSysTime(),
                         DateTimes.getTime2(cfpb.getXdsj()));
                 listCfpbComplete.add(cfpb21);
                 num=num-cfpbItem.sl1;
