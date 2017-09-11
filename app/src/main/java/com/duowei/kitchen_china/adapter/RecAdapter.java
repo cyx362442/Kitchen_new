@@ -149,10 +149,18 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHold> {
         });
 
         //最后一次点继续的单品，还显示在列表中的（数量》=1），置为蓝色
-        if("1".equals(cfpb.getBy9())){
-            holder.mTvName.setTextColor(context.getResources().getColor(R.color.colorBlue));
-        }else{
-            holder.mTvName.setTextColor(context.getResources().getColor(R.color.gray_dark));
+        if(mMakeModel==false){
+            if("1".equals(cfpb.getBy9())){
+                holder.mTvName.setTextColor(context.getResources().getColor(R.color.colorBlue));
+            }else{
+                holder.mTvName.setTextColor(context.getResources().getColor(R.color.gray_dark));
+            }
+        }else if(mMakeModel==true){//制作模式
+            if("1".equals(cfpb.getBy10())){
+                holder.mTvName.setTextColor(context.getResources().getColor(R.color.colorBlue));
+            }else{
+                holder.mTvName.setTextColor(context.getResources().getColor(R.color.gray_dark));
+            }
         }
 
         //超时单品

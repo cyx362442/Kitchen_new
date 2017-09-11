@@ -106,7 +106,7 @@ public class CookFragment extends DialogFragment implements View.OnClickListener
                     //制作
                     if("1".equals(item.getBy10())){
                         sql+="update cfpb set by10='1' where xh='"+item.xh+"'|";
-                    }else {
+                    } else {
                         sql+="update cfpb set by10='0' where xh='"+item.xh+"'|";
                     }
                     //完成
