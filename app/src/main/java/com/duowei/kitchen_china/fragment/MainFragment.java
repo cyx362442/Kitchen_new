@@ -54,6 +54,7 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
     private GpService mGpService = null;
     private boolean mMakeModel;
     private String mColums;
+    private String mPrinterIP;
 
     public MainFragment() {
         // Required empty public constructor
@@ -68,6 +69,7 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
         PreferenceUtils preferenceUtils = PreferenceUtils.getInstance(getActivity());
         mMakeModel = preferenceUtils.getMakeModel("spf_makeModel", false);
         mColums = preferenceUtils.getListColums("listColums", getString(R.string.three));
+        mPrinterIP = preferenceUtils.getPrinterIp("printerIP", "");
         listCfpb=new ArrayList<>();
         listCfpbComplete =new ArrayList<>();
         initRecy(inflate);
@@ -164,8 +166,8 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
                             "             select XH, MTXH, WMDBH, XMBH, XMMC, DW, SL, PZ, XSZT, YHMC, POS, TDSL, XDSJ, GETDATE(), BY1, BY2, BY3, BY4, BY5, BY6, BY7 " +
                             "             from CFPB where xh = " + cfpbItem.xh + "|";
                     if(mPrintStytle.equals(getString(R.string.print_server))){//使用打印服务器
-                        sql+="insert into pbdyxxb(xh,wmdbh,xmbh,xmmc,dw,sl,pz,syyxm,xtbz,czsj,zh)" +
-                                "select xh,wmdbh,xmbh,xmmc,dw,"+cfpbItem.sl1+",pz,yhmc,'3',getdate(),by1 from cfpb where XH='"+cfpbItem.xh+"'|";
+                        sql+="insert into pbdyxxb(xh,wmdbh,xmbh,xmmc,dw,sl,pz,syyxm,xtbz,czsj,zh,jsj)" +
+                                "select xh,wmdbh,xmbh,xmmc,dw,"+cfpbItem.sl1+",pz,yhmc,'3',getdate(),by1,'"+mPrinterIP+"' from cfpb where XH='"+cfpbItem.xh+"'|";
                     }
 
                     sql+="delete from cfpb where xh="+cfpbItem.xh+"|";

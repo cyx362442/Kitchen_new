@@ -38,6 +38,7 @@ public class CookFragment extends DialogFragment implements View.OnClickListener
     private List<Cfpb> listCfpbComplete;//己完成的
     private Cfpb mCfpb;
     private String mPrintStytle;
+    private String mPrinterIP;
 
     public static CookFragment newInstance(Cfpb cfpb) {
         Bundle args = new Bundle();
@@ -56,6 +57,7 @@ public class CookFragment extends DialogFragment implements View.OnClickListener
         mListCfpb = mCfpb.getListCfpb();
         PreferenceUtils instance = PreferenceUtils.getInstance(getActivity());
         mPrintStytle = instance.getPrintStytle("printStytle", getResources().getString(R.string.closeprint));
+        mPrinterIP = instance.getPrinterIp("printerIP", "");
 
         TextView tvTitle = (TextView) inflate.findViewById(R.id.tv_title);
         tvTitle.setText(mCfpb.getXmmc());
@@ -110,8 +112,8 @@ public class CookFragment extends DialogFragment implements View.OnClickListener
                     //完成
                     if("1".equals(item.getWc())){
                         if(mPrintStytle.equals(getString(R.string.print_server))){//使用打印服务器的
-                            sql+="insert into pbdyxxb(xh,wmdbh,xmbh,xmmc,dw,sl,pz,syyxm,xtbz,czsj,zh)" +
-                                    "select xh,wmdbh,xmbh,xmmc,dw,"+item.sl1+",pz,yhmc,'3',getdate(),by1 from cfpb where XH='"+item.xh+"'|";
+                            sql+="insert into pbdyxxb(xh,wmdbh,xmbh,xmmc,dw,sl,pz,syyxm,xtbz,czsj,zh,jsj)" +
+                                    "select xh,wmdbh,xmbh,xmmc,dw,"+item.sl1+",pz,yhmc,'3',getdate(),by1,'"+mPrinterIP+"' from cfpb where XH='"+item.xh+"'|";
                         }
                         //插入己完成
                         sql += "insert into CFPBYWC (XH, MTXH, WMDBH, XMBH, XMMC, DW, SL, PZ, XSZT, YHMC, POS, TDSL, XDSJ, WCSJ,      BY1, BY2, BY3, BY4, BY5, BY6, BY7) " +

@@ -23,7 +23,7 @@
             android:key="et_printerIP"
             android:summary="192.168.1.124"
             android:inputType="textUri"
-            android:title="网络打印机IP">
+            android:title="打印机IP(选择网络打印或打印服务器时为必填项)">
         </EditTextPreference>
         <ListPreference
             android:key="listColums"
