@@ -278,8 +278,8 @@ public class MainActivity extends AppCompatActivity {
             mSound.playSound('1',0);
             Toast.makeText(this,"USB打印机己断开",Toast.LENGTH_SHORT).show();
         }else if(event.state.equals(getResources().getString(R.string.net_disconnect))){
-            mSound.playSound('2',0);
-            Toast.makeText(this,"网络己断开，请检查",Toast.LENGTH_LONG).show();
+//            mSound.playSound('2',0);
+//            Toast.makeText(this,"网络己断开，请检查",Toast.LENGTH_LONG).show();
         }else if(event.state.equals(getResources().getString(R.string.reconnect))){
             mSound.playSound('3',0);
             connectionUsbPrint();

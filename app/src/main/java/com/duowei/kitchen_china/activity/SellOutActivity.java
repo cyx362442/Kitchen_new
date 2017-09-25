@@ -13,27 +13,18 @@ import com.duowei.kitchen_china.bean.Jyxmsz;
 import com.duowei.kitchen_china.event.SaleOut;
 import com.duowei.kitchen_china.event.StartAnim;
 import com.duowei.kitchen_china.event.StopAnim;
-import com.duowei.kitchen_china.fragment.MainFragment;
 import com.duowei.kitchen_china.fragment.SelloutFragment;
-import com.duowei.kitchen_china.fragment.TopFragment;
 import com.duowei.kitchen_china.fragment.UnSellOutFragment;
 import com.duowei.kitchen_china.httputils.DownHTTP;
 import com.duowei.kitchen_china.httputils.Net;
-import com.duowei.kitchen_china.httputils.Post;
 import com.duowei.kitchen_china.httputils.VolleyResultListener;
-import com.duowei.kitchen_china.sound.KeySound;
-import com.duowei.kitchen_china.uitls.DateTimes;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.litepal.crud.DataSupport;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SellOutActivity extends AppCompatActivity {

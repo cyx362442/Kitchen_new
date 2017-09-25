@@ -174,8 +174,8 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
                     tempNum=cfpbItem.sl1;
                 }else {//当前桌号待删除的单品数量>num,更新己用数量字段
                     if(mPrintStytle.equals(getString(R.string.print_server))){//使用打印服务器
-                        sql+="insert into pbdyxxb(xh,wmdbh,xmbh,xmmc,dw,sl,pz,syyxm,xtbz,czsj,zh)" +
-                                "select xh,wmdbh,xmbh,xmmc,dw,"+num+",pz,yhmc,'3',getdate(),by1 from cfpb where XH='"+cfpbItem.xh+"'|";
+                        sql+="insert into pbdyxxb(xh,wmdbh,xmbh,xmmc,dw,sl,pz,syyxm,xtbz,czsj,zh,jsj)" +
+                                "select xh,wmdbh,xmbh,xmmc,dw,"+num+",pz,yhmc,'3',getdate(),by1,'"+mPrinterIP+"' from cfpb where XH='"+cfpbItem.xh+"'|";
                     }
 
                     sql+="update cfpb set ywcsl=isnull(ywcsl,0)+"+num+" where xh="+cfpbItem.xh+"|";
