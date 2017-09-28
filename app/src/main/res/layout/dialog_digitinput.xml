@@ -16,7 +16,7 @@
                     android:layout_margin="10dp"
                     android:textColor="@color/white"
                     android:text="标题"
-                    android:textSize="@dimen/textsize20"/>
+                    android:textSize="25dp"/>
             </RelativeLayout>
             <LinearLayout
                 android:layout_width="match_parent"

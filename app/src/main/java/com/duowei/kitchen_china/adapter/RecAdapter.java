@@ -186,7 +186,7 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHold> {
                     continueLisener.setOnContinueClickListener(position,cfpb.getSl());
                 }else{//数量大于1，修改数量
                     final DigitInput digitInput = DigitInput.instance();
-                    digitInput.show(context,"请输入数量","数量：",finalCount);
+                    digitInput.show(context,cfpb.getXmmc(),"数量：",finalCount);
                     digitInput.setOnconfirmClick(new DigitInput.OnconfirmClick() {
                         @Override
                         public void confirmListener(String title, String inputMsg) {

@@ -89,7 +89,7 @@ public class HistoryAdapter extends BaseAdapter{
         hold.tvIndex.setText((position+1)+"");
         hold.tvName.setText(cfpb.getXmmc());
         hold.tvTable.setText(cfpb.getCzmc());
-        hold.tvNum.setText(cfpb.getSl()+"");
+        hold.tvNum.setText(cfpb.getYwcsl()+"");
         String pz =cfpb.getPz();
         if(!TextUtils.isEmpty(pz)){
             hold.tvBeizhu.setVisibility(View.VISIBLE);

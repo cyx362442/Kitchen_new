@@ -101,7 +101,7 @@ public class DigitInput implements View.OnClickListener{
         mLayout.findViewById(R.id.tv_cancel).setOnClickListener(this);
         mLayout.findViewById(R.id.tv_confirm).setOnClickListener(this);
 
-        mTvTitle.setText(title);
+        mTvTitle.setText(title+"    "+num);
         mContent.setText(contents);
     }
     @Override
