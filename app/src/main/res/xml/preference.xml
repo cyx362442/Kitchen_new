@@ -32,6 +32,13 @@
             android:entryValues="@array/list_colums"
             android:dialogTitle="请选择列数">
         </ListPreference>
+    <ListPreference
+        android:key="listSize"
+        android:title="订单字体"
+        android:entries="@array/list_size"
+        android:entryValues="@array/list_size"
+        android:dialogTitle="字体大小">
+    </ListPreference>
        <Preference
            android:key="et_version"
            android:title="版本更新"></Preference>

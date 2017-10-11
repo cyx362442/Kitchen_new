@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,14 +37,19 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHold> {
     private onContinueClickListener continueLisener;
     private  PopuShow mPopuShow;//点击菜品名称弹出popuwindow
     private  boolean mMakeModel;
+    private  String mTextSize;
+    private final String mColums;
 
     public RecAdapter(Context context,List<Cfpb> listCfpb) {
         this.context = context;
         this.listCfpb = listCfpb;
         mLayoutInflater = LayoutInflater.from(context);
         listCfpb_item=new ArrayList<>();
-        mPopuShow = PopuShow.getInstance(context);
-        mMakeModel = PreferenceUtils.getInstance(context).getMakeModel("spf_makeModel", false);
+        PreferenceUtils instance = PreferenceUtils.getInstance(context);
+        mMakeModel = instance.getMakeModel("spf_makeModel", false);
+        mTextSize = instance.getListSize("listSize", context.getString(R.string.normal));
+        mColums = instance.getListColums("listColums", context.getString(R.string.three));
+        mPopuShow = PopuShow.getInstance(context,mColums);
     }
 
     public void setList(List<Cfpb> listCfpb){
@@ -85,6 +91,8 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHold> {
         viewHold.mRecyclerView.setAdapter(viewHold.mRecAdapterItem);
 
         viewHold.mLl= (LinearLayout) inflate.findViewById(R.id.linearLayout);
+        viewHold.mLlBottom= (LinearLayout) inflate.findViewById(R.id.ll_bottom);
+
         viewHold.mLlMake= (LinearLayout) inflate.findViewById(R.id.ll_make);
         if(mMakeModel==true){//是否启用制作模式
             viewHold.mLlMake.setVisibility(View.VISIBLE);
@@ -96,9 +104,23 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHold> {
         viewHold.mTvBeizhu= (TextView) inflate.findViewById(R.id.tv_beizhu);
         viewHold.mTvNum= (TextView) inflate.findViewById(R.id.tv_num);
         viewHold.mTvDw= (TextView) inflate.findViewById(R.id.tv_dw);
+        viewHold.btnContinue= (Button) inflate.findViewById(R.id.btn_continue);
+
+        if(mTextSize.equals(context.getString(R.string.large))){//显示大号字体
+            viewHold.mTvName.setTextSize(60);
+            viewHold.mTvBeizhu.setTextSize(40);
+            viewHold.mTvNum.setTextSize(50);
+            viewHold.mTvDw.setTextSize(40);
+            viewHold.btnContinue.setTextSize(50);
+
+            DisplayMetrics dm = context.getResources().getDisplayMetrics();
+            int height = dm.heightPixels;
+            viewHold.mLl.setMinimumHeight(height/8);
+            viewHold.mLlBottom.setMinimumHeight(height/8*3);
+        }
+
         viewHold.mTvCooking= (TextView) inflate.findViewById(R.id.tv_cooking);
         viewHold.mTvUnCook= (TextView) inflate.findViewById(R.id.tv_uncook);
-        viewHold.btnContinue= (Button) inflate.findViewById(R.id.btn_continue);
         return viewHold;
     }
 
@@ -216,6 +238,7 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHold> {
             super(itemView);
         }
         LinearLayout mLl;
+        LinearLayout mLlBottom;
         LinearLayout mLlMake;
         RecyclerView mRecyclerView;
         TextView mTvName;

@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.duowei.kitchen_china.R;
 import com.duowei.kitchen_china.bean.Cfpb_item;
+import com.duowei.kitchen_china.uitls.PreferenceUtils;
 
 import java.util.List;
 
@@ -17,12 +18,16 @@ import java.util.List;
  */
 
 public class RecAdapter_item extends RecyclerView.Adapter<RecAdapter_item.ViewHold>{
+    private Context mContext;
     private LayoutInflater mLayoutInflater;
     private List<Cfpb_item> listCfpb_item;
+    private String mTextSize;
 
     public RecAdapter_item(Context context, List<Cfpb_item> listCfpb_item) {
         this.listCfpb_item = listCfpb_item;
+        mContext=context;
         mLayoutInflater=LayoutInflater.from(context);
+        mTextSize = PreferenceUtils.getInstance(context).getListSize("listSize", context.getString(R.string.normal));
     }
 
     public void setListCfpb_item(List<Cfpb_item> listCfpb_item){
@@ -35,6 +40,11 @@ public class RecAdapter_item extends RecyclerView.Adapter<RecAdapter_item.ViewHo
         ViewHold viewHold = new ViewHold(inflate);
         viewHold.tvTable= (TextView) inflate.findViewById(R.id.tv_table);
         viewHold.tvPasstime= (TextView) inflate.findViewById(R.id.tv_passtime);
+
+        if(mTextSize.equals(mContext.getString(R.string.large))){//大号字体
+            viewHold.tvTable.setTextSize(40);
+            viewHold.tvPasstime.setTextSize(40);
+        }
         return viewHold;
     }
 

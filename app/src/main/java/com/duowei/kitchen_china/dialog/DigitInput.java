@@ -57,7 +57,6 @@ public class DigitInput implements View.OnClickListener{
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mLayout = (LinearLayout) inflater.inflate(R.layout.dialog_digitinput, null);
         mDialog.setView(mLayout);
-        // by zjn
         if (context instanceof Activity) {
             Activity activity = (Activity) context;
             mDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
@@ -73,8 +72,6 @@ public class DigitInput implements View.OnClickListener{
                 }
             });
         }
-//
-        // ---
 
         mDialog.show();
         WindowManager.LayoutParams params = mDialog.getWindow().getAttributes();

@@ -8,14 +8,14 @@
                     android:id="@+id/recycleView_item"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/cook_top_greennormal"
-                    >
+                    android:background="@drawable/cook_top_greennormal">
                 </android.support.v7.widget.RecyclerView>
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="#ffffff"></View>
                 <LinearLayout
+                    android:id="@+id/ll_bottom"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/cook_bottom_white"

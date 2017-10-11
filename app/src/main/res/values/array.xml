@@ -7,8 +7,13 @@
         <item>@string/print_server</item>
     </string-array>
     <string-array name="list_colums">
+        <item>@string/two</item>
         <item>@string/three</item>
         <item>@string/four</item>
         <item>@string/five</item>
+    </string-array>
+    <string-array name="list_size">
+        <item>@string/normal</item>
+        <item>@string/large</item>
     </string-array>
 </resources>

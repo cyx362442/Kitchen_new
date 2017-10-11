@@ -20,9 +20,13 @@
     <string name="print_net">网络打印机</string>
     <string name="print_server">打印服务器</string>
 
+    <string name="two">2</string>
     <string name="three">3</string>
     <string name="four">4</string>
     <string name="five">5</string>
+
+    <string name="normal">正常</string>
+    <string name="large">大号</string>
 
     <string name="version">版本号</string>
     <string name="update">升级</string>

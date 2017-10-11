@@ -43,6 +43,7 @@ public class SettingsActivity extends AppCompatActivity {
     private static int mVersionCode;
     private static SwitchPreference spf;
     private static ListPreference listColums;
+    private static ListPreference listSize;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +73,8 @@ public class SettingsActivity extends AppCompatActivity {
         fragment.show(ft,getString(R.string.update));
     }
 
-    public static class SettingFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener, Preference.OnPreferenceClickListener {
+    public static class SettingFragment extends PreferenceFragment implements
+            SharedPreferences.OnSharedPreferenceChangeListener,Preference.OnPreferenceClickListener {
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -85,14 +87,16 @@ public class SettingsActivity extends AppCompatActivity {
             etKetchen = (EditTextPreference) findPreference("et_kitchenName");
             listPrint = (ListPreference) findPreference("printStytle");
             listColums = (ListPreference) findPreference("listColums");
+            listSize = (ListPreference) findPreference("listSize");
             mEtPrinterIP = (EditTextPreference) findPreference("et_printerIP");
             etVersion = findPreference("et_version");
             spf = (SwitchPreference) findPreference("spf_makeModel");
             mCheckbox = (CheckBoxPreference) findPreference("checkbox");
             mEtServiceIP.setSummary(mPreferenceUtils.getServiceIp("serviceIP",""));
             etKetchen.setSummary(mPreferenceUtils.getKetchen("et_kitchenName",""));
-            listPrint.setSummary(mPreferenceUtils.getPrintStytle("printStytle",getResources().getString(R.string.closeprint)));
+            listPrint.setSummary(mPreferenceUtils.getPrintStytle("printStytle",getString(R.string.closeprint)));
             listColums.setSummary(mPreferenceUtils.getListColums("listColums",getString(R.string.three)));
+            listSize.setSummary(mPreferenceUtils.getListSize("listSize",getString(R.string.normal)));
 
             mEtPrinterIP.setSummary(mPreferenceUtils.getPrinterIp("printerIP",""));
             etVersion.setSummary(mVersionName);
@@ -126,6 +130,10 @@ public class SettingsActivity extends AppCompatActivity {
                 String colums = sharedPreferences.getString("listColums", "");
                 listColums.setSummary(colums);
                 mPreferenceUtils.setListColums("listColums",colums);
+            }else if(key.equals("listSize")){
+                String size = sharedPreferences.getString("listSize", "");
+                listSize.setSummary(size);
+                mPreferenceUtils.setListSize("listSize",size);
             }else if(key.equals("spf_makeModel")){
                 boolean make = mPreferenceUtils.getMakeModel("spf_makeModel", false);
                 make=!make;

@@ -54,6 +54,13 @@ public class PreferenceUtils {
     public String getListColums(String key,String value){
         return mPreferences.getString(key,value);
     }
+    public void setListSize(String key,String value){
+        mEdit.putString(key,value);
+        mEdit.commit();
+    }
+    public String getListSize(String key,String value){
+        return mPreferences.getString(key,value);
+    }
 
     public void setPrinterIp(String key,String value){
         mEdit.putString(key,value);

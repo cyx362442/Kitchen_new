@@ -20,9 +20,7 @@
         android:id="@+id/frame02"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingRight="3dp"
-        android:layout_below="@+id/view"
-        ></FrameLayout>
+        android:layout_below="@+id/view"></FrameLayout>
     <include
         android:id="@+id/loading"
         layout="@layout/loading_item"
