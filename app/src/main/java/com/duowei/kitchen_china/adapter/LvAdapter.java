@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.duowei.kitchen_china.R;
 import com.duowei.kitchen_china.bean.Cfpb;
 import com.duowei.kitchen_china.bean.Cfpb_item;
+import com.duowei.kitchen_china.uitls.PreferenceUtils;
 
 /**
  * Created by Administrator on 2017-08-19.

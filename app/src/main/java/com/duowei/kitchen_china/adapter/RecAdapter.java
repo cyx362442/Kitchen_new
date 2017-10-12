@@ -39,6 +39,7 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHold> {
     private  boolean mMakeModel;
     private  String mTextSize;
     private final String mColums;
+    private final boolean mRecipes;
 
     public RecAdapter(Context context,List<Cfpb> listCfpb) {
         this.context = context;
@@ -47,6 +48,7 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHold> {
         listCfpb_item=new ArrayList<>();
         PreferenceUtils instance = PreferenceUtils.getInstance(context);
         mMakeModel = instance.getMakeModel("spf_makeModel", false);
+        mRecipes = instance.getRecipes("spf_recipes", false);
         mTextSize = instance.getListSize("listSize", context.getString(R.string.normal));
         mColums = instance.getListColums("listColums", context.getString(R.string.three));
         mPopuShow = PopuShow.getInstance(context,mColums);
@@ -115,7 +117,6 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHold> {
 
             DisplayMetrics dm = context.getResources().getDisplayMetrics();
             int height = dm.heightPixels;
-            viewHold.mLl.setMinimumHeight(height/8);
             viewHold.mLlBottom.setMinimumHeight(height/8*3);
         }
 

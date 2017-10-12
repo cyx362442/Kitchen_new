@@ -12,11 +12,20 @@
                 android:gravity="center"
                 android:padding="10dp"
                 android:text="弹出框"
-                android:textSize="25dp"
+                android:textSize="30dp"
                 android:textColor="@color/white"/>
             <com.duowei.kitchen_china.adapter.MaxListView
                 android:id="@+id/listView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
             </com.duowei.kitchen_china.adapter.MaxListView>
+            <TextView
+                android:id="@+id/tv_recipes"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:text="显示配方"
+                android:textSize="35dp"/>
 </LinearLayout>

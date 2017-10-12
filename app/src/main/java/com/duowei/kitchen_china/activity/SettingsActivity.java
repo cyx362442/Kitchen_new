@@ -44,6 +44,7 @@ public class SettingsActivity extends AppCompatActivity {
     private static SwitchPreference spf;
     private static ListPreference listColums;
     private static ListPreference listSize;
+    private static SwitchPreference spfRecipes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +92,7 @@ public class SettingsActivity extends AppCompatActivity {
             mEtPrinterIP = (EditTextPreference) findPreference("et_printerIP");
             etVersion = findPreference("et_version");
             spf = (SwitchPreference) findPreference("spf_makeModel");
+            spfRecipes = (SwitchPreference) findPreference("spf_recipes");
             mCheckbox = (CheckBoxPreference) findPreference("checkbox");
             mEtServiceIP.setSummary(mPreferenceUtils.getServiceIp("serviceIP",""));
             etKetchen.setSummary(mPreferenceUtils.getKetchen("et_kitchenName",""));
@@ -103,6 +105,7 @@ public class SettingsActivity extends AppCompatActivity {
             etVersion.setTitle("版本更新(V"+mVersionCode+")");
             etVersion.setOnPreferenceClickListener(this);
             spf.setChecked(mPreferenceUtils.getMakeModel("spf_makeModel",false));
+            spfRecipes.setChecked(mPreferenceUtils.getRecipes("spf_recipes",false));
             mCheckbox.setChecked(mPreferenceUtils.getAutoStart("auto",true));
             SharedPreferences sharedPreferences = getPreferenceScreen().getSharedPreferences();
             sharedPreferences.registerOnSharedPreferenceChangeListener(this);
@@ -136,14 +139,16 @@ public class SettingsActivity extends AppCompatActivity {
                 mPreferenceUtils.setListSize("listSize",size);
             }else if(key.equals("spf_makeModel")){
                 boolean make = mPreferenceUtils.getMakeModel("spf_makeModel", false);
-                make=!make;
-                spf.setChecked(make);
-                mPreferenceUtils.setMakeModel("spf_makeModel",make);
+                spf.setChecked(!make);
+                mPreferenceUtils.setMakeModel("spf_makeModel",!make);
+            }else if(key.equals("spf_recipes")){
+                boolean recipes = mPreferenceUtils.getRecipes("spf_recipes", false);
+                spfRecipes.setChecked(!recipes);
+                mPreferenceUtils.setRecipes("spf_recipes",!recipes);
             }else if(key.equals("checkbox")){
                 boolean auto=mPreferenceUtils.getAutoStart("auto", true);
-                auto=!auto;
-                mCheckbox.setChecked(auto);
-                mPreferenceUtils.setAutoStart("auto",auto);
+                mCheckbox.setChecked(!auto);
+                mPreferenceUtils.setAutoStart("auto",!auto);
             }
         }
 
