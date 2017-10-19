@@ -11,6 +11,7 @@ import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -70,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
     private PrinterServiceConnection conn = null;
 
     public static final int REQUESTCODE=200;
+    public static Window mWindow;
 
     class PrinterServiceConnection implements ServiceConnection {
         @Override
@@ -88,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mWindow = getWindow();
         initUI();
         initFragment();
         mSound = KeySound.getContext(this);//初始化声音
