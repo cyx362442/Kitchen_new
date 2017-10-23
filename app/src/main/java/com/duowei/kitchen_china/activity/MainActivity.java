@@ -13,6 +13,8 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
 import com.duowei.kitchen_china.R;
@@ -23,10 +25,12 @@ import com.duowei.kitchen_china.event.OutTimeFood;
 import com.duowei.kitchen_china.event.PrintAmin;
 import com.duowei.kitchen_china.event.PrintConnect;
 import com.duowei.kitchen_china.event.SearchFood;
+import com.duowei.kitchen_china.event.ShowCall;
 import com.duowei.kitchen_china.event.StartProgress;
 import com.duowei.kitchen_china.event.Update;
 import com.duowei.kitchen_china.event.UpdateCfpb;
 import com.duowei.kitchen_china.event.UsbState;
+import com.duowei.kitchen_china.fragment.CallOutFragment;
 import com.duowei.kitchen_china.fragment.MainFragment;
 import com.duowei.kitchen_china.fragment.TopFragment;
 import com.duowei.kitchen_china.fragment.TopFragment2;
@@ -72,6 +76,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static final int REQUESTCODE=200;
     public static Window mWindow;
+    private Animation mAnimation;
+    private View mFragmentCall;
 
     class PrinterServiceConnection implements ServiceConnection {
         @Override
@@ -160,10 +166,19 @@ public class MainActivity extends AppCompatActivity {
         String serviceIP = mPreferenceUtils.getServiceIp("serviceIP", "");
         Net.url = "http://" + serviceIP + ":2233/server/ServerSvlt?";
         String ketchen = mPreferenceUtils.getKetchen("et_kitchenName", "");
-        Net.sql_cfpb="select A.XH,A.xmbh,LTrim(A.xmmc)as xmmc,A.dw,(isnull(A.sl,0)-isnull(A.tdsl,0)-isnull(A.YWCSL,0))sl,\n" +
+        Net.sql_cfpb="select A.XH,A.wmdbh,A.xmbh,LTrim(A.xmmc)as xmmc,A.dw,(isnull(A.sl,0)-isnull(A.tdsl,0)-isnull(A.YWCSL,0))sl,\n" +
                 "A.pz,CONVERT(varchar(100), a.xdsj, 120)as xdsj,A.BY1 as czmc,datediff(minute,A.xdsj,getdate())fzs,A.yhmc,isnull(A.xszt,'')xszt,A.ywcsl,j.py,isnull(j.by13,9999999)cssj,A.by9,A.by10 from cfpb A LEFT JOIN JYXMSZ J ON A.XMBH=J.XMBH\n" +
                 "where A.XDSJ BETWEEN DATEADD(mi,-180,GETDATE()) AND GETDATE() and (isnull(A.sl,0)-isnull(A.tdsl,0))>0 and a.pos='"+ketchen+"'\n" +
                 "order by A.xdsj,A.xmmc|";
+        Net.sql_call="delete from CFPB where  XH in (select XH from CFPB where SL = TDSL)|" +
+
+//                "delete from KDSCall where BillNo not in (select WMDBH from CFPB)|" +
+
+                "delete from KDSCall where XH in (select top 1 XH from KDSCall where " +
+                "BillNo in (select BillNo from KDSCall group by BillNo having count(*) > 1))|" +
+
+                "insert into KDSCALL (TableNo, XDSJ, BillNo, YHJ) " +
+                "select replace(BY1, ',', ''), getdate(), wmdbh, '0' from CFPB where XDSJ BETWEEN DATEADD(mi,-180,GETDATE()) AND GETDATE() and XH in (select min(XH) from CFPB group by wmdbh) and wmdbh not in (select BillNo from KDSCALL)|";
     }
 
     /*绑定USB打印机*/
@@ -174,12 +189,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initFragment() {
+        mFragmentCall = findViewById(R.id.frame_out);
         mFragment = new MainFragment();
         mTopFragment = new TopFragment();
+        CallOutFragment callOutFragment = new CallOutFragment();
         getFragmentManager().beginTransaction()
                  .replace(R.id.frame01, mTopFragment).commit();
         getFragmentManager().beginTransaction()
                 .replace(R.id.frame02, mFragment).commit();
+        getFragmentManager().beginTransaction()
+                .replace(R.id.frame_out, callOutFragment).commit();
     }
 
     private void initUI() {
@@ -299,6 +318,19 @@ public class MainActivity extends AppCompatActivity {
     public void appUpdate(Update event){
         UpdateFragment updateFragment = UpdateFragment.newInstance(event.url, event.name);
         updateFragment.show(getSupportFragmentManager(),getString(R.string.update));
+    }
+
+    @Subscribe
+    public void showCall(ShowCall event){
+        if(event.show==1){
+            mAnimation = AnimationUtils.loadAnimation(this, R.anim.pop_push_down_out);
+            mFragmentCall.setVisibility(View.VISIBLE);
+            mFragmentCall.startAnimation(mAnimation);
+        }else if(event.show==0){
+//            mAnimation = AnimationUtils.loadAnimation(this, R.anim.pop_push_up_in);
+//            mFragmentCall.startAnimation(mAnimation);
+            mFragmentCall.setVisibility(View.GONE);
+        }
     }
 
     @Override

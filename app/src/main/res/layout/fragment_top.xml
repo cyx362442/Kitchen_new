@@ -87,6 +87,10 @@
                         style="@style/TopButton"
                         android:text="设置"/>
                     <Button
+                        android:id="@+id/btn_call"
+                        style="@style/TopButton"
+                        android:text="呼叫"></Button>
+                    <Button
                         android:id="@+id/btn_exit"
                         style="@style/TopButton"
                         android:text="退出"/>

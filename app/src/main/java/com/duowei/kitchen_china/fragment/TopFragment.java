@@ -24,10 +24,12 @@ import com.duowei.kitchen_china.bean.Cfpb_item;
 import com.duowei.kitchen_china.event.OutTimeFood;
 import com.duowei.kitchen_china.event.PrintConnect;
 import com.duowei.kitchen_china.event.SearchFood;
+import com.duowei.kitchen_china.event.ShowCall;
 import com.duowei.kitchen_china.httputils.Net;
 import com.duowei.kitchen_china.httputils.Post;
 import com.duowei.kitchen_china.sound.KeySound;
 import com.duowei.kitchen_china.uitls.ColorAnim;
+import com.duowei.kitchen_china.uitls.PreferenceUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -61,13 +63,17 @@ public class TopFragment extends Fragment {
     @BindView(R.id.img_print)
     ImageView mImgPrint;
     Unbinder unbinder;
+    @BindView(R.id.btn_call)
+    Button mBtnCall;
     private Intent mIntent;
 
     private float tempNum = 0;
-    private float tempOutTime=0;
+    private float tempOutTime = 0;
     private KeySound mSound;
     private boolean isOutTime = false;
     private AnimationDrawable mDrawable;
+    private PreferenceUtils mPreferenceUtils;
+    private int show=0;
 
     public TopFragment() {
         // Required empty public constructor
@@ -80,7 +86,7 @@ public class TopFragment extends Fragment {
         View inflate = inflater.inflate(R.layout.fragment_top, container, false);
         unbinder = ButterKnife.bind(this, inflate);
         mSound = KeySound.getContext(getActivity());
-
+        mPreferenceUtils = PreferenceUtils.getInstance(getActivity());
         return inflate;
     }
 
@@ -88,7 +94,7 @@ public class TopFragment extends Fragment {
     public void setListCfpb(List<Cfpb> listCfpb) {
         mTvUncook.setText(listCfpb.size() + "种");
         float foodCount = 0;
-        float outTime=0;
+        float outTime = 0;
         for (int i = 0; i < listCfpb.size(); i++) {
             Cfpb cfpb = listCfpb.get(i);
             List<Cfpb_item> list = cfpb.getListCfpb();
@@ -96,15 +102,15 @@ public class TopFragment extends Fragment {
                 foodCount += list.get(j).sl1;
             }
             String cssj = cfpb.getCssj();
-            if(!TextUtils.isEmpty(cssj)&&cfpb.getFzs()>Integer.parseInt(cssj)){
-                outTime=outTime+cfpb.getSl();
+            if (!TextUtils.isEmpty(cssj) && cfpb.getFzs() > Integer.parseInt(cssj)) {
+                outTime = outTime + cfpb.getSl();
             }
         }
         mTvCooked.setText(foodCount + "份");
         Handler handler = new Handler();
         //超时单品、新订单声音、动画
-        if (foodCount > tempNum&&outTime>tempOutTime) {
-            mSound.playSound('4',0);
+        if (foodCount > tempNum && outTime > tempOutTime) {
+            mSound.playSound('4', 0);
             handler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -119,15 +125,15 @@ public class TopFragment extends Fragment {
             });
         }
         //超时单品声音
-        else if(outTime>tempOutTime){
-            mSound.playSound('4',0);
+        else if (outTime > tempOutTime) {
+            mSound.playSound('4', 0);
             ColorAnim.getInstacne(getActivity()).startBackground(mBtnOvertime);
             handler.post(new Runnable() {
                 @Override
                 public void run() {
                     try {
                         Thread.sleep(2000);
-                        mSound.playSound('4',0);
+                        mSound.playSound('4', 0);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -135,18 +141,30 @@ public class TopFragment extends Fragment {
             });
         }
         //新的订单
-        else if(foodCount > tempNum){
+        else if (foodCount > tempNum) {
             mSound.playSound('0', 0);
             ColorAnim.getInstacne(getActivity()).startColor(mTvCooked);
         }
         tempNum = foodCount;
-        tempOutTime=outTime;
+        tempOutTime = outTime;
     }
 
-    public void startAnim(){
+    public void startAnim() {
         mImgPrint.setImageResource(R.drawable.printanim);
         mDrawable = (AnimationDrawable) mImgPrint.getDrawable();
         mDrawable.start();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mPreferenceUtils.getCall("spf_call", false)) {
+            mBtnSearch.setVisibility(View.GONE);
+            mBtnCall.setVisibility(View.VISIBLE);
+        }else{
+            mBtnSearch.setVisibility(View.VISIBLE);
+            mBtnCall.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -155,8 +173,8 @@ public class TopFragment extends Fragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.img_print,R.id.btn_history, R.id.btn_search, R.id.btn_overtime, R.id.btn_saleout,
-            R.id.btn_setting, R.id.btn_exit})
+    @OnClick({R.id.img_print, R.id.btn_history, R.id.btn_search, R.id.btn_overtime, R.id.btn_saleout,
+            R.id.btn_call,R.id.btn_setting, R.id.btn_exit})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.img_print:
@@ -186,6 +204,14 @@ public class TopFragment extends Fragment {
             case R.id.btn_saleout:
                 mIntent = new Intent(getActivity(), SellOutActivity.class);
                 startActivity(mIntent);
+                break;
+            case R.id.btn_call:
+                if(show==0){
+                    show=1;
+                }else{
+                    show=0;
+                }
+                EventBus.getDefault().post(new ShowCall(show));
                 break;
             case R.id.btn_setting:
                 mIntent = new Intent(getActivity(), SettingsActivity.class);

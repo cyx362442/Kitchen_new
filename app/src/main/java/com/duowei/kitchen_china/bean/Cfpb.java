@@ -25,6 +25,7 @@ public class Cfpb extends DataSupport implements Serializable{
      */
 
     private String XH;
+    private String wmdbh;
     private String xmbh;
     private String xmmc;
     private String dw;
@@ -42,6 +43,14 @@ public class Cfpb extends DataSupport implements Serializable{
     private String by10;
     private String wcsj;
     private long time;
+
+    public String getWmdbh() {
+        return wmdbh;
+    }
+
+    public void setWmdbh(String wmdbh) {
+        this.wmdbh = wmdbh;
+    }
 
     public String getXszt() {
         return xszt;
@@ -83,9 +92,10 @@ public class Cfpb extends DataSupport implements Serializable{
         this.by9 = by9;
     }
 
-    public Cfpb(String XH, String xmbh, String xmmc, String dw, float sl, String pz, String xdsj,
+    public Cfpb(String XH, String wmdbh,String xmbh, String xmmc, String dw, float sl, String pz, String xdsj,
                 String czmc, int fzs, String yhmc, float ywcsl, String wcsj,long time) {
             this.XH = XH;
+        this.wmdbh=wmdbh;
         this.xmbh = xmbh;
         this.xmmc = xmmc;
         this.dw = dw;

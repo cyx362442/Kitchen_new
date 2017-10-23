@@ -120,7 +120,7 @@ public class CookFragment extends DialogFragment implements View.OnClickListener
                                 "             select XH, MTXH, WMDBH, XMBH, XMMC, DW, SL, PZ, XSZT, YHMC, POS, TDSL, XDSJ, GETDATE(), BY1, BY2, BY3, BY4, BY5, BY6, BY7 " +
                                 "             from CFPB where xh = " + item.xh + "|";
                         sql+="delete from cfpb where xh='"+item.xh+"'|";
-                        Cfpb cfpb = new Cfpb(mCfpb.getXH(), mCfpb.getXmbh(), mCfpb.getXmmc(), mCfpb.getDw(),
+                        Cfpb cfpb = new Cfpb(mCfpb.getXH(),mCfpb.getWmdbh(),mCfpb.getXmbh(), mCfpb.getXmmc(), mCfpb.getDw(),
                                 item.sl1, item.pz, mCfpb.getXdsj(), item.czmc1,
                                 item.fzs, mCfpb.getYhmc(), item.sl1, DateTimes.getSysTime(),
                                 DateTimes.getTime2(mCfpb.getXdsj()));

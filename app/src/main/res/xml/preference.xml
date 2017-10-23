@@ -49,6 +49,9 @@
         <SwitchPreference android:key="spf_recipes"
             android:title="启用制作配方"
             android:checked="false"></SwitchPreference>
+        <SwitchPreference android:key="spf_call"
+            android:title="启用呼叫取餐"
+            android:checked="false"></SwitchPreference>
         <CheckBoxPreference
             android:key="checkbox"
             android:title="开机自启动"

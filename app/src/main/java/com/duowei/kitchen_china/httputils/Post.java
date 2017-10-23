@@ -1,6 +1,5 @@
 package com.duowei.kitchen_china.httputils;
 
-
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageInfo;
@@ -14,6 +13,7 @@ import com.duowei.kitchen_china.R;
 import com.duowei.kitchen_china.bean.Cfpb;
 import com.duowei.kitchen_china.bean.Cfpb_item;
 import com.duowei.kitchen_china.event.OrderFood;
+import com.duowei.kitchen_china.event.ShowCall;
 import com.duowei.kitchen_china.event.Update;
 import com.duowei.kitchen_china.event.UpdateCfpb;
 import com.duowei.kitchen_china.uitls.DateTimes;
@@ -60,6 +60,20 @@ public class Post {
             public void onResponse(String response) {
                 if (response.contains("richado")) {
                     EventBus.getDefault().post(new UpdateCfpb());
+                }
+            }
+        });
+    }
+
+    public synchronized void postCall7(String sql){
+        DownHTTP.postVolley7(Net.url, sql, new VolleyResultListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+            @Override
+            public void onResponse(String response) {
+                if(response.contains("richado")){
+                    EventBus.getDefault().post(new ShowCall(2));
                 }
             }
         });

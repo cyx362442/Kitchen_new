@@ -17,6 +17,7 @@ import com.duowei.kitchen_china.adapter.SpacesItemDecoration;
 import com.duowei.kitchen_china.bean.Cfpb;
 import com.duowei.kitchen_china.bean.Cfpb_item;
 import com.duowei.kitchen_china.event.Completes;
+import com.duowei.kitchen_china.event.ShowCall;
 import com.duowei.kitchen_china.event.StartProgress;
 import com.duowei.kitchen_china.event.UsbState;
 import com.duowei.kitchen_china.fragment.dialog.CookFragment;
@@ -182,7 +183,7 @@ public class MainFragment extends Fragment implements RecAdapter.onItemClickList
                     tempNum=num;
                 }
                 //己完成
-                cfpb21 = new Cfpb(cfpb.getXH(), cfpb.getXmbh(), cfpb.getXmmc(), cfpb.getDw(),
+                cfpb21 = new Cfpb(cfpb.getXH(), cfpb.getWmdbh(),cfpb.getXmbh(), cfpb.getXmmc(), cfpb.getDw(),
                             cfpbItem.sl1, cfpbItem.pz, cfpb.getXdsj(), cfpbItem.czmc1,
                             cfpbItem.fzs, cfpb.getYhmc(), tempNum, DateTimes.getSysTime(),
                         DateTimes.getTime2(cfpb.getXdsj()));

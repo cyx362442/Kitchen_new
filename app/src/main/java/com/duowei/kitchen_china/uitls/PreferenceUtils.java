@@ -86,6 +86,14 @@ public class PreferenceUtils {
         return mPreferences.getBoolean(key,b);
     }
 
+    public void setCall(String key,boolean b){
+        mEdit.putBoolean(key,b);
+        mEdit.commit();
+    }
+    public boolean getCall(String key,boolean b){
+        return mPreferences.getBoolean(key,b);
+    }
+
     public void setAutoStart(String key,boolean b){
         mEdit.putBoolean(key,b);
         mEdit.commit();

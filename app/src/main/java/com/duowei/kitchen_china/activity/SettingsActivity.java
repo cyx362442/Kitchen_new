@@ -45,6 +45,7 @@ public class SettingsActivity extends AppCompatActivity {
     private static ListPreference listColums;
     private static ListPreference listSize;
     private static SwitchPreference spfRecipes;
+    private static SwitchPreference spfCall;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +94,7 @@ public class SettingsActivity extends AppCompatActivity {
             etVersion = findPreference("et_version");
             spf = (SwitchPreference) findPreference("spf_makeModel");
             spfRecipes = (SwitchPreference) findPreference("spf_recipes");
+            spfCall = (SwitchPreference) findPreference("spf_call");
             mCheckbox = (CheckBoxPreference) findPreference("checkbox");
             mEtServiceIP.setSummary(mPreferenceUtils.getServiceIp("serviceIP",""));
             etKetchen.setSummary(mPreferenceUtils.getKetchen("et_kitchenName",""));
@@ -106,6 +108,7 @@ public class SettingsActivity extends AppCompatActivity {
             etVersion.setOnPreferenceClickListener(this);
             spf.setChecked(mPreferenceUtils.getMakeModel("spf_makeModel",false));
             spfRecipes.setChecked(mPreferenceUtils.getRecipes("spf_recipes",false));
+            spfCall.setChecked(mPreferenceUtils.getCall("spf_call",false));
             mCheckbox.setChecked(mPreferenceUtils.getAutoStart("auto",true));
             SharedPreferences sharedPreferences = getPreferenceScreen().getSharedPreferences();
             sharedPreferences.registerOnSharedPreferenceChangeListener(this);
@@ -145,6 +148,10 @@ public class SettingsActivity extends AppCompatActivity {
                 boolean recipes = mPreferenceUtils.getRecipes("spf_recipes", false);
                 spfRecipes.setChecked(!recipes);
                 mPreferenceUtils.setRecipes("spf_recipes",!recipes);
+            }else if(key.equals("spf_call")){
+                boolean call = mPreferenceUtils.getRecipes("spf_call", false);
+                spfCall.setChecked(!call);
+                mPreferenceUtils.setRecipes("spf_call",!call);
             }else if(key.equals("checkbox")){
                 boolean auto=mPreferenceUtils.getAutoStart("auto", true);
                 mCheckbox.setChecked(!auto);
