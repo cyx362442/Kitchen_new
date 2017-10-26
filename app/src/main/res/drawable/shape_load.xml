@@ -5,6 +5,6 @@
         />
     <!--填充颜色-->
     <solid
-        android:color="#B0000000"
+        android:color="#D0000000"
         />
 </shape>

@@ -46,6 +46,7 @@ public class PopuShow {
         recipes = PreferenceUtils.getInstance(context).getRecipes("spf_recipes", false);
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         int width = wm.getDefaultDisplay().getWidth();
+        int height = wm.getDefaultDisplay().getHeight();
         if(ps==null){
             ps=new PopuShow();
             popView = LayoutInflater.from(context).inflate(R.layout.popu_item,null);
@@ -54,7 +55,13 @@ public class PopuShow {
             mPopupWindow.setFocusable(false);                   // 设定 PopupWindow 取的焦点，创建出来的 PopupWindow 默认无焦点
         }
         int colum = Integer.parseInt(colums);
-        mPopupWindow.setWidth(width/colum);
+        if(recipes){//显示配方信息
+            mPopupWindow.setWidth(width*9/10);
+            mPopupWindow.setHeight(height*9/10);
+        }else{
+            mPopupWindow.setWidth(width/colum);
+            mPopupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+        }
         return ps;
     }
     public void showPopuWindow(Context context,View view,Cfpb cfpb){
@@ -65,7 +72,7 @@ public class PopuShow {
         tv.setText(cfpb.getXmmc());
         lv = (MaxListView) popView.findViewById(R.id.listView);
         mTvRecipes = (TextView) popView.findViewById(R.id.tv_recipes);
-        if(recipes==true){//显示配方信息
+        if(recipes){//显示配方信息
             mPopupWindow.showAtLocation(MainActivity.mWindow.getDecorView(), Gravity.CENTER, 0, 0);
             Http_Plxx(cfpb);
             mTvRecipes.setVisibility(View.VISIBLE);
@@ -98,7 +105,7 @@ public class PopuShow {
                     Gson gson = new Gson();
                     Plxx[] plxxes = gson.fromJson(response, Plxx[].class);
                     for(int i=0;i<plxxes.length;i++){
-                        str=str+(i+1)+"、"+plxxes[i].getYclmc()+"\t\t\t"+
+                        str=str+(i+1)+"、"+plxxes[i].getYclmc()+"\t\t\t\t\t\t\t"+
                                 NumUtil.clearZero(plxxes[i].getSl())+plxxes[i].getSyzjldw()+"\n";
                     }
                     mTvRecipes.setText(str);
